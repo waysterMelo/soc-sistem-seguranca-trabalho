@@ -1,24 +1,21 @@
-package com.ocupacional.soc.Model;
+package com.ocupacional.soc.Entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "cnaes")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Cnae {
-    
+@AllArgsConstructor
+public class CnaeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(length = 10, nullable = false, unique = true)
+
     private String codigo;
-    
-    @Column(nullable = false)
     private String descricao;
-
-
 }
