@@ -1,6 +1,5 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Dto.EmpresaDto;
 import com.ocupacional.soc.Entities.EmpresaEntity;
 import com.ocupacional.soc.Repositories.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
