@@ -1,6 +1,5 @@
 package com.ocupacional.soc.Controllers;
 
-import com.ocupacional.soc.Dto.EmpresaDto;
 import com.ocupacional.soc.Entities.EmpresaEntity;
 import com.ocupacional.soc.Services.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/empresas")
 public class EmpresaController {
 
-    @Autowired
     private EmpresaService empresaService;
+
+    public EmpresaController(EmpresaService empresaService) {
+        this.empresaService = empresaService;
+    }
 
     @GetMapping
     public ResponseEntity<List<EmpresaEntity>> listarTodas() {

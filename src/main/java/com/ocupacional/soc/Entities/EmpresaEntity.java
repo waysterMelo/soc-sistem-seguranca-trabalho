@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Entities;
 
+
 import com.ocupacional.soc.Enuns.GrauRisco;
 import com.ocupacional.soc.Enuns.StatusEmpresa;
 import com.ocupacional.soc.Enuns.TipoEmpresa;

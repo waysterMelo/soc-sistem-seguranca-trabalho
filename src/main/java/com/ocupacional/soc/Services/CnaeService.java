@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Services;
 
 import com.ocupacional.soc.Entities.CnaeEntity;
+import com.ocupacional.soc.Entities.CnaeEntity;
 import com.ocupacional.soc.Repositories.CnaeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class CnaeService {
     @Autowired
     private CnaeRepository cnaeRepository;
 
-    public List<CnaeEntity> listarTodos() {
+    public List<com.ocupacional.soc.Entities.CnaeEntity> listarTodos() {
         return cnaeRepository.findAll();
     }
 
