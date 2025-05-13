@@ -18,4 +18,9 @@ public class SetorEntity {
     private String nome;
 
     private String descricao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id", nullable = false)
+    private EmpresaEntity empresa;
+
 }

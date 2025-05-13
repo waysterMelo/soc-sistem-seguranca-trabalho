@@ -22,7 +22,7 @@ public class UnidadeOperacionalController {
         this.unidadeOperacionalService = unidadeOperacionalService;
     }
 
-    @PostMapping("/empresas/{empresaId}/unidades-operacionais")
+    @PostMapping("/{empresaId}")
     public ResponseEntity<UnidadeOperacionalResponseDTO> criarUnidadeOperacional(
             @PathVariable Long empresaId,
             @Valid @RequestBody UnidadeOperacionalRequestDTO requestDTO) {
@@ -36,14 +36,14 @@ public class UnidadeOperacionalController {
         }
     }
 
-    @GetMapping("/unidades-operacionais/{unidadeId}")
+    @GetMapping("/{unidadeId}")
     public ResponseEntity<UnidadeOperacionalResponseDTO> buscarUnidadeOperacionalPorId(@PathVariable Long unidadeId) {
         return unidadeOperacionalService.buscarPorId(unidadeId)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unidade Operacional não encontrada com ID: " + unidadeId));
     }
 
-    @GetMapping("/empresas/{empresaId}/unidades-operacionais")
+    @GetMapping("/{empresaId}/unidades-empresa")
     public ResponseEntity<List<UnidadeOperacionalResponseDTO>> listarUnidadesPorEmpresa(@PathVariable Long empresaId) {
         try {
             List<UnidadeOperacionalResponseDTO> unidades = unidadeOperacionalService.listarPorEmpresaId(empresaId);
@@ -53,7 +53,7 @@ public class UnidadeOperacionalController {
         }
     }
 
-    @PutMapping("/unidades-operacionais/{unidadeId}")
+    @PutMapping("/{unidadeId}")
     public ResponseEntity<UnidadeOperacionalResponseDTO> atualizarUnidadeOperacional(
             @PathVariable Long unidadeId,
             @Valid @RequestBody UnidadeOperacionalRequestDTO requestDTO) {

@@ -5,6 +5,7 @@ import com.ocupacional.soc.Dto.SetorResponseDTO;
 import com.ocupacional.soc.Services.SetorService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,39 +27,62 @@ public class SetorController {
 
     @PostMapping
     public ResponseEntity<SetorResponseDTO> criarSetor(@Valid @RequestBody SetorRequestDTO requestDTO) {
-        try {
-            SetorResponseDTO responseDTO = setorService.criar(requestDTO);
-            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+       try {
+           SetorResponseDTO setorResponseDTO = setorService.criar(requestDTO);
+           return new ResponseEntity<>(setorResponseDTO, HttpStatus.CREATED);
+       }catch (EntityNotFoundException e){
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+       }catch (IllegalArgumentException ex){
+           throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+       }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SetorResponseDTO> buscarSetorPorId(@PathVariable Long id) {
         return setorService.buscarPorId(id)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado com ID: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor " +
+                        "não encontrado com ID " + id));
     }
 
+
     @GetMapping
-    public ResponseEntity<List<SetorResponseDTO>> listarTodosSetores() {
-        List<SetorResponseDTO> setores = setorService.listarTodos();
+    public ResponseEntity<List<SetorResponseDTO>> listarSetores( // Renomeado para listarSetores para clareza
+                                                                 @RequestParam(required = false) Long empresaId) {
+        List<SetorResponseDTO> setores;
+        if (empresaId != null) {
+            try {
+                setores = setorService.listarPorEmpresa(empresaId);
+            } catch (EntityNotFoundException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
+        } else {
+            setores = setorService.listarTodos();
+        }
+        // Não lançar 404 se a lista global estiver vazia, apenas retornar lista vazia.
+        // Lançar 404 apenas se o recurso específico (como empresaId) não for encontrado.
         return ResponseEntity.ok(setores);
     }
 
-    @GetMapping("/buscar")
-    public ResponseEntity<SetorResponseDTO> buscarSetorPorNome(@RequestParam String nome) {
-        return setorService.buscarPorNome(nome)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor não encontrado com nome: " + nome));
+    @GetMapping("/buscar-por-empresa")
+    public ResponseEntity<SetorResponseDTO> buscarSetorPorNomeEEmpresa(
+            @RequestParam String nome,
+            @RequestParam Long empresaId) {
+        try {
+            return setorService.buscarPorNomeEEmpresa(nome, empresaId)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor com nome '" + nome + "' não encontrado na empresa ID: " + empresaId));
+        } catch (EntityNotFoundException e) { // Captura EntityNotFoundException vinda do serviço (ex: empresa não encontrada)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<SetorResponseDTO> atualizarSetor(@PathVariable Long id, @Valid @RequestBody SetorRequestDTO requestDTO) {
         try {
-            SetorResponseDTO updatedSetor = setorService.atualizar(id, requestDTO);
-            return ResponseEntity.ok(updatedSetor);
+            SetorResponseDTO atualizarSetor = setorService.atualizar(id, requestDTO);
+            return ResponseEntity.ok(atualizarSetor);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -73,7 +97,8 @@ public class SetorController {
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
-
 }

@@ -12,4 +12,5 @@ public class SetorResponseDTO {
     private Long id;
     private String nome;
     private String descricao;
+    private EmpresaSimpleResponseDTO empresa;
 }

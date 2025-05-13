@@ -10,7 +10,9 @@ public interface SetorService {
     SetorResponseDTO criar(SetorRequestDTO dto);
     Optional<SetorResponseDTO> buscarPorId(Long id);
     List<SetorResponseDTO> listarTodos();
+    List<SetorResponseDTO> listarPorEmpresa(Long empresaId);
     SetorResponseDTO atualizar(Long id, SetorRequestDTO dto);
     void deletar(Long id);
-    Optional<SetorResponseDTO> buscarPorNome(String nome);
+    Optional<SetorResponseDTO> buscarPorNomeEEmpresa(String nome, Long empresaId);
+
 }

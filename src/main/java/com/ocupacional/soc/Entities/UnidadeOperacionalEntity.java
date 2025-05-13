@@ -72,7 +72,7 @@ public class UnidadeOperacionalEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "setores",
+            name = "unidade_operacional_setor",
             joinColumns = @JoinColumn(name = "unidade_operacional_id"),
             inverseJoinColumns = @JoinColumn(name = "setor_id")
     )
