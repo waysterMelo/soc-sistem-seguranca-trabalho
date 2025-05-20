@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Enuns;
+package com.ocupacional.soc.Enuns.CadastroEmpresas;
 
 public enum GrauRisco {
     NAO_INFORMADO,

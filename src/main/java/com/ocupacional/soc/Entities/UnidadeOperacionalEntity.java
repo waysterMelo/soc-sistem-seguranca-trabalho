@@ -1,9 +1,9 @@
 package com.ocupacional.soc.Entities;
 
 
-import com.ocupacional.soc.Enuns.GrauRisco;
-import com.ocupacional.soc.Enuns.SituacaoUnidadeOperacional;
-import com.ocupacional.soc.Enuns.TipoMatrizFilial;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
+import com.ocupacional.soc.Enuns.UnidadeOperacional.SituacaoUnidadeOperacional;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

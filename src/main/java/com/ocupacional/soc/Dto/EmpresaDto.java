@@ -1,9 +1,9 @@
 package com.ocupacional.soc.Dto;
 
-import com.ocupacional.soc.Enuns.GrauRisco;
-import com.ocupacional.soc.Enuns.StatusEmpresa;
-import com.ocupacional.soc.Enuns.TipoEmpresa;
-import com.ocupacional.soc.Enuns.TipoMatrizFilial;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoEmpresa;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import lombok.Data;
 
 import java.util.List;
