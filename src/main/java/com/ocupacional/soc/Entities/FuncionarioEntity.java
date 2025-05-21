@@ -18,7 +18,7 @@ public class FuncionarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private Long id;
 
     @Column(nullable = false)
     private String nome;

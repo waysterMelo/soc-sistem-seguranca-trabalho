@@ -20,7 +20,7 @@ public class ProfissionalRegistroAmbientalEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funcao_id", nullable = false)

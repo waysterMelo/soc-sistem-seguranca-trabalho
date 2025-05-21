@@ -35,7 +35,7 @@ public interface FuncaoMapper {
     FuncaoResponseDTO entityToResponseDTO(FuncaoEntity entity);
 
     @Named("uuidToEmpresaEntity")
-    default EmpresaEntity uuidToEmpresaEntity(UUID id) {
+    default EmpresaEntity uuidToEmpresaEntity(Long id) {
         if (id == null) return null;
         EmpresaEntity empresa = new EmpresaEntity();
         empresa.setId(id);
@@ -43,7 +43,7 @@ public interface FuncaoMapper {
     }
 
     @Named("uuidToSetorEntity")
-    default SetorEntity uuidToSetorEntity(UUID id) {
+    default SetorEntity uuidToSetorEntity(Long id) {
         if (id == null) return null;
         SetorEntity setor = new SetorEntity();
         setor.setId(id);
@@ -51,7 +51,7 @@ public interface FuncaoMapper {
     }
 
     @Named("uuidToCboEntity")
-    default CboEntity uuidToCboEntity(UUID id) {
+    default CboEntity uuidToCboEntity(Long id) {
         if (id == null) return null;
         CboEntity cbo = new CboEntity();
         cbo.setId(id);

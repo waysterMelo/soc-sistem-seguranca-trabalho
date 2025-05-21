@@ -21,7 +21,7 @@ public class RiscoTrabalhistaPgrEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "grupo_risco", nullable = false)
