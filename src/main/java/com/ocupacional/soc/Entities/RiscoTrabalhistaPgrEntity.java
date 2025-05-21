@@ -20,7 +20,7 @@ import java.util.UUID;
 public class RiscoTrabalhistaPgrEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)

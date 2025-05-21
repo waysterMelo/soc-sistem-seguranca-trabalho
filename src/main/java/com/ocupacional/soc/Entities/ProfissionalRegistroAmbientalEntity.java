@@ -19,7 +19,7 @@ import java.util.UUID;
 public class ProfissionalRegistroAmbientalEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
