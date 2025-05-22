@@ -9,14 +9,20 @@ import com.ocupacional.soc.Mapper.RiscoTrabalhistaPgrMapper;
 import com.ocupacional.soc.Repositories.*;
 import com.ocupacional.soc.Services.FuncaoService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class FuncaoServiceImpl implements FuncaoService {
 
     private final FuncaoRepository funcaoRepository;
@@ -27,118 +33,199 @@ public class FuncaoServiceImpl implements FuncaoService {
     private final FuncaoMapper funcaoMapper;
     private final RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper;
 
-    @Autowired
-    public FuncaoServiceImpl(
-            FuncaoRepository funcaoRepository,
-            EmpresaRepository empresaRepository,
-            SetorRepository setorRepository,
-            CboRepository cboRepository,
-            FuncionarioRepository funcionarioRepository,
-            FuncaoMapper funcaoMapper,
-            RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper
-    ) {
-        this.funcaoRepository = funcaoRepository;
-        this.empresaRepository = empresaRepository;
-        this.setorRepository = setorRepository;
-        this.cboRepository = cboRepository;
-        this.funcionarioRepository = funcionarioRepository;
-        this.funcaoMapper = funcaoMapper;
-        this.riscoTrabalhistaPgrMapper = riscoTrabalhistaPgrMapper;
-    }
-
     @Override
     @Transactional
     public FuncaoResponseDTO criarFuncao(FuncaoRequestDTO requestDTO) {
-        FuncaoEntity funcaoEntity = funcaoMapper.requestDtoToEntity(requestDTO);
-        funcaoEntity.setEmpresa(findEmpresa(requestDTO.getEmpresaId()));
-        funcaoEntity.setSetor(findSetor(requestDTO.getSetorId()));
-        funcaoEntity.setCbo(findCbo(requestDTO.getCboId()));
+        log.info("Iniciando criação de nova função: {}", requestDTO.getNome());
 
-        if (requestDTO.getRiscosPGR() != null) {
-            requestDTO.getRiscosPGR().forEach(riscoDTO ->
-                    funcaoEntity.addRiscoPGR(riscoTrabalhistaPgrMapper.toEntity(riscoDTO))
-            );
+        try {
+            FuncaoEntity funcaoEntity = buildFuncaoEntity(requestDTO);
+            FuncaoEntity savedEntity = funcaoRepository.save(funcaoEntity);
+
+            log.info("Função criada com sucesso. ID: {}", savedEntity.getId());
+            return funcaoMapper.entityToResponseDTO(savedEntity);
+        } catch (Exception e) {
+            log.error("Erro ao criar função: {}", e.getMessage(), e);
+            throw e;
         }
-        if (requestDTO.getProfissionaisResponsaveis() != null) {
-            requestDTO.getProfissionaisResponsaveis().forEach(profDTO -> {
-                ProfissionalRegistroAmbientalEntity profissionalEntity = new ProfissionalRegistroAmbientalEntity();
-                profissionalEntity.setFuncionario(findFuncionario(profDTO.getFuncionarioId()));
-                funcaoEntity.addProfissionalResponsavel(profissionalEntity);
-            });
-        }
-        return funcaoMapper.entityToResponseDTO(funcaoRepository.save(funcaoEntity));
     }
 
     @Override
     @Transactional
     public FuncaoResponseDTO buscarFuncaoPorId(Long id) {
-        return funcaoMapper.entityToResponseDTO(findFuncao(id));
+        log.debug("Buscando função por ID: {}", id);
+        return funcaoMapper.entityToResponseDTO(findFuncaoById(id));
     }
+
 
     @Override
     @Transactional
     public Page<FuncaoResponseDTO> listarFuncoes(Pageable pageable) {
+        log.debug("Listando funções com paginação: página {}, tamanho {}",
+                pageable.getPageNumber(), pageable.getPageSize());
         return funcaoRepository.findAll(pageable).map(funcaoMapper::entityToResponseDTO);
     }
 
     @Override
     @Transactional
     public FuncaoResponseDTO atualizarFuncao(Long id, FuncaoRequestDTO requestDTO) {
-        FuncaoEntity funcaoExistente = findFuncao(id);
-        funcaoExistente.setNome(requestDTO.getNome());
-        funcaoExistente.setQuantidadeFuncionarios(requestDTO.getQuantidadeFuncionarios());
-        funcaoExistente.setDescricao(requestDTO.getDescricaoFuncao());
-        funcaoExistente.setTipoGfip(requestDTO.getTipoGfip());
-        funcaoExistente.setAtividadesInsalubres(requestDTO.getAtividadesInsalubres());
-        funcaoExistente.setInformacoesComplementaresRegistrosAmbientais(requestDTO.getInformacoesComplementaresRegistrosAmbientais());
-        funcaoExistente.setEmpresa(findEmpresa(requestDTO.getEmpresaId()));
-        funcaoExistente.setSetor(findSetor(requestDTO.getSetorId()));
-        funcaoExistente.setCbo(findCbo(requestDTO.getCboId()));
+        log.info("Iniciando atualização da função ID: {}", id);
 
-        funcaoExistente.getRiscosPGR().clear();
-        if (requestDTO.getRiscosPGR() != null) {
-            requestDTO.getRiscosPGR().forEach(riscoDTO ->
-                    funcaoExistente.addRiscoPGR(riscoTrabalhistaPgrMapper.toEntity(riscoDTO))
-            );
+        try {
+            FuncaoEntity funcaoExistente = findFuncaoById(id);
+            updateFuncaoEntity(funcaoExistente, requestDTO);
+            FuncaoEntity updatedEntity = funcaoRepository.save(funcaoExistente);
+
+            log.info("Função atualizada com sucesso. ID: {}", id);
+            return funcaoMapper.entityToResponseDTO(updatedEntity);
+        } catch (Exception e) {
+            log.error("Erro ao atualizar função ID {}: {}", id, e.getMessage(), e);
+            throw e;
         }
-        funcaoExistente.getProfissionaisResponsaveis().clear();
-        if (requestDTO.getProfissionaisResponsaveis() != null) {
-            requestDTO.getProfissionaisResponsaveis().forEach(profDTO -> {
-                ProfissionalRegistroAmbientalEntity profissionalEntity = new ProfissionalRegistroAmbientalEntity();
-                profissionalEntity.setFuncionario(findFuncionario(profDTO.getFuncionarioId()));
-                funcaoExistente.addProfissionalResponsavel(profissionalEntity);
-            });
-        }
-        return funcaoMapper.entityToResponseDTO(funcaoRepository.save(funcaoExistente));
     }
 
     @Override
     @Transactional
     public void deletarFuncao(Long id) {
+        log.info("Iniciando exclusão da função ID: {}", id);
+
         if (!funcaoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Função não encontrada com ID: " + id);
         }
+
         funcaoRepository.deleteById(id);
+        log.info("Função excluída com sucesso. ID: {}", id);
     }
 
-    private EmpresaEntity findEmpresa(Long id) {
+    private FuncaoEntity buildFuncaoEntity(FuncaoRequestDTO requestDTO) {
+        FuncaoEntity funcaoEntity = funcaoMapper.requestDtoToEntity(requestDTO);
+
+        // Configuração das associações obrigatórias
+        funcaoEntity.setEmpresa(findEmpresaById(requestDTO.getEmpresaId()));
+        funcaoEntity.setSetor(findSetorById(requestDTO.getSetorId()));
+        funcaoEntity.setCbo(findCboById(requestDTO.getCboId()));
+
+        // Configuração dos riscos PGR
+        processRiscosPGR(funcaoEntity, requestDTO);
+
+        // Configuração dos profissionais responsáveis
+        processProfissionaisResponsaveis(funcaoEntity, requestDTO);
+
+        return funcaoEntity;
+    }
+
+    public void updateFuncaoEntity(FuncaoEntity funcaoExistente, FuncaoRequestDTO requestDTO){
+        updateBasicFields(funcaoExistente, requestDTO);
+
+        funcaoExistente.setEmpresa(findEmpresaById(requestDTO.getEmpresaId()));
+        funcaoExistente.setSetor(findSetorById(requestDTO.getSetorId()));
+        funcaoExistente.setCbo(findCboById(requestDTO.getCboId()));
+
+        funcaoExistente.getRiscosPGR().clear();
+        processRiscosPGR(funcaoExistente, requestDTO);
+
+        funcaoExistente.getProfissionaisResponsaveis().clear();
+        processProfissionaisResponsaveis(funcaoExistente, requestDTO);
+    }
+
+
+
+
+
+
+
+
+
+    private void updateBasicFields(FuncaoEntity funcaoEntity, FuncaoRequestDTO requestDTO) {
+        Optional.ofNullable(requestDTO.getNome())
+                .ifPresent(funcaoEntity::setNome);
+
+        Optional.ofNullable(requestDTO.getQuantidadeFuncionarios())
+                .ifPresent(funcaoEntity::setQuantidadeFuncionarios);
+
+        Optional.ofNullable(requestDTO.getDescricaoFuncao())
+                .ifPresent(funcaoEntity::setDescricao);
+
+        Optional.ofNullable(requestDTO.getTipoGfip())
+                .ifPresent(funcaoEntity::setTipoGfip);
+
+        Optional.ofNullable(requestDTO.getAtividadesInsalubres())
+                .ifPresent(funcaoEntity::setAtividadesInsalubres);
+
+        Optional.ofNullable(requestDTO.getInformacoesComplementaresRegistrosAmbientais())
+                .ifPresent(funcaoEntity::setInformacoesComplementaresRegistrosAmbientais);
+    }
+
+    private void processRiscosPGR(FuncaoEntity funcaoEntity, FuncaoRequestDTO requestDTO) {
+        if (!CollectionUtils.isEmpty(requestDTO.getRiscosPGR())) {
+            requestDTO.getRiscosPGR().forEach(riscoDTO -> {
+                try {
+                    funcaoEntity.addRiscoPGR(riscoTrabalhistaPgrMapper.toEntity(riscoDTO));
+                } catch (Exception e) {
+                    log.error("Erro ao processar risco PGR: {}", e.getMessage());
+                    throw new RuntimeException("Erro ao processar riscos PGR", e);
+                }
+            });
+        }
+    }
+
+    public void processProfissionaisResponsaveis(FuncaoEntity funcaoEntity, FuncaoRequestDTO requestDTO){
+        if (!CollectionUtils.isEmpty(requestDTO.getProfissionaisResponsaveis())){
+            requestDTO.getProfissionaisResponsaveis().forEach(profDTO -> {
+                try{
+                    ProfissionalRegistroAmbientalEntity profissionalRegistroAmbientalEntity =
+                            createProfissionalEntity(profDTO.getFuncionarioId());
+                    funcaoEntity.addProfissionalResponsavel(profissionalRegistroAmbientalEntity);
+                } catch (RuntimeException e) {
+                    log.error("Erro ao processar profissional responsavel ID {}: {}", profDTO
+                            .getFuncionarioId(), e.getMessage());
+                    throw new RuntimeException("Erro ao processar profissionais responsáveis");
+                }
+            });
+        }
+    }
+
+    public ProfissionalRegistroAmbientalEntity createProfissionalEntity(Long funcionarioId){
+        ProfissionalRegistroAmbientalEntity profissionalEntity = new ProfissionalRegistroAmbientalEntity();
+        profissionalEntity.setFuncionario(findFuncionarioById(funcionarioId));
+        return profissionalEntity;
+    }
+
+
+
+    private EmpresaEntity findEmpresaById(Long id) {
         return empresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada com ID: " + id));
+                .orElseThrow(() -> {
+                    log.error("Empresa não encontrada com ID: {}", id);
+                    return new ResourceNotFoundException("Empresa não encontrada com ID: " + id);
+                });
     }
-    private SetorEntity findSetor(Long id) {
+    private SetorEntity findSetorById(Long id) {
         return setorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Setor não encontrado com ID: " + id));
+                .orElseThrow(() -> {
+                    log.error("Setor não encontrado com ID: {}", id);
+                    return new ResourceNotFoundException("Setor não encontrado com ID: " + id);
+                } );
     }
-    private CboEntity findCbo(Long id) {
+    private CboEntity findCboById(Long id) {
         return cboRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("CBO não encontrado com ID: " + id));
+                .orElseThrow(()-> {
+                    log.error("CBO não encontrado com ID: {}", id);
+                    return new ResourceNotFoundException("CBO não encontrado com ID: " + id);
+                });
     }
-    private FuncionarioEntity findFuncionario(Long id) {
+    private FuncionarioEntity findFuncionarioById(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado com ID: " + id));
+                .orElseThrow(() -> {
+                    log.error("Funcionário não encontrado com ID: {}", id);
+                    return new ResourceNotFoundException("Funcionário não encontrado com ID: " + id);
+                });
     }
-    private FuncaoEntity findFuncao(Long id) {
+    private FuncaoEntity findFuncaoById(Long id) {
         return funcaoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com ID: " + id));
+                .orElseThrow( () -> {
+                    log.error("Função não encontrada com ID: {}", id);
+                    return new ResourceNotFoundException("Função não encontrada com ID: " + id);
+                } );
     }
 }
