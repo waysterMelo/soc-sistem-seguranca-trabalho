@@ -40,7 +40,7 @@ public class FuncaoEntity {
     private Integer quantidadeFuncionarios;
 
     @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name="descricao", nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
     @Enumerated(EnumType.STRING)
@@ -60,6 +60,15 @@ public class FuncaoEntity {
     @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<ProfissionalRegistroAmbientalEntity> profissionaisResponsaveis = new ArrayList<>();
+
+    @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<FuncaoAgenteNocivoEntity> agentesNocivosEsocial = new ArrayList<>();
+
+    @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<FuncaoExamePcmsoEntity> examesPcmso = new ArrayList<>();
+
 
     public void addRiscoPGR(RiscoTrabalhistaPgrEntity risco) {
         riscosPGR.add(risco);
@@ -81,5 +90,23 @@ public class FuncaoEntity {
         profissional.setFuncao(null);
     }
 
+    public void addAgenteNocivoEsocial(FuncaoAgenteNocivoEntity agenteNocivo) {
+        agentesNocivosEsocial.add(agenteNocivo);
+        agenteNocivo.setFuncao(this);
+    }
 
+    public void removeAgenteNocivoEsocial(FuncaoAgenteNocivoEntity agenteNocivo) {
+        agentesNocivosEsocial.remove(agenteNocivo);
+        agenteNocivo.setFuncao(null);
+    }
+
+    public void addExamePcmso(FuncaoExamePcmsoEntity exame) {
+        examesPcmso.add(exame);
+        exame.setFuncao(this);
+    }
+
+    public void removeExamePcmso(FuncaoExamePcmsoEntity exame) {
+        examesPcmso.remove(exame);
+        exame.setFuncao(null);
+    }
 }

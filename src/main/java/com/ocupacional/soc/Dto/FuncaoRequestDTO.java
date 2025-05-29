@@ -35,7 +35,7 @@ public class FuncaoRequestDTO {
     private Integer quantidadeFuncionarios;
 
     @NotBlank(message = "A descrição da função não pode ser vazia.")
-    private String descricaoFuncao;
+    private String descricaoFuncao; // Será mapeado para 'descricao' na entidade
 
     private TipoGfip tipoGfip;
 
@@ -47,5 +47,11 @@ public class FuncaoRequestDTO {
     private List<RiscoTrabalhistaPgrRequestDTO> riscosPGR;
 
     @Valid
-    private List<ProfissionalResponsavelRequestDTO> profissionaisResponsaveis;
+    private List<ProfissionalResponsavelRequestDTO>profissionaisResponsaveis;
+
+    @Valid
+    private List<FuncaoAgenteNocivoRequestDTO> agentesNocivosEsocial;
+
+    @Valid
+    private List<FuncaoExamePcmsoRequestDTO> examesPcmso;
 }

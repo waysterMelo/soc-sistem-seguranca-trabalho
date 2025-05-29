@@ -1,21 +1,18 @@
 package com.ocupacional.soc.Entities;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
-@Table(name = "risco_trabalhista_pgr") // Mantém o nome da tabela de associação
+@Table(name = "funcao_agentes_nocivos")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiscoTrabalhistaPgrEntity {
+public class FuncaoAgenteNocivoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +23,6 @@ public class RiscoTrabalhistaPgrEntity {
     private FuncaoEntity funcao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "risco_catalogo_id", nullable = false)
-    private RiscoCatalogoEntity riscoCatalogo;
-
-
+    @JoinColumn(name = "agente_nocivo_catalogo_id", nullable = false)
+    private AgenteNocivoCatalogoEntity agenteNocivoCatalogo;
 }

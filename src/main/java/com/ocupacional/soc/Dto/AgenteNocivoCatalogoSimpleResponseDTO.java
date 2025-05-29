@@ -1,6 +1,5 @@
 package com.ocupacional.soc.Dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiscoTrabalhistaPgrRequestDTO {
+public class AgenteNocivoCatalogoSimpleResponseDTO {
 
-    @NotNull(message = "O ID do Risco (Catálogo) é obrigatório.")
-    private Long riscoCatalogoId;
+    private Long id;
+    private String codigoEsocial;
+    private String descricao;
+
+
 }

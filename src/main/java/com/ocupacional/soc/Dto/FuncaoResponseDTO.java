@@ -7,14 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FuncaoResponseDTO {
-
 
     private Long id;
     private EmpresaSimpleResponseDTO empresa;
@@ -23,11 +20,12 @@ public class FuncaoResponseDTO {
     private String nomeCbo;
     private String nome;
     private Integer quantidadeFuncionarios;
-    private String descricaoFuncao;
+    private String descricaoFuncao; // Será mapeado de 'descricao' da entidade
     private TipoGfip tipoGfip;
     private String atividadesInsalubres;
     private String informacoesComplementaresRegistrosAmbientais;
     private List<RiscoTrabalhistaPgrResponseDTO> riscosPGR;
     private List<ProfissionalResponsavelResponseDTO> profissionaisResponsaveis;
-
+    private List<FuncaoAgenteNocivoResponseDTO> agentesNocivosEsocial;
+    private List<FuncaoExamePcmsoResponseDTO> examesPcmso;
 }

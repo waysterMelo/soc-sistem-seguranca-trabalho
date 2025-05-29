@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiscoTrabalhistaPgrRequestDTO {
+public class FuncaoAgenteNocivoRequestDTO {
 
-    @NotNull(message = "O ID do Risco (Catálogo) é obrigatório.")
-    private Long riscoCatalogoId;
+    @NotNull(message = "O ID do Agente Nocivo (Catálogo) é obrigatório.")
+    private Long agenteNocivoCatalogoId;
+
+
 }

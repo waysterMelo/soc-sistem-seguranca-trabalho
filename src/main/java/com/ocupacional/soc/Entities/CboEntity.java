@@ -2,24 +2,27 @@ package com.ocupacional.soc.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Entity
+@Table(name = "cbo")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class CboEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String codigo;
+    @Column(name = "codigo_cbo", nullable = false, unique = true, length = 7)
+    private String codigoCbo;
 
-    @Column(nullable = false)
-    private String titulo;
+    @Column(name = "nome_ocupacao", nullable = false, columnDefinition = "TEXT")
+    private String nomeOcupacao;
+
+
 }
