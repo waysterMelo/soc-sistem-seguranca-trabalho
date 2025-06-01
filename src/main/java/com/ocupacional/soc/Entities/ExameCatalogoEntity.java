@@ -22,7 +22,7 @@ public class ExameCatalogoEntity {
     @Column(name = "codigo_exame", unique = true, length = 20)
     private String codigoExame;
 
-    @Column(name = "nome_exame", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "nome_exame", nullable = false)
     private String nomeExame;
 
 

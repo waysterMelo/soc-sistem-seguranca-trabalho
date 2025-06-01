@@ -9,16 +9,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {ExameCatalogoMapper.class})
+@Mapper(componentModel = "spring", uses = {ExameCatalogoMapper.class}) // ExameCatalogoMapper já está em 'uses'
 public interface FuncaoExamePcmsoMapper {
     FuncaoExamePcmsoMapper INSTANCE = Mappers.getMapper(FuncaoExamePcmsoMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "funcao", ignore = true) // Será setada no service
+    @Mapping(target = "funcao", ignore = true)
     @Mapping(source = "exameCatalogoId", target = "exameCatalogo", qualifiedByName = "idToExameCatalogoEntity")
     FuncaoExamePcmsoEntity requestDtoToEntity(FuncaoExamePcmsoRequestDTO dto);
 
-    @Mapping(source = "exameCatalogo", target = "exameCatalogo") // Usa ExameCatalogoMapper
+    // ATUALIZE AQUI para usar o método nomeado do ExameCatalogoMapper
+    @Mapping(source = "exameCatalogo", target = "exameCatalogo", qualifiedByName = "toExameCatalogoSimpleResponseDTO")
     FuncaoExamePcmsoResponseDTO entityToResponseDto(FuncaoExamePcmsoEntity entity);
 
     @Named("idToExameCatalogoEntity")

@@ -155,6 +155,13 @@ public class FuncaoServiceImpl implements FuncaoService {
         if (!CollectionUtils.isEmpty(requestDTO.getExamesPcmso())) {
             requestDTO.getExamesPcmso().forEach(exameDTO -> {
                 ExameCatalogoEntity catalogoExame = findExameCatalogoById(exameDTO.getExameCatalogoId());
+
+                // ✅ PONTO DE DEBUG: Verifique aqui
+                 System.out.println("ID do Exame: " + catalogoExame.getId());
+                System.out.println("Código do Exame (entidade): " + catalogoExame.getCodigoExame());
+                System.out.println("Nome do Exame (entidade ANTES do mapeamento): " + catalogoExame.getNomeExame());
+
+
                 FuncaoExamePcmsoEntity funcaoExameEntity = funcaoExamePcmsoMapper.requestDtoToEntity(exameDTO);
                 funcaoExameEntity.setExameCatalogo(catalogoExame); // Garantir que a entidade completa está lá
                 // O tipoExame, periodicidade e obrigatorio já são mapeados pelo funcaoExamePcmsoMapper
