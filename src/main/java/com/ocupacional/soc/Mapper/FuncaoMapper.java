@@ -9,7 +9,7 @@ import com.ocupacional.soc.Entities.SetorEntity;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-// Removido import java.util.UUID;
+
 
 @Mapper(componentModel = "spring", uses = {
         RiscoTrabalhistaPgrMapper.class,

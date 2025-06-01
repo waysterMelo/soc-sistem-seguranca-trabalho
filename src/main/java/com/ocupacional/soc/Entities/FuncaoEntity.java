@@ -101,12 +101,18 @@ public class FuncaoEntity {
     }
 
     public void addExamePcmso(FuncaoExamePcmsoEntity exame) {
-        examesPcmso.add(exame);
+        if (this.examesPcmso == null ){
+            this.examesPcmso = new ArrayList<>();
+        }
+        this.examesPcmso.add(exame);
         exame.setFuncao(this);
     }
 
     public void removeExamePcmso(FuncaoExamePcmsoEntity exame) {
-        examesPcmso.remove(exame);
-        exame.setFuncao(null);
+       if (this.examesPcmso != null){
+           this.examesPcmso.remove(exame);
+           exame.setFuncao(null);
+       }
     }
+
 }

@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExameCatalogoSimpleResponseDTO {
+public class ExameCatalogoResponseDTO {
 
     private Long id;
     private String codigoExame;
     private String nomeExame;
-
 
 }

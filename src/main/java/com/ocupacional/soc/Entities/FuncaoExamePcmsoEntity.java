@@ -26,7 +26,7 @@ public class FuncaoExamePcmsoEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exame_catalogo_id", nullable = false)
-    private ExamesPCMSO exameCatalogo;
+    private ExameCatalogoEntity exameCatalogo;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_exame", nullable = false)

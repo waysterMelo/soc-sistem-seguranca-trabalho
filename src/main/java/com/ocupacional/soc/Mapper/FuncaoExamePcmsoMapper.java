@@ -2,7 +2,7 @@ package com.ocupacional.soc.Mapper;
 
 import com.ocupacional.soc.Dto.FuncaoExamePcmsoRequestDTO;
 import com.ocupacional.soc.Dto.FuncaoExamePcmsoResponseDTO;
-import com.ocupacional.soc.Entities.ExamesPCMSO;
+import com.ocupacional.soc.Entities.ExameCatalogoEntity;
 import com.ocupacional.soc.Entities.FuncaoExamePcmsoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,11 +22,11 @@ public interface FuncaoExamePcmsoMapper {
     FuncaoExamePcmsoResponseDTO entityToResponseDto(FuncaoExamePcmsoEntity entity);
 
     @Named("idToExameCatalogoEntity")
-    default ExamesPCMSO idToExameCatalogoEntity(Long id) {
+    default ExameCatalogoEntity idToExameCatalogoEntity(Long id) {
         if (id == null) {
             return null;
         }
-        ExamesPCMSO exame = new ExamesPCMSO();
+        ExameCatalogoEntity exame = new ExameCatalogoEntity();
         exame.setId(id);
         return exame;
     }

@@ -154,7 +154,7 @@ public class FuncaoServiceImpl implements FuncaoService {
         funcaoEntity.getExamesPcmso().clear();
         if (!CollectionUtils.isEmpty(requestDTO.getExamesPcmso())) {
             requestDTO.getExamesPcmso().forEach(exameDTO -> {
-                ExamesPCMSO catalogoExame = findExameCatalogoById(exameDTO.getExameCatalogoId());
+                ExameCatalogoEntity catalogoExame = findExameCatalogoById(exameDTO.getExameCatalogoId());
                 FuncaoExamePcmsoEntity funcaoExameEntity = funcaoExamePcmsoMapper.requestDtoToEntity(exameDTO);
                 funcaoExameEntity.setExameCatalogo(catalogoExame); // Garantir que a entidade completa está lá
                 // O tipoExame, periodicidade e obrigatorio já são mapeados pelo funcaoExamePcmsoMapper
@@ -208,7 +208,7 @@ public class FuncaoServiceImpl implements FuncaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Agente Nocivo (Catálogo) não encontrado com ID: " + id));
     }
 
-    private ExamesPCMSO findExameCatalogoById(Long id) {
+    private ExameCatalogoEntity findExameCatalogoById(Long id) {
         return exameCatalogoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Exame (Catálogo) não encontrado com ID: " + id));
     }

@@ -12,19 +12,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExamesPCMSO {
+public class ExameCatalogoEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Pode ser um código interno ou do eSocial, se aplicável
-    @Column(name = "codigo_exame", unique = true)
+    @Column(name = "codigo_exame", unique = true, length = 20)
     private String codigoExame;
 
-    @Column(nullable = false)
-    private String nome;
+    @Column(name = "nome_exame", nullable = false, columnDefinition = "TEXT")
+    private String nomeExame;
 
-    @Column(columnDefinition = "TEXT")
-    private String descricaoOrientacoes;
+
+
 }
