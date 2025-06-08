@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Entities.MedicoEntity;
-import com.ocupacional.soc.Repositories.MedicoRepository;
+import com.ocupacional.soc.Entities.Cadastros.MedicoEntity;
+import com.ocupacional.soc.Repositories.Cadastros.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

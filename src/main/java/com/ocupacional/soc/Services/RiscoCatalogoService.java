@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Dto.RiscoCatalogoRequestDTO;
-import com.ocupacional.soc.Dto.RiscoCatalogoResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoResponseDTO;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

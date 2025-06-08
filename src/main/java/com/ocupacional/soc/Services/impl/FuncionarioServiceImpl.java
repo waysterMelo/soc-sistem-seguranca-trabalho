@@ -1,16 +1,16 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.FuncionarioRequestDTO;
-import com.ocupacional.soc.Dto.FuncionarioResponseDTO;
-import com.ocupacional.soc.Entities.EmpresaEntity;
-import com.ocupacional.soc.Entities.FuncionarioEntity;
-import com.ocupacional.soc.Entities.TelefoneEntity;
+import com.ocupacional.soc.Dto.Cadastros.FuncionarioRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
+import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Entities.Cadastros.FuncionarioEntity;
+import com.ocupacional.soc.Entities.Cadastros.TelefoneEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Exceptions.InvalidRequestException;
-import com.ocupacional.soc.Mapper.FuncionarioMapper;
-import com.ocupacional.soc.Mapper.TelefoneMapper; // Importe se não estiver no mesmo pacote de FuncionarioMapper
-import com.ocupacional.soc.Repositories.EmpresaRepository;
-import com.ocupacional.soc.Repositories.FuncionarioRepository;
+import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
+import com.ocupacional.soc.Mapper.Cadastros.TelefoneMapper; // Importe se não estiver no mesmo pacote de FuncionarioMapper
+import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
+import com.ocupacional.soc.Repositories.Cadastros.FuncionarioRepository;
 import com.ocupacional.soc.Services.FuncionarioService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service

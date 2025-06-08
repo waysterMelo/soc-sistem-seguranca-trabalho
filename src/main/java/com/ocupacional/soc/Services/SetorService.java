@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Dto.SetorRequestDTO;
-import com.ocupacional.soc.Dto.SetorResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.SetorRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.SetorResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,14 +1,13 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.SetorRequestDTO;
-import com.ocupacional.soc.Dto.SetorResponseDTO;
-import com.ocupacional.soc.Entities.EmpresaEntity;
-import com.ocupacional.soc.Entities.SetorEntity;
-import com.ocupacional.soc.Entities.UnidadeOperacionalEntity;
-import com.ocupacional.soc.Mapper.SetorMapper;
-import com.ocupacional.soc.Repositories.EmpresaRepository;
-import com.ocupacional.soc.Repositories.SetorRepository;
-import com.ocupacional.soc.Repositories.UnidadeOperacionalRepository;
+import com.ocupacional.soc.Dto.Cadastros.SetorRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.SetorResponseDTO;
+import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
+import com.ocupacional.soc.Mapper.Cadastros.SetorMapper;
+import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
+import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
+import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Services.SetorService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -37,51 +36,22 @@ public class SetorServiceImpl implements SetorService {
     @Override
     @Transactional
     public SetorResponseDTO criar(SetorRequestDTO dto) {
-        System.out.println("DEBUG: Iniciando criar setor. DTO empresaId: " + dto.getEmpresaId()); // Ponto de Debug 1
 
         EmpresaEntity empresa = empresaRepository.findById(dto.getEmpresaId())
                 .orElseThrow(() -> {
-                    // Log antes de lançar a exceção pode ser útil
-                    System.err.println("DEBUG: Empresa não encontrada com ID: " + dto.getEmpresaId());
                     return new EntityNotFoundException("Empresa não encontrada com ID: " + dto.getEmpresaId());
                 });
-
-        // Ponto de Debug 2: Verificar a empresa recuperada
-        if (empresa != null) {
-            System.out.println("DEBUG: Empresa recuperada: ID=" + empresa.getId() + ", Nome=" + empresa.getNomeFantasia());
-            if (empresa.getId() == null) {
-                System.err.println("DEBUG: ALERTA! ID da empresa recuperada é NULL!");
-            }
-        } else {
-            System.err.println("DEBUG: ALERTA! Objeto Empresa é NULL após findById (não deveria acontecer devido ao orElseThrow).");
-        }
-
 
         setorRepository.findByNomeAndEmpresaId(dto.getNome(), dto.getEmpresaId()).ifPresent(existingSetor -> {
             throw new IllegalArgumentException("Setor com o nome '" + dto.getNome() + "' já existe na empresa " + (empresa != null ? empresa.getNomeFantasia() : "ID: "+dto.getEmpresaId()) + ".");
         });
 
         SetorEntity setorEntity = setorMapper.toEntity(dto);
-        // Ponto de Debug 3: Verificar setorEntity.getEmpresa() ANTES de setar
-        System.out.println("DEBUG: setorEntity.getEmpresa() ANTES de setar: " + setorEntity.getEmpresa());
-
-
-        setorEntity.setEmpresa(empresa); // Linha crucial!
-
-        // Ponto de Debug 4: Verificar setorEntity.getEmpresa() DEPOIS de setar
-        if (setorEntity.getEmpresa() != null) {
-            System.out.println("DEBUG: setorEntity.getEmpresa() DEPOIS de setar: ID=" + setorEntity.getEmpresa().getId());
-            if (setorEntity.getEmpresa().getId() == null) {
-                System.err.println("DEBUG: ALERTA! ID da empresa em setorEntity é NULL DEPOIS de setar!");
-            }
-        } else {
-            System.err.println("DEBUG: ALERTA! setorEntity.getEmpresa() é NULL DEPOIS de setar!");
-        }
+        setorEntity.setEmpresa(empresa);
 
         try {
             setorEntity = setorRepository.save(setorEntity);
         } catch (Exception e) {
-            System.err.println("DEBUG: Erro ao salvar setorEntity: " + e.getMessage());
             e.printStackTrace(); // Imprime o stack trace completo do erro no console do servidor
             throw e; // Relança a exceção para ser tratada pelo GlobalExceptionHandler
         }

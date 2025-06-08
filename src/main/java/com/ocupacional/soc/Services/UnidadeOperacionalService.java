@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Dto.UnidadeOperacionalRequestDTO;
-import com.ocupacional.soc.Dto.UnidadeOperacionalResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

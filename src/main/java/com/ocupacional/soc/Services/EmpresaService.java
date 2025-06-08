@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Entities.EmpresaEntity;
-import com.ocupacional.soc.Repositories.EmpresaRepository;
+import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

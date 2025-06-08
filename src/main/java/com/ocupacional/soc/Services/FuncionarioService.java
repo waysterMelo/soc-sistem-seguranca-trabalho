@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services;
 
-import com.ocupacional.soc.Dto.FuncionarioRequestDTO;
-import com.ocupacional.soc.Dto.FuncionarioResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.FuncionarioRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

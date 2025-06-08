@@ -1,12 +1,12 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.RiscoCatalogoRequestDTO;
-import com.ocupacional.soc.Dto.RiscoCatalogoResponseDTO;
-import com.ocupacional.soc.Entities.RiscoCatalogoEntity;
+import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoResponseDTO;
+import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
-import com.ocupacional.soc.Mapper.RiscoCatalogoMapper;
-import com.ocupacional.soc.Repositories.RiscoCatalogoRepository;
+import com.ocupacional.soc.Mapper.Cadastros.RiscoCatalogoMapper;
+import com.ocupacional.soc.Repositories.Cadastros.RiscoCatalogoRepository;
 import com.ocupacional.soc.Services.RiscoCatalogoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

@@ -1,12 +1,18 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.EnderecoDto;
-import com.ocupacional.soc.Dto.UnidadeOperacionalRequestDTO;
-import com.ocupacional.soc.Dto.UnidadeOperacionalResponseDTO;
-import com.ocupacional.soc.Entities.*;
-import com.ocupacional.soc.Mapper.EnderecoMapper;
-import com.ocupacional.soc.Mapper.UnidadeOperacionalMapper;
-import com.ocupacional.soc.Repositories.*;
+import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
+import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
+import com.ocupacional.soc.Entities.Cadastros.CnaeEntity;
+import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
+import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
+import com.ocupacional.soc.Mapper.Cadastros.EnderecoMapper;
+import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
+import com.ocupacional.soc.Repositories.Cadastros.CnaeRepository;
+import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
+import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
+import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Services.UnidadeOperacionalService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;

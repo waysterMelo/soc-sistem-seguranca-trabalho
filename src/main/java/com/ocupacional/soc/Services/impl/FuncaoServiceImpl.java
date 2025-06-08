@@ -1,14 +1,14 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.FuncaoRequestDTO;
-import com.ocupacional.soc.Dto.FuncaoResponseDTO;
-import com.ocupacional.soc.Entities.*;
+import com.ocupacional.soc.Dto.Cadastros.FuncaoRequestDTO;
+import com.ocupacional.soc.Dto.Cadastros.FuncaoResponseDTO;
+import com.ocupacional.soc.Entities.Cadastros.*;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
-import com.ocupacional.soc.Mapper.FuncaoAgenteNocivoMapper;
-import com.ocupacional.soc.Mapper.FuncaoExamePcmsoMapper;
-import com.ocupacional.soc.Mapper.FuncaoMapper;
-import com.ocupacional.soc.Mapper.RiscoTrabalhistaPgrMapper;
-import com.ocupacional.soc.Repositories.*;
+import com.ocupacional.soc.Mapper.Cadastros.FuncaoAgenteNocivoMapper;
+import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
+import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
+import com.ocupacional.soc.Mapper.Cadastros.RiscoTrabalhistaPgrMapper;
+import com.ocupacional.soc.Repositories.Cadastros.*;
 import com.ocupacional.soc.Services.FuncaoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
