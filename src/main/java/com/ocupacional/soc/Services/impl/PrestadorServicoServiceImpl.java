@@ -8,7 +8,7 @@ import com.ocupacional.soc.Exceptions.NotFoundException;
 import com.ocupacional.soc.Mapper.PrestadorServiços.PrestadorServicoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.CboRepository;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
-import com.ocupacional.soc.Services.PrestadorServicoService;
+import com.ocupacional.soc.Services.Cadastros.PrestadorServicoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

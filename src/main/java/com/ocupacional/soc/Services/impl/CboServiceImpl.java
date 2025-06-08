@@ -5,7 +5,7 @@ import com.ocupacional.soc.Mapper.Cadastros.CboMapper;
 import com.ocupacional.soc.Dto.Cadastros.CboRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.CboResponseDTO;
 import com.ocupacional.soc.Repositories.Cadastros.CboRepository;
-import com.ocupacional.soc.Services.CboService;
+import com.ocupacional.soc.Services.Cadastros.CboService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

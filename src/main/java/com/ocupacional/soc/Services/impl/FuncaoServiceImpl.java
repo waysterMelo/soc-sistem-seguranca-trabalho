@@ -9,7 +9,7 @@ import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.RiscoTrabalhistaPgrMapper;
 import com.ocupacional.soc.Repositories.Cadastros.*;
-import com.ocupacional.soc.Services.FuncaoService;
+import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

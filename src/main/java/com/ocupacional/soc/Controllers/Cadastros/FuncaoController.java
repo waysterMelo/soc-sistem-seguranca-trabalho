@@ -2,7 +2,7 @@ package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.FuncaoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncaoResponseDTO;
-import com.ocupacional.soc.Services.FuncaoService;
+import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

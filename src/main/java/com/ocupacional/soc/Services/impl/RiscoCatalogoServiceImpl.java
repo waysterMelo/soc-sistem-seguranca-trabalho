@@ -7,7 +7,7 @@ import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.RiscoCatalogoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.RiscoCatalogoRepository;
-import com.ocupacional.soc.Services.RiscoCatalogoService;
+import com.ocupacional.soc.Services.Cadastros.RiscoCatalogoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

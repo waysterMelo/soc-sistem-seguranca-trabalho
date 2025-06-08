@@ -2,7 +2,7 @@ package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
-import com.ocupacional.soc.Services.UnidadeOperacionalService;
+import com.ocupacional.soc.Services.Cadastros.UnidadeOperacionalService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.*;
 import org.springframework.http.HttpStatus;

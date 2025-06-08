@@ -3,7 +3,7 @@ package com.ocupacional.soc.Controllers.Cadastros;
 import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoResponseDTO;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
-import com.ocupacional.soc.Services.RiscoCatalogoService;
+import com.ocupacional.soc.Services.Cadastros.RiscoCatalogoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -8,7 +8,7 @@ import com.ocupacional.soc.Mapper.Cadastros.SetorMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
-import com.ocupacional.soc.Services.SetorService;
+import com.ocupacional.soc.Services.Cadastros.SetorService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

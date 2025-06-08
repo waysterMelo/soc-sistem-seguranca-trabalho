@@ -13,7 +13,7 @@ import com.ocupacional.soc.Repositories.Cadastros.CnaeRepository;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
-import com.ocupacional.soc.Services.UnidadeOperacionalService;
+import com.ocupacional.soc.Services.Cadastros.UnidadeOperacionalService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Services;
+package com.ocupacional.soc.Services.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;

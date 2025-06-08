@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
-import com.ocupacional.soc.Services.EmpresaService;
+import com.ocupacional.soc.Services.Cadastros.EmpresaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

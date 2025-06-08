@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Services;
+package com.ocupacional.soc.Services.Cadastros;
 
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;

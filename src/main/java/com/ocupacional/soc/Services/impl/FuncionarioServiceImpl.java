@@ -11,7 +11,7 @@ import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
 import com.ocupacional.soc.Mapper.Cadastros.TelefoneMapper; // Importe se não estiver no mesmo pacote de FuncionarioMapper
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncionarioRepository;
-import com.ocupacional.soc.Services.FuncionarioService;
+import com.ocupacional.soc.Services.Cadastros.FuncionarioService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

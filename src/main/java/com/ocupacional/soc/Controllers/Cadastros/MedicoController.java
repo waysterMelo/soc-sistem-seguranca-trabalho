@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Entities.Cadastros.MedicoEntity;
-import com.ocupacional.soc.Services.MedicoService;
+import com.ocupacional.soc.Services.Cadastros.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
