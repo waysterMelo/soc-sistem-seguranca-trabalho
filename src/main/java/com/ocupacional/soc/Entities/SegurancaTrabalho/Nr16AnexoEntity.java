@@ -14,6 +14,7 @@ public class Nr16AnexoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "norma_regulamentadora")
     private Integer normaRegulamentadora;
 

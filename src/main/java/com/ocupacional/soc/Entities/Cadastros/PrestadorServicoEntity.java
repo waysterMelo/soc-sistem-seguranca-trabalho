@@ -40,9 +40,6 @@ public class PrestadorServicoEntity {
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
-    // --- Endereço ---
-    // Reutilizando a EnderecoEntity que já existe.
-    // CascadeType.ALL significa que ao salvar um Prestador, o Endereço associado também será salvo.
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;

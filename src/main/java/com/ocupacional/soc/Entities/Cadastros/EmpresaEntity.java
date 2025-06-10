@@ -64,7 +64,7 @@ public class EmpresaEntity {
     private EmpresaEntity empresaMatriz;
 
     @ManyToOne
-    private MedicoEntity medicoResponsavelPcmsso;
+    private PrestadorServicoEntity medicoResponsavelPcmsso;
 
     @Column(columnDefinition = "TEXT")
     private String observacoes;

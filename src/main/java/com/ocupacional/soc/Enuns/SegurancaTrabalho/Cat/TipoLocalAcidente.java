@@ -1,0 +1,11 @@
+package com.ocupacional.soc.Enuns.SegurancaTrabalho.Cat;
+
+public enum TipoLocalAcidente {
+    ESTABELECIMENTO_DO_EMPREGADOR_NO_BRASIL,
+    ESTABELECIMENTO_DO_EMPREGADOR_NO_EXTERIOR,
+    ESTABELECIMENTO_DE_TERCEIROS,
+    VIA_PUBLICA,
+    AREA_RURAL,
+    EMBARCACAO,
+    OUTROS
+}
