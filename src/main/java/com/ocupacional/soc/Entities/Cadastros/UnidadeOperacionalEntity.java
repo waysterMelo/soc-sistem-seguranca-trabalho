@@ -1,21 +1,22 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
 import com.ocupacional.soc.Enuns.UnidadeOperacional.SituacaoUnidadeOperacional;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Table(name = "unidades_operacionais")
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 public class UnidadeOperacionalEntity {
 
     @Id
@@ -33,6 +34,8 @@ public class UnidadeOperacionalEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
+    @JsonBackReference
+    @ToString.Exclude @EqualsAndHashCode.Exclude
     private EmpresaEntity empresa;
 
     private String endereco;
@@ -58,7 +61,6 @@ public class UnidadeOperacionalEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cnae_principal_id")
     private CnaeEntity cnaePrincipal;
-
 
     @Column(nullable = false)
     private boolean alocadaEmEmpresaTerceira = false;

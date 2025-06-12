@@ -1,26 +1,27 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoEmpresa;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "empresas")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor@ToString(onlyExplicitlyIncluded = true)
 public class EmpresaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include @EqualsAndHashCode.Include
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -68,4 +69,9 @@ public class EmpresaEntity {
 
     @Column(columnDefinition = "TEXT")
     private String observacoes;
+
+    @OneToMany(mappedBy = "empresa")
+    @JsonManagedReference
+    @ToString.Exclude @EqualsAndHashCode.Exclude
+    private List<UnidadeOperacionalEntity> unidadesOperacionais;
 }

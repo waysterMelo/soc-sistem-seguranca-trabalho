@@ -50,4 +50,7 @@ public class EpiEpcEntity {
 
     @Column(name="criado_por")
     private String criadoPor;
+
+    @Column(nullable = false)
+    private Integer quantidadeEmEstoque;
 }
