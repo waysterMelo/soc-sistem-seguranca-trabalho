@@ -93,6 +93,9 @@ public class FuncionarioEntity {
     @EqualsAndHashCode.Exclude
     private EmpresaEntity empresa;
 
+    @Column(name = "data_admissao")
+    private LocalDate dataAdmissao;
+
     @Transient
     public Integer getIdade() {
         if (this.dataNascimento == null) {

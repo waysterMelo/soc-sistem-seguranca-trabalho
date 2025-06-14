@@ -59,7 +59,7 @@ public class LtcatEntity {
             joinColumns = @JoinColumn(name = "ltcat_id"),
             inverseJoinColumns = @JoinColumn(name = "profissional_id"))
     @Builder.Default
-    private Set<ProfissionalRegistroAmbientalEntity> profissionaisAmbientais = new HashSet<>();
+    private Set<ProfissionalRegistrosEntity> profissionaisAmbientais = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "ltcat_prestadores_servico",

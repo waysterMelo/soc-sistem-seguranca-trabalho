@@ -3,7 +3,7 @@ package com.ocupacional.soc.Mapper.SegurancaTrabalho.Cat;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.Cat.CatResponseDTO;
 import com.ocupacional.soc.Entities.Cat.CatEntity;
 import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
-import com.ocupacional.soc.Mapper.PrestadorServiços.PrestadorServicoMapper;
+import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -3,6 +3,7 @@ package com.ocupacional.soc.Dto.Cadastros;
 import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import com.ocupacional.soc.Enuns.Funcionario.StatusFuncionario;
 import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,5 +33,6 @@ public class FuncionarioResponseDTO {
     private EnderecoDto endereco;
     private List<TelefoneDto> telefones;
     private EmpresaSimpleResponseDTO empresa;
+    private LocalDate dataAdmissao;
 
 }

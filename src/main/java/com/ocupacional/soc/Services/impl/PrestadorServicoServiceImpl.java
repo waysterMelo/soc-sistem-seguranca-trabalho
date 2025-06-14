@@ -5,7 +5,7 @@ import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoRespons
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Exceptions.BusinessException;
 import com.ocupacional.soc.Exceptions.NotFoundException;
-import com.ocupacional.soc.Mapper.PrestadorServiços.PrestadorServicoMapper;
+import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.CboRepository;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Services.Cadastros.PrestadorServicoService;

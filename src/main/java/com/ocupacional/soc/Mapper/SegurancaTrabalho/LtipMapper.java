@@ -4,7 +4,7 @@ import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.LtipEntity;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Mapper.Mapper.AparelhoMapper;
-import com.ocupacional.soc.Mapper.PrestadorServiços.PrestadorServicoMapper;
+import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

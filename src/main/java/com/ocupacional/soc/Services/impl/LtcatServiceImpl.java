@@ -2,7 +2,8 @@ package com.ocupacional.soc.Services.impl;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
-import com.ocupacional.soc.Entities.Cadastros.*;
+import com.ocupacional.soc.Entities.Cadastros.AgenteNocivoCatalogoEntity;
+import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatAgenteNocivoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
@@ -18,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class LtcatServiceImpl implements LtcatService {
     private final LtcatRepository ltcatRepository;
     private final LtcatMapper ltcatMapper;
     private final UnidadeOperacionalRepository unidadeOperacionalRepository;
-    private final ProfissionalRegistroAmbientalRepository profissionalRegistroAmbientalRepository;
+    private final ProfissionalRegistrosRepository profissionalRegistrosRepository;
     private final PrestadorServicoRepository prestadorServicoRepository;
     private final AparelhoRepository aparelhoRepository;
     private final BibliografiaRepository bibliografiaRepository;
@@ -93,7 +94,7 @@ public class LtcatServiceImpl implements LtcatService {
         entity.setConclusao(dto.getConclusao());
         entity.setPlanejamentoAnual(dto.getPlanejamentoAnual());
 
-        if(dto.getProfissionaisAmbientaisIds() != null) entity.setProfissionaisAmbientais(new HashSet<>(profissionalRegistroAmbientalRepository.findAllById(dto.getProfissionaisAmbientaisIds())));
+        if(dto.getProfissionaisAmbientaisIds() != null) entity.setProfissionaisAmbientais(new HashSet<>(profissionalRegistrosRepository.findAllById(dto.getProfissionaisAmbientaisIds())));
         if(dto.getPrestadoresServicoIds() != null) entity.setPrestadoresServico(new HashSet<>(prestadorServicoRepository.findAllById(dto.getPrestadoresServicoIds())));
         if(dto.getAparelhosIds() != null) entity.setAparelhos(new HashSet<>(aparelhoRepository.findAllById(dto.getAparelhosIds())));
         if(dto.getBibliografiasIds() != null) entity.setBibliografias(new HashSet<>(bibliografiaRepository.findAllById(dto.getBibliografiasIds())));
@@ -106,7 +107,7 @@ public class LtcatServiceImpl implements LtcatService {
                 AgenteNocivoCatalogoEntity an = agenteNocivoCatalogoRepository.findById(agenteDto.getAgenteNocivoId()).orElseThrow(() -> new ResourceNotFoundException("Agente Nocivo não encontrado."));
                 FuncaoEntity f = funcaoRepository.findById(agenteDto.getFuncaoId()).orElseThrow(() -> new ResourceNotFoundException("Função não encontrada."));
                 return LtcatAgenteNocivoEntity.builder().ltcat(entity).agenteNocivo(an).funcao(f).build();
-            }).collect(Collectors.toList());
+            }).toList();
             entity.getAgentesNocivos().addAll(novosAgentes);
         }
 

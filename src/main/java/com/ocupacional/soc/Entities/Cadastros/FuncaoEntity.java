@@ -59,7 +59,7 @@ public class FuncaoEntity {
 
     @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<ProfissionalRegistroAmbientalEntity> profissionaisResponsaveis = new ArrayList<>();
+    private List<ProfissionalRegistrosEntity> profissionaisResponsaveis = new ArrayList<>();
 
     @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
@@ -80,12 +80,12 @@ public class FuncaoEntity {
         risco.setFuncao(null);
     }
 
-    public void addProfissionalResponsavel(ProfissionalRegistroAmbientalEntity profissional) {
+    public void addProfissionalResponsavel(ProfissionalRegistrosEntity profissional) {
         profissionaisResponsaveis.add(profissional);
         profissional.setFuncao(this);
     }
 
-    public void removeProfissionalResponsavel(ProfissionalRegistroAmbientalEntity profissional) {
+    public void removeProfissionalResponsavel(ProfissionalRegistrosEntity profissional) {
         profissionaisResponsaveis.remove(profissional);
         profissional.setFuncao(null);
     }

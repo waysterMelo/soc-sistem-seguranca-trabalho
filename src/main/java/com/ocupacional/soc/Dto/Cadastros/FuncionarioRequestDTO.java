@@ -32,7 +32,8 @@ public class FuncionarioRequestDTO {
     @Valid @NotNull(message = "Endereço é obrigatório") private EnderecoDto endereco;
     @Valid private List<TelefoneDto> telefones;
     @NotNull(message = "ID da Empresa é obrigatório") private Long empresaId;
-
+    @NotNull(message = "Data de admissão é obrigatório ")
+    private LocalDate dataAdmissao;
 
 
 }

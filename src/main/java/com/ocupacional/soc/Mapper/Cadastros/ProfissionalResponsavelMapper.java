@@ -2,7 +2,7 @@ package com.ocupacional.soc.Mapper.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.ProfissionalResponsavelResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.FuncionarioEntity;
-import com.ocupacional.soc.Entities.Cadastros.ProfissionalRegistroAmbientalEntity;
+import com.ocupacional.soc.Entities.Cadastros.ProfissionalRegistrosEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -15,7 +15,7 @@ public interface ProfissionalResponsavelMapper {
 
     @Mapping(source = "funcionario.id", target = "funcionarioId") // Alterado de medico.id
     @Mapping(source = "funcionario", target = "nomeFuncionario", qualifiedByName = "funcionarioToNomeFuncionario") // Alterado de medicoToNomeMedico
-    ProfissionalResponsavelResponseDTO toResponseDTO(ProfissionalRegistroAmbientalEntity entity);
+    ProfissionalResponsavelResponseDTO toResponseDTO(ProfissionalRegistrosEntity entity);
 
     @Named("funcionarioToNomeFuncionario")
     default String funcionarioToNomeFuncionario(FuncionarioEntity funcionario) { // Alterado de MedicoEntity

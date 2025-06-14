@@ -7,7 +7,6 @@ import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoAgenteNocivoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
-import com.ocupacional.soc.Mapper.Cadastros.RiscoTrabalhistaPgrMapper;
 import com.ocupacional.soc.Repositories.Cadastros.*;
 import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.transaction.Transactional;
@@ -33,7 +32,6 @@ public class FuncaoServiceImpl implements FuncaoService {
     private final ExameCatalogoRepository exameCatalogoRepository;
     private final RiscoCatalogoRepository riscoCatalogoRepository;
     private final FuncaoMapper funcaoMapper;
-    private final RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper;
     private final FuncaoAgenteNocivoMapper funcaoAgenteNocivoMapper;
     private final FuncaoExamePcmsoMapper funcaoExamePcmsoMapper;
 
@@ -48,12 +46,12 @@ public class FuncaoServiceImpl implements FuncaoService {
             return funcaoMapper.entityToResponseDTO(savedEntity);
         } catch (Exception e) {
             log.error("Erro ao criar função: {}", e.getMessage(), e);
-            throw e; // Permite que o GlobalExceptionHandler trate
+            throw e;
         }
     }
 
     @Override
-    @Transactional // ReadOnly não é apropriado para busca que pode popular lazy collections para o mapper
+    @Transactional
     public FuncaoResponseDTO buscarFuncaoPorId(Long id) {
         log.debug("Buscando função por ID: {}", id);
         FuncaoEntity funcaoEntity = findFuncaoById(id);
@@ -66,7 +64,7 @@ public class FuncaoServiceImpl implements FuncaoService {
 
 
     @Override
-    @Transactional // Mesma observação do buscarPorId sobre lazy loading e transações
+    @Transactional
     public Page<FuncaoResponseDTO> listarFuncoes(Pageable pageable) {
         log.debug("Listando funções com paginação: página {}, tamanho {}",
                 pageable.getPageNumber(), pageable.getPageSize());
@@ -133,7 +131,7 @@ public class FuncaoServiceImpl implements FuncaoService {
         funcaoEntity.getProfissionaisResponsaveis().clear();
         if (!CollectionUtils.isEmpty(requestDTO.getProfissionaisResponsaveis())) {
             requestDTO.getProfissionaisResponsaveis().forEach(profDTO -> {
-                ProfissionalRegistroAmbientalEntity profissionalEntity = new ProfissionalRegistroAmbientalEntity();
+                ProfissionalRegistrosEntity profissionalEntity = new ProfissionalRegistrosEntity();
                 profissionalEntity.setFuncionario(findFuncionarioById(profDTO.getFuncionarioId()));
                 funcaoEntity.addProfissionalResponsavel(profissionalEntity);
             });
