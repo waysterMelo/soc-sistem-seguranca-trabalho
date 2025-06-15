@@ -43,6 +43,7 @@ public class FuncionarioEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Lob
     private StatusFuncionario status;
 
     @Column(length = 50)
