@@ -2,7 +2,6 @@ package com.ocupacional.soc.Entities.Cadastros;
 
 import com.ocupacional.soc.Entities.SegurancaTrabalho.OrdemServico.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,8 +38,7 @@ public class LaboratorioEntity extends AuditableEntity {
     private EnderecoEntity endereco;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "laboratorio_id") // Relação unidirecional
-    @Builder.Default
+    @JoinColumn(name = "laboratorio_id")
     private List<TelefoneEntity> telefones = new ArrayList<>();
 
     @Column(length = 255)

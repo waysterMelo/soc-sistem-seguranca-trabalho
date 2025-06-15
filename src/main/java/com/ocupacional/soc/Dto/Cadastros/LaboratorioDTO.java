@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +18,6 @@ public class LaboratorioDTO {
     @NotBlank(message = "O campo Nome Fantasia é obrigatório")
     private String nomeFantasia;
 
-    @CNPJ(message = "CNPJ inválido")
     private String cnpj;
 
     @Valid
