@@ -1,77 +1,172 @@
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LogOut, Settings} from 'lucide-react';
-import {DashboardIcon, FileTextIcon, UsersIcon} from "../components/Icons.jsx";
+import {
+    LayoutDashboard,
+    ChevronDown,
+    Building,
+    Building2,
+    Briefcase,
+    User as UserIcon, // Renomeado para evitar conflito
+    Users,
+    Truck,
+    Shield,
+    Download,
+    Radio,
+    LogOut,
+    Settings,
+    PanelLeftClose
+} from 'lucide-react';
 
-function Sidebar() {
+
+// --- Componente de UI para o Logo ---
+const MetraCloudLogo = () => (
+    <div className="flex items-center text-xl font-bold text-white tracking-wider">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2 text-yellow-400">
+            <path d="M12 3V21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M3 12H21" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
+        <span>METRA</span>
+        <span className="text-yellow-400">CLOUD</span>
+    </div>
+);
+
+
+// Dados para os itens do menu, incluindo submenus (do seu código)
+const menuItems = [
+    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/dashboard' },
+    {
+        name: 'Cadastros',
+        icon: <Building size={20} />,
+        path: '#', // Usado para indicar um submenu
+        subItems: [
+            { name: 'Empresas', path: 'cadastros/listar/empresas', icon: <Building2 size={18} /> },
+            { name: 'Unidades Operacionais', path: 'cadastros/listar/unidades', icon: <Building2 size={18} /> },
+            { name: 'Setores', path: '/setores', icon: <Briefcase size={18} /> },
+            { name: 'Funções', path: '/funcoes', icon: <UserIcon size={18} /> },
+            { name: 'Funcionários', path: '/funcionarios', icon: <Users size={18} /> },
+            { name: 'Prestadores de Serviços', path: '/prestadores', icon: <Truck size={18} /> },
+            { name: 'EPI/EPC', path: '/epi-epc', icon: <Shield size={18} /> },
+            { name: 'Importações', path: '/importacoes', icon: <Download size={18} /> },
+            { name: 'Aparelhos', path: '/aparelhos', icon: <Radio size={18} /> },
+        ],
+    }
+    // Adicione outros itens de menu principais aqui
+];
+
+// Componente para um item de menu individual (do seu código)
+const SidebarMenuItem = ({ item, activePath }) => {
     const location = useLocation();
-    const isActive = (path) => location.pathname === path;
+    const [isOpen, setIsOpen] = useState(location.pathname.startsWith(item.path) && item.path !== '#');
 
-    const menuItems = [
-        { category: 'Principal' },
-        { name: 'Cadastros', path: '/', icon: <DashboardIcon /> },
-        { name: 'Check-Lists', path: '/checklists', icon: <FileTextIcon /> },
-        { name: 'Colaboradores', path: '/colaboradores', icon: <UsersIcon /> },
-    ];
+    const isSubActive = item.subItems && item.subItems.some(sub => sub.path === activePath);
+    const isActive = activePath === item.path || isSubActive;
+
+    const handleToggle = () => {
+        if (item.subItems) {
+            setIsOpen(!isOpen);
+        }
+    };
+
+    if (!item.subItems) {
+        return (
+            <Link
+                to={item.path}
+                className={`flex items-center p-3 my-1 rounded-lg transition-colors duration-200 ${
+                    isActive ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-300 hover:bg-emerald-700/50 hover:text-white'
+                }`}
+            >
+                {item.icon}
+                <span className="ml-4 font-medium">{item.name}</span>
+            </Link>
+        );
+    }
 
     return (
-        <aside className="w-[280px] h-screen bg-gradient-to-br from-emerald-700 to-emerald-900 fixed left-0 top-0 text-white shadow-xl z-10 flex flex-col">
-            <div className="sidebar-header p-5 flex items-center border-b border-white/10">
-                <div className="brand-logo-icon w-10 h-10 mr-4 flex items-center justify-center bg-white/10 rounded-xl p-2 backdrop-blur-sm">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <div>
+            <button
+                onClick={handleToggle}
+                className={`w-full flex items-center justify-between p-3 my-1 rounded-lg transition-colors duration-200 ${
+                    isActive ? 'bg-emerald-600 text-white' : 'text-gray-300 hover:bg-emerald-700/50 hover:text-white'
+                }`}
+            >
+                <div className="flex items-center">
+                    {item.icon}
+                    <span className="ml-4 font-medium">{item.name}</span>
                 </div>
-                <div className="brand-name flex flex-col">
-                    <h2 className="text-lg font-bold tracking-wider m-0 text-white">OCUPACIONAL</h2>
-                    <span className="text-xs opacity-80 mt-0.5">CHECK-LIST</span>
-                </div>
-            </div>
-
-            <div className="sidebar-user p-5 flex items-center border-b border-white/10">
-                <div className="user-avatar w-10 h-10 rounded-full bg-white text-emerald-700 font-bold flex items-center justify-center mr-3 shadow-inner">
-                    <span className="font-bold">M</span>
-                </div>
-                <div className="user-info flex flex-col">
-                    <span className="text-sm font-semibold">Marina</span>
-                    <span className="text-xs opacity-80">Administrador</span>
-                </div>
-            </div>
-
-            <nav className="sidebar-menu py-5 flex-grow overflow-y-auto">
-                {menuItems.map((item, index) => (
-                    item.category ? (
-                        <div key={index} className="text-xs opacity-80 my-3 mx-5 uppercase tracking-wider">{item.category}</div>
-                    ) : (
+                <ChevronDown
+                    size={20}
+                    className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                />
+            </button>
+            <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}
+            >
+                <div className="pl-8 pt-2 space-y-1 border-l-2 border-emerald-600/50 ml-5">
+                    {item.subItems.map((subItem, index) => (
                         <Link
                             key={index}
-                            to={item.path}
-                            className={`menu-item py-3 px-5 flex items-center transition-all relative
-                            text-white/90 hover:bg-white/10 group ${isActive(item.path) ? 'bg-white/15 text-white font-medium' : ''}`}
+                            to={subItem.path}
+                            className={`flex items-center p-2 rounded-md text-sm transition-colors duration-200 ${
+                                activePath === subItem.path
+                                    ? 'text-white font-semibold'
+                                    : 'text-gray-400 hover:text-white hover:bg-emerald-700/40'
+                            }`}
                         >
-                            {isActive(item.path) && <span className="absolute left-0 top-0 w-1 h-full bg-white rounded-r"></span>}
-                            <div className={`menu-icon w-5 h-5 mr-3 flex items-center justify-center transition-transform duration-300 ${isActive(item.path) ? 'text-white scale-110' : 'text-white/70 group-hover:text-white group-hover:scale-110'}`}>
-                                {item.icon}
-                            </div>
-                            <span className="menu-text text-sm">{item.name}</span>
-                            <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
+                            {subItem.icon}
+                            <span className="ml-3">{subItem.name}</span>
                         </Link>
-                    )
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+export default function Sidebar() {
+    const location = useLocation();
+
+    return (
+        <aside className="w-72 h-screen bg-gray-800 text-white flex flex-col fixed shadow-lg" style={{background: 'linear-gradient(to bottom, #0f172a, #1e293b)'}}>
+
+            {/* Cabeçalho com Logo e Botão (do novo design) */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
+                <MetraCloudLogo />
+                <button className="p-2 rounded-md text-gray-400 hover:bg-gray-700 hover:text-white">
+                    <PanelLeftClose size={20} />
+                </button>
+            </div>
+
+            {/* Perfil do Usuário (do novo design) */}
+            <div className="p-5 flex flex-col items-center text-center border-b border-gray-700/50">
+                <div className="w-24 h-24 rounded-full bg-gray-900/50 flex items-center justify-center mb-4">
+                    <UserIcon size={50} className="text-gray-500" />
+                </div>
+                <h2 className="font-semibold text-lg text-white">ADMIN</h2>
+                <button className="flex items-center text-sm text-gray-400 hover:text-white">
+                    <span>CLÍNICA - MARINA GARCIA LOPES...</span>
+                    <ChevronDown size={16} className="ml-1" />
+                </button>
+            </div>
+
+            {/* Menu Principal (do seu código) */}
+            <nav className="flex-grow p-4 space-y-2 overflow-y-auto">
+                {menuItems.map((item, index) => (
+                    <SidebarMenuItem key={index} item={item} activePath={location.pathname} />
                 ))}
             </nav>
 
-            <div className="sidebar-footer p-5 border-t border-white/10 flex items-center justify-between">
-                <button className="settings-btn bg-white/10 hover:bg-white/20 w-9 h-9 rounded-lg flex items-center justify-center transition-all backdrop-blur-sm">
-                    <Settings size={18} />
+            {/* Rodapé com Ações (do seu código) */}
+            <div className="p-4 border-t border-gray-700">
+                <button className="w-full flex items-center justify-center p-3 rounded-lg text-gray-300 hover:bg-emerald-700/50 hover:text-white transition-colors duration-200">
+                    <Settings size={20} />
+                    <span className="ml-3 font-medium">Configurações</span>
                 </button>
-                <button className="logout-btn bg-white/10 hover:bg-white/20 w-9 h-9 rounded-lg flex items-center justify-center transition-all backdrop-blur-sm">
-                    <LogOut size={18} />
+                <button className="w-full flex items-center justify-center mt-2 p-3 rounded-lg text-gray-300 hover:bg-red-700/50 hover:text-white transition-colors duration-200">
+                    <LogOut size={20} />
+                    <span className="ml-3 font-medium">Sair</span>
                 </button>
             </div>
         </aside>
     );
 }
-
-export default Sidebar;

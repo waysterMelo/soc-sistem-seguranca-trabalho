@@ -2,6 +2,9 @@ import {Route, Routes} from 'react-router-dom';
 import AppLayout from './layouts/AppLayout';
 import DashboardPage from './features/dashboard/DashboardPage';
 import EmpresaListPage from "./features/cadastros/empresa/EmpresaListPage.jsx";
+import CadastrarEmpresa from "./features/cadastros/empresa/CadastrarEmpresa.jsx";
+import ListarUnidades from "./features/cadastros/empresa/ListarUnidades.jsx";
+import CadastrarUnidade from "./features/cadastros/empresa/CadastrarUnidade.jsx";
 
 
 function NotFound() {
@@ -13,7 +16,10 @@ function App() {
         <Routes>
             <Route path="/" element={<AppLayout />}>
                 <Route index element={<DashboardPage />} />
-                <Route path="cadastros/empresas" element={<EmpresaListPage />} />
+                <Route path="cadastros/listar/empresas" element={<EmpresaListPage />} />
+                <Route path="cadastros/nova-empresa" element={<CadastrarEmpresa />} />
+                <Route path="cadastros/listar/unidades" element={<ListarUnidades />} />
+                <Route path="cadastros/nova-unidade" element={<CadastrarUnidade />} />
             </Route>
         </Routes>
     );
