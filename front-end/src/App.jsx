@@ -64,6 +64,7 @@ function App() {
                 <Route path="seguranca/treinamentos" element={<ListarTreinamentos />} />
                 <Route path="seguranca/novo-treinamento" element={<CadastrarTreinamento />} />
                 <Route path="seguranca/epi" element={<MovimentacaoEPI />} />
+                <Route path="seguranca/ordem-servico" element={<MovimentacaoEPI />} />
             </Route>
         </Routes>
     );
