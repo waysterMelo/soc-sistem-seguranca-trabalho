@@ -46,7 +46,7 @@ const menuItems = [
             { name: 'CAT', path: '/seguranca/cat' },
             { name: 'Treinamentos', path: '/seguranca/treinamentos' },
             { name: 'Movimentação de EPI', path: '/seguranca/epi' },
-            { name: 'Ordem de Serviço', path: '/seguranca/ordem-servico' }
+            { name: 'Ordem de Serviço', path: '/seguranca/listar/ordem-servico' }
         ],
     }
 ];

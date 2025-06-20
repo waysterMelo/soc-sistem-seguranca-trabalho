@@ -27,6 +27,9 @@ import ListarCAT from "./features/seguranca/ListarCAT.jsx";
 import ListarTreinamentos from "./features/seguranca/ListarTreinamentos.jsx";
 import CadastrarTreinamento from "./features/seguranca/CadastrarTreinamento.jsx";
 import MovimentacaoEPI from "./features/seguranca/MovimentacaoEPI.jsx";
+import OrdemServico from "./features/seguranca/OrdemDeServico.jsx";
+import ListarOrdemServico from "./features/seguranca/OrdemDeServico.jsx";
+import CriarOrdemDeServico from "./features/seguranca/CriarOrdemServico.jsx";
 
 
 function NotFound() {
@@ -64,7 +67,9 @@ function App() {
                 <Route path="seguranca/treinamentos" element={<ListarTreinamentos />} />
                 <Route path="seguranca/novo-treinamento" element={<CadastrarTreinamento />} />
                 <Route path="seguranca/epi" element={<MovimentacaoEPI />} />
-                <Route path="seguranca/ordem-servico" element={<MovimentacaoEPI />} />
+                <Route path="seguranca/listar/ordem-servico" element={<ListarOrdemServico />} />
+                <Route path="seguranca/nova-ordem" element={<CriarOrdemDeServico />} />
+
             </Route>
         </Routes>
     );

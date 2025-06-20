@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
 // Componente para o ícone de busca
 const SearchIcon = () => (
@@ -13,7 +14,6 @@ const ClearIcon = () => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
 );
-
 
 // Componente para o cabeçalho
 const Header = () => (
@@ -34,7 +34,7 @@ const InfoSection = () => (
                     <button className="p-2 text-gray-700 bg-green-500 rounded-md hover:bg-green-400 flex-shrink-0 shadow-sm border border-gray-200">
                         <SearchIcon />
                     </button>
-                    <button className="p-2 text-white bg-green-500 rounded-md hover:bg-green-400 flex-shrink-0 shadow-sm">
+                    <button className="p-2 text-white bg-red-500 rounded-md hover:bg-green-400 flex-shrink-0 shadow-sm">
                         <ClearIcon />
                     </button>
                 </div>
@@ -43,7 +43,7 @@ const InfoSection = () => (
                 <label htmlFor="registro" className="block text-sm font-medium text-gray-600 mb-1">Registro Profissional</label>
                 <div className="flex items-center gap-2">
                     <input type="text" id="registro" defaultValue="Marina Garcia Lopes - Comercial e Projetos - Gerente Comercial e de Projetos" className="flex-grow w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                    <button className="p-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 flex-shrink-0 shadow-sm border border-gray-200">
+                    <button className="p-2 text-gray-700 bg-green-500 rounded-md hover:bg-green-400 flex-shrink-0 shadow-sm border border-gray-200">
                         <SearchIcon />
                     </button>
                     <button className="p-2 text-white bg-red-500 rounded-md hover:bg-red-600 flex-shrink-0 shadow-sm">
@@ -199,12 +199,12 @@ const RetiradaModal = ({ isOpen, onClose }) => {
 // Componente para as ações do rodapé
 const FooterActions = () => (
     <div className="flex justify-end mt-6">
-        <button className="btn-hover bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-amber-600 flex items-center space-x-2">
+        <Link to={'/cadastros/epi-epc'} className="btn-hover bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-amber-600 flex items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25A2.25 2.25 0 0 1 13.5 8.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
             </svg>
             <span>Equipamentos</span>
-        </button>
+        </Link>
     </div>
 );
 
