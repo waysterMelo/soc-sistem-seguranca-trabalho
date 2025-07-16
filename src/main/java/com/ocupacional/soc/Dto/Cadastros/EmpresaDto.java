@@ -6,8 +6,6 @@ import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoEmpresa;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class EmpresaDto {
 
@@ -21,13 +19,12 @@ public class EmpresaDto {
     private String nomeFantasia;
     private String logomarcaUrl;
     private EnderecoDto endereco;
-    private String telefone1;
+    private String telefonePrincipal;
+    private String telefoneSecundario;
     private String email;
     private GrauRisco grauRisco;
     private Long cnaePrincipalId;
-    private List<Long> cnaesSecundariosIds;
     private TipoMatrizFilial tipoMatrizFilial;
-    private Long empresaMatrizId;
     private Long medicoResponsavelPcmssoId;
     private String observacoes;
 }

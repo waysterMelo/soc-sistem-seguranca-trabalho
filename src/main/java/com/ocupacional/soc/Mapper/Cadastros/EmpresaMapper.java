@@ -4,6 +4,7 @@ import com.ocupacional.soc.Dto.Cadastros.EmpresaDto;
 import com.ocupacional.soc.Dto.Cadastros.EmpresaSimpleResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.CnaeEntity;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,17 +20,44 @@ public interface EmpresaMapper {
 
     EmpresaSimpleResponseDTO toSimpleResponseDto(EmpresaEntity entity);
 
-    @Mapping(source = "endereco", target = "endereco") // Mapeado por EnderecoMapper
-   @Mapping(source = "cnaePrincipal.id", target = "cnaePrincipalId")
-    @Mapping(source = "cnaesSecundarios", target = "cnaesSecundariosIds", qualifiedByName = "cnaesToIds")
     @Mapping(source = "medicoResponsavelPcmsso.id", target = "medicoResponsavelPcmssoId")
+    @Mapping(source = "cnaePrincipalId", target = "cnaePrincipalId", qualifiedByName = "cnaeToId")
     EmpresaDto toEmpresaDto(EmpresaEntity empresaEntity);
 
-    @Mapping(source = "endereco", target = "endereco") // Mapeado por EnderecoMapper
-    @Mapping(target = "cnaePrincipal", ignore = true) // Ignorar para preencher manualmente no serviço (buscar por cnaePrincipalId)
-    @Mapping(target = "cnaesSecundarios", ignore = true) // Ignorar para preencher manualmente no serviço (buscar por cnaesSecundariosIds)
-    @Mapping(target = "medicoResponsavelPcmsso", ignore = true) // Ignorar para preencher manualmente no serviço (buscar por medicoResponsavelPcmssoId)
+    @Mapping(source = "cnaePrincipalId", target = "cnaePrincipalId", qualifiedByName = "idToCnae")
+    @Mapping(source = "endereco", target = "endereco")
+    @Mapping(source = "medicoResponsavelPcmssoId", target = "medicoResponsavelPcmsso", qualifiedByName = "idToPrestadorServico")
     EmpresaEntity toEmpresaEntity(EmpresaDto empresaDto);
+
+    @Named("idToPrestadorServico")
+    default PrestadorServicoEntity idToPrestadorServico(Long id) {
+        if (id == null) {
+            return null;
+        }
+        PrestadorServicoEntity prestador = new PrestadorServicoEntity();
+        prestador.setId(id);
+        return prestador;
+    }
+
+
+
+    @Named("cnaeToId")
+    default Long cnaeToId(CnaeEntity cnae) {
+        if (cnae == null) {
+            return null;
+        }
+        return cnae.getId();
+    }
+
+    @Named("idToCnae")
+    default CnaeEntity idToCnae(Long id) {
+        if (id == null) {
+            return null;
+        }
+        CnaeEntity cnae = new CnaeEntity();
+        cnae.setId(id);
+        return cnae;
+    }
 
 
     @Named("cnaesToIds")

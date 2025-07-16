@@ -1,6 +1,8 @@
 package com.ocupacional.soc.Controllers.Cadastros;
 
+import com.ocupacional.soc.Dto.Cadastros.EmpresaDto;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
+import com.ocupacional.soc.Mapper.Cadastros.EmpresaMapper;
 import com.ocupacional.soc.Services.Cadastros.EmpresaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,32 +15,42 @@ import java.util.Map;
 @RequestMapping("/api/empresas")
 public class EmpresaController {
 
-    private EmpresaService empresaService;
+    private final EmpresaService empresaService;
+    private final EmpresaMapper empresaMapper;
 
-    public EmpresaController(EmpresaService empresaService) {
+    public EmpresaController(EmpresaService empresaService, EmpresaMapper empresaMapper) {
         this.empresaService = empresaService;
+        this.empresaMapper = empresaMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpresaEntity>> listarTodas() {
-        return ResponseEntity.ok(empresaService.listarTodas());
+    public ResponseEntity<List<EmpresaDto>> listarTodas() {
+        List<EmpresaEntity> empresas = empresaService.listarTodas();
+        List<EmpresaDto> dtos= empresas.stream().map(empresaMapper::toEmpresaDto)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpresaEntity> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<EmpresaDto> buscarPorId(@PathVariable Long id) {
         return empresaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
+                .map(empresa -> ResponseEntity.ok(empresaMapper.toEmpresaDto(empresa)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaEntity> criar(@RequestBody EmpresaEntity empresa) {
-        return ResponseEntity.ok(empresaService.salvar(empresa));
+    public ResponseEntity<EmpresaDto> criar(@RequestBody EmpresaDto empresaDto) {
+        EmpresaEntity empresa = empresaMapper.toEmpresaEntity(empresaDto);
+        EmpresaEntity salva = empresaService.salvar(empresa);
+        return ResponseEntity.ok(empresaMapper.toEmpresaDto(salva));
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaEntity> atualizar(@PathVariable Long id, @RequestBody EmpresaEntity empresa) {
-        return ResponseEntity.ok(empresaService.atualizar(id, empresa));
+    public ResponseEntity<EmpresaDto> atualizar(@PathVariable Long id, @RequestBody EmpresaDto empresaDto) {
+        EmpresaEntity empresa = empresaMapper.toEmpresaEntity(empresaDto);
+        EmpresaEntity atualizada = empresaService.atualizar(id, empresa);
+        return ResponseEntity.ok(empresaMapper.toEmpresaDto(atualizada));
     }
 
     @DeleteMapping("/{id}")

@@ -46,6 +46,7 @@ public class EmpresaEntity {
     private EnderecoEntity endereco;
 
     private String telefonePrincipal;
+
     private String telefoneSecundario;
 
     private String email;
@@ -54,15 +55,14 @@ public class EmpresaEntity {
     private GrauRisco grauRisco;
 
     @ManyToOne
-    private CnaeEntity cnaePrincipal;
-
-    @ManyToMany
-    private List<CnaeEntity> cnaesSecundarios;
+    @JoinColumn(name = "cnae_principal_id")
+    private CnaeEntity cnaePrincipalId;
 
     @Enumerated(EnumType.STRING)
     private TipoMatrizFilial tipoMatrizFilial;
 
     @ManyToOne
+    @JoinColumn(name = "medico_responsavel_pcmsso_id")
     private PrestadorServicoEntity medicoResponsavelPcmsso;
 
     @Column(columnDefinition = "TEXT")

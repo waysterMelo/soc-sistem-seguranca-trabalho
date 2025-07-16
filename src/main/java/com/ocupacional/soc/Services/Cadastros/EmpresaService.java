@@ -50,8 +50,7 @@ public class EmpresaService {
                     empresa.setTelefoneSecundario(empresaAtualizada.getTelefoneSecundario());
                     empresa.setEmail(empresaAtualizada.getEmail());
                     empresa.setGrauRisco(empresaAtualizada.getGrauRisco());
-                    empresa.setCnaePrincipal(empresaAtualizada.getCnaePrincipal());
-                    empresa.setCnaesSecundarios(empresaAtualizada.getCnaesSecundarios());
+                    empresa.setCnaePrincipalId(empresaAtualizada.getCnaePrincipalId());
                     empresa.setTipoMatrizFilial(empresaAtualizada.getTipoMatrizFilial());
                     empresa.setMedicoResponsavelPcmsso(empresaAtualizada.getMedicoResponsavelPcmsso());
                     empresa.setObservacoes(empresaAtualizada.getObservacoes());

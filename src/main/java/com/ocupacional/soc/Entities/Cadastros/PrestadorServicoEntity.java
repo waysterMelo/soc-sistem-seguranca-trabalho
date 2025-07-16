@@ -4,14 +4,12 @@ package com.ocupacional.soc.Entities.Cadastros;
 import com.ocupacional.soc.Enuns.CadastroPrestador.TipoConselho;
 import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "prestadores_servico")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
