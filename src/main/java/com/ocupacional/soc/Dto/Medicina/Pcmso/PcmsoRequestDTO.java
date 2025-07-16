@@ -7,12 +7,15 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class PcmsoRequestDTO {
     @NotNull(message = "O ID da Unidade Operacional é obrigatório.")
     private Long unidadeOperacionalId;
-
+    @NotNull(message = "O Médico Responsável é obrigatório.")
+    private Long medicoResponsavelId;
+    private Set<Long> elaboradoresIds;
     @NotNull(message = "O status é obrigatório.")
     private PcmsoStatus status;
 

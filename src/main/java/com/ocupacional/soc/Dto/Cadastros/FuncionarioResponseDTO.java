@@ -5,7 +5,6 @@ import com.ocupacional.soc.Enuns.Funcionario.StatusFuncionario;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class FuncionarioResponseDTO {
@@ -31,7 +30,7 @@ public class FuncionarioResponseDTO {
     private boolean criarRegistroProfissional;
     private String matricula;
     private EnderecoDto endereco;
-    private List<TelefoneDto> telefones;
+    private String telefones;
     private EmpresaSimpleResponseDTO empresa;
     private LocalDate dataAdmissao;
 

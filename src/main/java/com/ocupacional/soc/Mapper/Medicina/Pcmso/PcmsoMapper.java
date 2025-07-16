@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {UnidadeOperacionalMapper.class, PcmsoExameMapper.class})
 public interface PcmsoMapper {
     @Mapping(source = "unidadeOperacional", target = "unidadeOperacional")
+    @Mapping(source = "medicoResponsavel", target = "medicoResponsavel")
+    @Mapping(source = "elaboradores", target = "elaboradores")
     @Mapping(source = "exames", target = "exames")
     @Mapping(target = "riscos", ignore = true)
     PcmsoResponseDTO toResponseDto(PcmsoEntity entity);

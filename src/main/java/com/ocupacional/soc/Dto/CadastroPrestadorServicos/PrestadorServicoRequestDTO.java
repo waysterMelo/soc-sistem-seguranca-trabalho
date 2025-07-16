@@ -1,7 +1,6 @@
 package com.ocupacional.soc.Dto.CadastroPrestadorServicos;
 
 import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
-import com.ocupacional.soc.Dto.Cadastros.TelefoneDto;
 import com.ocupacional.soc.Enuns.CadastroPrestador.TipoConselho;
 import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import jakarta.validation.Valid;
@@ -25,8 +24,8 @@ public class PrestadorServicoRequestDTO {
     private Sexo sexo;
     @Valid
     private EnderecoDto endereco;
-    private TelefoneDto telefone1;
-    private TelefoneDto telefone2;
+    private String telefone1;
+    private String telefone2;
     @Email
     private String email;
     @NotNull private Long cboId;

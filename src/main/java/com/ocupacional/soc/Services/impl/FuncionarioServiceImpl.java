@@ -4,11 +4,9 @@ import com.ocupacional.soc.Dto.Cadastros.FuncionarioRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncionarioEntity;
-import com.ocupacional.soc.Entities.Cadastros.TelefoneEntity;
-import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Exceptions.InvalidRequestException;
+import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
-import com.ocupacional.soc.Mapper.Cadastros.TelefoneMapper; // Importe se não estiver no mesmo pacote de FuncionarioMapper
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncionarioRepository;
 import com.ocupacional.soc.Services.Cadastros.FuncionarioService;
@@ -17,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 
 @Service
@@ -117,21 +113,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             EmpresaEntity novaEmpresa = empresaRepository.findById(requestDTO.getEmpresaId())
                     .orElseThrow(() -> new ResourceNotFoundException("Nova empresa não encontrada com ID: " + requestDTO.getEmpresaId()));
             funcionarioExistente.setEmpresa(novaEmpresa);
-        }
-
-        // Gerenciamento de Telefones: Limpar os existentes e adicionar os novos.
-        // Certifique-se que TelefoneMapper.INSTANCE está acessível ou injete TelefoneMapper.
-        if (funcionarioExistente.getTelefones() == null) {
-            funcionarioExistente.setTelefones(new ArrayList<>());
-        }
-        funcionarioExistente.getTelefones().clear(); // Remove os antigos da coleção da JPA
-
-        if (requestDTO.getTelefones() != null && TelefoneMapper.INSTANCE != null) {
-            requestDTO.getTelefones().forEach(telDto -> {
-                TelefoneEntity telEntity = TelefoneMapper.INSTANCE.toEntity(telDto);
-                telEntity.setFuncionario(funcionarioExistente);
-                funcionarioExistente.getTelefones().add(telEntity);
-            });
         }
 
         FuncionarioEntity updatedFuncionario = funcionarioRepository.save(funcionarioExistente);

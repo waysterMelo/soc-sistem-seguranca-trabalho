@@ -39,13 +39,14 @@ public class EmpresaEntity {
 
     private String nomeFantasia;
 
+
     private String logomarcaUrl;
 
     @OneToOne(cascade = CascadeType.ALL)
     private EnderecoEntity endereco;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<TelefoneEntity> telefones;
+    private String telefonePrincipal;
+    private String telefoneSecundario;
 
     private String email;
 
@@ -60,9 +61,6 @@ public class EmpresaEntity {
 
     @Enumerated(EnumType.STRING)
     private TipoMatrizFilial tipoMatrizFilial;
-
-    @ManyToOne
-    private EmpresaEntity empresaMatriz;
 
     @ManyToOne
     private PrestadorServicoEntity medicoResponsavelPcmsso;

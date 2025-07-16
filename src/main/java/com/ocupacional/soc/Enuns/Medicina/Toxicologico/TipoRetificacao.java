@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Enuns.Medicina;
+package com.ocupacional.soc.Enuns.Medicina.Toxicologico;
 
 public enum TipoRetificacao {
     ORIGINAL,

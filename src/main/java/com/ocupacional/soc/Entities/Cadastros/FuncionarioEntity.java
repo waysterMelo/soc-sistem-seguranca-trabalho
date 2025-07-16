@@ -4,9 +4,8 @@ import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import com.ocupacional.soc.Enuns.Funcionario.StatusFuncionario;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "funcionarios")
@@ -82,11 +81,9 @@ public class FuncionarioEntity {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
 
-    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    private List<TelefoneEntity> telefones = new ArrayList<>();
+    private String telefone1;
+
+    private String telefone2;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)

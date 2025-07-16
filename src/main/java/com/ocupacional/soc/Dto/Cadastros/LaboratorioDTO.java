@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class LaboratorioDTO {
@@ -23,8 +22,7 @@ public class LaboratorioDTO {
     @Valid
     private EnderecoDto endereco;
 
-    @Valid
-    private List<TelefoneDto> telefones;
+    private String telefone;
 
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$", message = "Email com formato inválido")
     private String email;

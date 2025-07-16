@@ -8,7 +8,6 @@ import com.ocupacional.soc.Exceptions.BusinessException;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.EnderecoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.LaboratorioMapper;
-import com.ocupacional.soc.Mapper.Cadastros.TelefoneMapper;
 import com.ocupacional.soc.Repositories.Cadastros.LaboratorioRepository;
 import com.ocupacional.soc.Services.Cadastros.LaboratorioService;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ public class LaboratorioServiceImpl implements LaboratorioService {
     private final LaboratorioRepository laboratorioRepository;
     private final LaboratorioMapper laboratorioMapper;
     private final EnderecoMapper enderecoMapper;
-    private final TelefoneMapper telefoneMapper;
 
 
     @Override
@@ -88,15 +85,6 @@ public class LaboratorioServiceImpl implements LaboratorioService {
             entity.setEndereco(endereco);
         } else {
             entity.setEndereco(null);
-        }
-
-        entity.getTelefones().clear();
-        if (!CollectionUtils.isEmpty(dto.getTelefones())) {
-            entity.getTelefones().addAll(
-                    dto.getTelefones().stream()
-                            .map(telefoneMapper::toEntity)
-                            .toList()
-            );
         }
     }
 

@@ -1,6 +1,6 @@
 package com.ocupacional.soc.Dto.Medicina.Toxicologico;
 
-import com.ocupacional.soc.Enuns.Medicina.TipoRetificacao;
+import com.ocupacional.soc.Enuns.Medicina.Toxicologico.TipoRetificacao;
 import com.ocupacional.soc.Enuns.Medicina.Toxicologico.UfEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

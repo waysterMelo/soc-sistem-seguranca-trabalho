@@ -4,7 +4,7 @@ import com.ocupacional.soc.Entities.Cadastros.LaboratorioEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Cadastros.ProfissionalRegistrosEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.OrdemServico.AuditableEntity;
-import com.ocupacional.soc.Enuns.Medicina.TipoRetificacao;
+import com.ocupacional.soc.Enuns.Medicina.Toxicologico.TipoRetificacao;
 import com.ocupacional.soc.Enuns.Medicina.Toxicologico.UfEnum;
 import jakarta.persistence.*;
 import lombok.*;

@@ -44,14 +44,9 @@ public class PrestadorServicoEntity {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
 
-    // --- Informações de Contato ---
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "telefone1_id")
-    private TelefoneEntity telefone1;
+    private String telefone1;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "telefone2_id")
-    private TelefoneEntity telefone2;
+    private String telefone2;
 
     @Column(length = 255)
     private String email;

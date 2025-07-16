@@ -41,13 +41,13 @@ public class EmpresaService {
                     empresa.setNomeFantasia(empresaAtualizada.getNomeFantasia());
                     empresa.setLogomarcaUrl(empresaAtualizada.getLogomarcaUrl());
                     empresa.setEndereco(empresaAtualizada.getEndereco());
-                    empresa.setTelefones(empresaAtualizada.getTelefones());
+                    empresa.setTelefonePrincipal(empresaAtualizada.getTelefonePrincipal());
+                    empresa.setTelefoneSecundario(empresaAtualizada.getTelefoneSecundario());
                     empresa.setEmail(empresaAtualizada.getEmail());
                     empresa.setGrauRisco(empresaAtualizada.getGrauRisco());
                     empresa.setCnaePrincipal(empresaAtualizada.getCnaePrincipal());
                     empresa.setCnaesSecundarios(empresaAtualizada.getCnaesSecundarios());
                     empresa.setTipoMatrizFilial(empresaAtualizada.getTipoMatrizFilial());
-                    empresa.setEmpresaMatriz(empresaAtualizada.getEmpresaMatriz());
                     empresa.setMedicoResponsavelPcmsso(empresaAtualizada.getMedicoResponsavelPcmsso());
                     empresa.setObservacoes(empresaAtualizada.getObservacoes());
                     return empresaRepository.save(empresa);

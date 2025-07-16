@@ -21,7 +21,7 @@ public class EmpresaDto {
     private String nomeFantasia;
     private String logomarcaUrl;
     private EnderecoDto endereco;
-    private List<TelefoneDto> telefones;
+    private String telefone1;
     private String email;
     private GrauRisco grauRisco;
     private Long cnaePrincipalId;

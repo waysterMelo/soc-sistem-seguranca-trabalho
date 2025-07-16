@@ -8,9 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "laboratorios")
 @Getter
@@ -37,9 +34,7 @@ public class LaboratorioEntity extends AuditableEntity {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "laboratorio_id")
-    private List<TelefoneEntity> telefones = new ArrayList<>();
+    private String telefone;
 
     @Column(length = 255)
     private String email;

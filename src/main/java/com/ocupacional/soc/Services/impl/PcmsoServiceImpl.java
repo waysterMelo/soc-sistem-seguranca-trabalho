@@ -7,6 +7,7 @@ import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoRequestDTO;
 import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.ExameCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
+import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Entities.Medicina.Pcmso.PcmsoEntity;
 import com.ocupacional.soc.Entities.Medicina.Pcmso.PcmsoExameEntity;
@@ -20,6 +21,7 @@ import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Repositories.Medicina.Pcmso.PcmsoExameRepository;
 import com.ocupacional.soc.Repositories.Medicina.Pcmso.PcmsoRepository;
+import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Services.Aparelhos.FileStorageService;
 import com.ocupacional.soc.Services.Medicina.Pcmso.PcmsoService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +46,7 @@ public class PcmsoServiceImpl implements PcmsoService {
     private final UnidadeOperacionalRepository unidadeRepository;
     private final FuncaoRepository funcaoRepository;
     private final ExameCatalogoRepository exameCatalogoRepository;
+    private final PrestadorServicoRepository prestadorRepository;
     private final PcmsoMapper pcmsoMapper;
     private final RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper;
     private final FileStorageService fileStorageService;
@@ -86,21 +91,18 @@ public class PcmsoServiceImpl implements PcmsoService {
     public PcmsoResponseDTO create(PcmsoRequestDTO dto, MultipartFile capaImagem) {
         validateActivePcmso(dto.getUnidadeOperacionalId(), dto.getStatus(), null);
 
-        UnidadeOperacionalEntity unidade = unidadeRepository.findById(dto.getUnidadeOperacionalId())
-                .orElseThrow(() -> new ResourceNotFoundException("Unidade Operacional não encontrada com ID: " + dto.getUnidadeOperacionalId()));
-
-        // 1. Cria e salva a entidade PCMSO principal PRIMEIRO
         PcmsoEntity entity = new PcmsoEntity();
-        mapPcmsoFields(entity, dto, unidade);
+        mapToEntity(entity, dto); // Lógica de mapeamento centralizada
+
         if (capaImagem != null && !capaImagem.isEmpty()) {
             entity.setCapaImagemUrl(fileStorageService.storeFile(capaImagem));
         }
+
         PcmsoEntity savedPcmso = pcmsoRepository.save(entity);
 
-        // 2. Cria e salva as entidades de Exame, associando ao PCMSO já salvo
         if (!CollectionUtils.isEmpty(dto.getExames())) {
             List<PcmsoExameEntity> exames = mapExamesFromDto(dto, savedPcmso);
-            pcmsoExameRepository.saveAll(exames); // Salva a lista de exames explicitamente
+            pcmsoExameRepository.saveAll(exames);
         }
 
         return findById(savedPcmso.getId());
@@ -114,21 +116,18 @@ public class PcmsoServiceImpl implements PcmsoService {
 
         validateActivePcmso(dto.getUnidadeOperacionalId(), dto.getStatus(), id);
 
-        // Limpa os exames antigos
         entity.getExames().clear();
-        pcmsoRepository.saveAndFlush(entity); // Força a remoção dos órfãos
+        pcmsoRepository.saveAndFlush(entity);
 
-        // Mapeia os dados do PCMSO
-        UnidadeOperacionalEntity unidade = unidadeRepository.findById(dto.getUnidadeOperacionalId())
-                .orElseThrow(() -> new ResourceNotFoundException("Unidade Operacional não encontrada com ID: " + dto.getUnidadeOperacionalId()));
-        mapPcmsoFields(entity, dto, unidade);
+        mapToEntity(entity, dto); // Lógica de mapeamento centralizada
+
         if (capaImagem != null && !capaImagem.isEmpty()) {
             fileStorageService.deleteFile(entity.getCapaImagemUrl());
             entity.setCapaImagemUrl(fileStorageService.storeFile(capaImagem));
         }
+
         PcmsoEntity updatedPcmso = pcmsoRepository.save(entity);
 
-        // Cria e salva as novas associações de exame
         if (!CollectionUtils.isEmpty(dto.getExames())) {
             List<PcmsoExameEntity> exames = mapExamesFromDto(dto, updatedPcmso);
             pcmsoExameRepository.saveAll(exames);
@@ -147,6 +146,44 @@ public class PcmsoServiceImpl implements PcmsoService {
         pcmsoRepository.delete(entity);
     }
 
+    private void mapPcmsoFields(PcmsoEntity entity, PcmsoRequestDTO dto, UnidadeOperacionalEntity unidade) {
+        entity.setUnidadeOperacional(unidade);
+        entity.setStatus(dto.getStatus());
+        entity.setDataDocumento(dto.getDataDocumento());
+        entity.setDataVencimento(dto.getDataVencimento());
+        entity.setCapa(dto.getCapa());
+        entity.setIntroducao(dto.getIntroducao());
+        entity.setSobrePcmso(dto.getSobrePcmso());
+        entity.setConclusao(dto.getConclusao());
+    }
+
+    private void mapToEntity(PcmsoEntity entity, PcmsoRequestDTO dto) {
+        UnidadeOperacionalEntity unidade = unidadeRepository.findById(dto.getUnidadeOperacionalId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unidade Operacional não encontrada com ID: " + dto.getUnidadeOperacionalId()));
+
+        PrestadorServicoEntity medicoResponsavel = prestadorRepository.findById(dto.getMedicoResponsavelId())
+                .orElseThrow(() -> new ResourceNotFoundException("Médico Responsável não encontrado com ID: " + dto.getMedicoResponsavelId()));
+
+        entity.setUnidadeOperacional(unidade);
+        entity.setMedicoResponsavel(medicoResponsavel);
+        entity.setStatus(dto.getStatus());
+        entity.setDataDocumento(dto.getDataDocumento());
+        entity.setDataVencimento(dto.getDataVencimento());
+        entity.setCapa(dto.getCapa());
+        entity.setIntroducao(dto.getIntroducao());
+        entity.setSobrePcmso(dto.getSobrePcmso());
+        entity.setConclusao(dto.getConclusao());
+
+        // Mapeamento dos elaboradores
+        entity.getElaboradores().clear();
+        if (!CollectionUtils.isEmpty(dto.getElaboradoresIds())) {
+            Set<PrestadorServicoEntity> elaboradores = new HashSet<>(prestadorRepository.findAllById(dto.getElaboradoresIds()));
+            if(elaboradores.size() != dto.getElaboradoresIds().size()){
+                throw new ResourceNotFoundException("Um ou mais elaboradores não foram encontrados.");
+            }
+            entity.setElaboradores(elaboradores);
+        }
+    }
 
     private void validateActivePcmso(Long unidadeId, PcmsoStatus status, Long currentPcmsoId) {
         if (status == PcmsoStatus.ATIVO) {
@@ -183,16 +220,5 @@ public class PcmsoServiceImpl implements PcmsoService {
             }
         }
         return result;
-    }
-
-    private void mapPcmsoFields(PcmsoEntity entity, PcmsoRequestDTO dto, UnidadeOperacionalEntity unidade) {
-        entity.setUnidadeOperacional(unidade);
-        entity.setStatus(dto.getStatus());
-        entity.setDataDocumento(dto.getDataDocumento());
-        entity.setDataVencimento(dto.getDataVencimento());
-        entity.setCapa(dto.getCapa());
-        entity.setIntroducao(dto.getIntroducao());
-        entity.setSobrePcmso(dto.getSobrePcmso());
-        entity.setConclusao(dto.getConclusao());
     }
 }
