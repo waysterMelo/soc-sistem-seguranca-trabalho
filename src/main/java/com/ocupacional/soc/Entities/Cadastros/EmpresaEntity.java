@@ -39,7 +39,7 @@ public class EmpresaEntity {
 
     private String nomeFantasia;
 
-
+    @Column(name = "logomarca_url")
     private String logomarcaUrl;
 
     @OneToOne(cascade = CascadeType.ALL)

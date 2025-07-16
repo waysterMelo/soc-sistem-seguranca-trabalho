@@ -4,12 +4,17 @@ import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class EmpresaService {
+
+    @Autowired
+    private LogoStorageService logoStorageService;
 
     @Autowired
     private EmpresaRepository empresaRepository;
@@ -54,4 +59,11 @@ public class EmpresaService {
                 })
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
     }
+
+    public Map<String, String> uploadLogo(MultipartFile file) {
+        String fileName = logoStorageService.storeLogo(file);
+        String fileUrl = logoStorageService.getLogoUrl(fileName);
+        return Map.of("url", fileUrl);
+    }
+
 } 

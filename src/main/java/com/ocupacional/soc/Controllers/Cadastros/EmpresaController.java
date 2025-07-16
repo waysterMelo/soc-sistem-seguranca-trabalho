@@ -4,8 +4,10 @@ import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Services.Cadastros.EmpresaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/empresas")
@@ -44,4 +46,11 @@ public class EmpresaController {
         empresaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/logo")
+    public ResponseEntity<Map<String, String>> uploadLogo(@RequestParam("file") MultipartFile file) {
+        Map<String, String> response = empresaService.uploadLogo(file);
+        return ResponseEntity.ok(response);
+    }
+
 } 
