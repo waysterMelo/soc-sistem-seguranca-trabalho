@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
+import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoEmpresa;
@@ -23,8 +24,8 @@ public class EmpresaDto {
     private String telefoneSecundario;
     private String email;
     private GrauRisco grauRisco;
-    private Long cnaePrincipalId;
+    private CnaeDto cnaePrincipal;
     private TipoMatrizFilial tipoMatrizFilial;
-    private Long medicoResponsavelPcmssoId;
+    private PrestadorServicoResponseDTO medicoResponsavel;
     private String observacoes;
 }

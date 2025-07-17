@@ -1,11 +1,32 @@
 package com.ocupacional.soc.Dto.CadastroPrestadorServicos;
 
 
-import lombok.Data;
+import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
+import com.ocupacional.soc.Enuns.CadastroPrestador.TipoConselho;
+import com.ocupacional.soc.Enuns.Funcionario.Sexo;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PrestadorServicoResponseDTO extends PrestadorServicoRequestDTO {
 
     private Long id;
+    private String nome;
+    private String sobrenome;
+    private String cpf;
+    private String rg;
+    private String orgaoEmissorRg;
+    private Sexo sexo;
+
+    private EnderecoDto endereco;
+    private String telefone1;
+    private String telefone2;
+    private String email;
+    private Long cboId;
+    private String nis;
+    private TipoConselho conselho;
+    private String numeroInscricaoConselho;
+    private String estadoConselho;
 
 }

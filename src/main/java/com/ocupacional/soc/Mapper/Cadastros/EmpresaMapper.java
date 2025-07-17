@@ -5,69 +5,43 @@ import com.ocupacional.soc.Dto.Cadastros.EmpresaSimpleResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.CnaeEntity;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
+import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Mapper(componentModel = "spring", uses = {EnderecoMapper.class, CnaeMapper.class})
+@Mapper(componentModel = "spring",
+        uses = {EnderecoMapper.class, CnaeMapper.class, PrestadorServicoMapper.class})
 public interface EmpresaMapper {
 
-    EmpresaMapper INSTANCE = Mappers.getMapper(EmpresaMapper.class);
+    // Mapeamento para DTO completo
+    @Mapping(source = "cnaePrincipalId", target = "cnaePrincipal")
+    @Mapping(source = "medicoResponsavelPcmsso", target = "medicoResponsavel")
+    EmpresaDto toEmpresaDto(EmpresaEntity entity);
+
+    // Mapeamento para Entity
+    @Mapping(source = "cnaePrincipal.id", target = "cnaePrincipalId")
+    @Mapping(source = "medicoResponsavel.id", target = "medicoResponsavelPcmsso")
+    EmpresaEntity toEmpresaEntity(EmpresaDto dto);
 
     EmpresaSimpleResponseDTO toSimpleResponseDto(EmpresaEntity entity);
 
-    @Mapping(source = "medicoResponsavelPcmsso.id", target = "medicoResponsavelPcmssoId")
-    @Mapping(source = "cnaePrincipalId", target = "cnaePrincipalId", qualifiedByName = "cnaeToId")
-    EmpresaDto toEmpresaDto(EmpresaEntity empresaEntity);
 
-    @Mapping(source = "cnaePrincipalId", target = "cnaePrincipalId", qualifiedByName = "idToCnae")
-    @Mapping(source = "endereco", target = "endereco")
-    @Mapping(source = "medicoResponsavelPcmssoId", target = "medicoResponsavelPcmsso", qualifiedByName = "idToPrestadorServico")
-    EmpresaEntity toEmpresaEntity(EmpresaDto empresaDto);
-
-    @Named("idToPrestadorServico")
-    default PrestadorServicoEntity idToPrestadorServico(Long id) {
-        if (id == null) {
+    default CnaeEntity map(Long cnaeId) {
+        if (cnaeId == null) {
             return null;
         }
-        PrestadorServicoEntity prestador = new PrestadorServicoEntity();
-        prestador.setId(id);
-        return prestador;
+        CnaeEntity cnaeEntity = new CnaeEntity();
+        cnaeEntity.setId(cnaeId);
+        return cnaeEntity;
     }
 
-
-
-    @Named("cnaeToId")
-    default Long cnaeToId(CnaeEntity cnae) {
-        if (cnae == null) {
+    default PrestadorServicoEntity mapPrestador(Long prestadorId) {
+        if (prestadorId == null) {
             return null;
         }
-        return cnae.getId();
-    }
-
-    @Named("idToCnae")
-    default CnaeEntity idToCnae(Long id) {
-        if (id == null) {
-            return null;
-        }
-        CnaeEntity cnae = new CnaeEntity();
-        cnae.setId(id);
-        return cnae;
-    }
-
-
-    @Named("cnaesToIds")
-    default List<Long> cnaesToIds(List<CnaeEntity> cnaes) {
-        if (cnaes == null) {
-            return null;
-        }
-        return cnaes.stream()
-                .map(CnaeEntity::getId)
-                .collect(Collectors.toList());
+        PrestadorServicoEntity prestadorEntity = new PrestadorServicoEntity();
+        prestadorEntity.setId(prestadorId);
+        return prestadorEntity;
     }
 
 }
