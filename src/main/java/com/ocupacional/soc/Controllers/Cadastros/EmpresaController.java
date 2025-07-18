@@ -4,6 +4,9 @@ import com.ocupacional.soc.Dto.Cadastros.EmpresaDto;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Mapper.Cadastros.EmpresaMapper;
 import com.ocupacional.soc.Services.Cadastros.EmpresaService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,5 +67,38 @@ public class EmpresaController {
         Map<String, String> response = empresaService.uploadLogo(file);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/relatorio/pdf")
+    public ResponseEntity<byte[]> gerarRelatorioPdf() {
+        try {
+            byte[] relatorio = empresaService.gerarRelatorioPdf();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("filename", "relatorio-empresas.pdf");
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+            return new ResponseEntity<>(relatorio, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log completo do erro
+
+            // Criar uma mensagem mais detalhada com a pilha de chamadas
+            StringBuilder errorMsg = new StringBuilder();
+            errorMsg.append("Erro ao gerar relatório: ").append(e.getMessage()).append("\n");
+
+            for (StackTraceElement element : e.getStackTrace()) {
+                errorMsg.append(element.toString()).append("\n");
+            }
+
+            if (e.getCause() != null) {
+                errorMsg.append("Caused by: ").append(e.getCause().getMessage());
+            }
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(errorMsg.toString().getBytes());
+        }
+    }
+
+
 
 } 

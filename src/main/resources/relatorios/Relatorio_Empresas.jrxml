@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+                                  http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+			  name="Relatorio_Empresas"
+			  pageWidth="595"
+			  pageHeight="842"
+			  columnWidth="535"
+			  leftMargin="30" rightMargin="30"
+			  topMargin="30" bottomMargin="30"
+			  whenNoDataType="AllSectionsNoDetail"
+			  isTitleNewPage="false"
+			  isSummaryNewPage="false"
+			  uuid="a1f690a3-5977-4caa-a4e2-82b9364e1a9c">
+
+	<!-- Importações necessárias -->
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+
+	<style name="Base" isDefault="true" fontSize="10"/>
+	<style name="Titulo" style="Base" fontSize="16" isBold="true"/>
+	<style name="Subtitulo" style="Base" fontSize="12" isBold="true"/>
+	<style name="Cabecalho" style="Base" fontSize="10" isBold="true" backcolor="#F0F0F0"/>
+	<style name="Detalhe" style="Base" fontSize="9"/>
+	<style name="Rodape" style="Base" fontSize="8" isItalic="true"/>
+	<style name="GraficoTitulo" style="Base" fontSize="12" isBold="true"/>
+
+	<!-- SubDataset para o gráfico de riscos -->
+	<subDataset name="RiscoDataset" uuid="9abc63e3-e1bd-433c-a5c1-7f832b3c2cc3">
+		<field name="key" class="java.lang.String"/>
+		<field name="value" class="java.lang.Integer"/>
+	</subDataset>
+
+	<!-- SubDataset para o gráfico de status -->
+	<subDataset name="StatusDataset" uuid="a5ba768d-11d3-435c-9d4c-4c29f02d1cd8">
+		<field name="key" class="java.lang.String"/>
+		<field name="value" class="java.lang.Integer"/>
+	</subDataset>
+
+	<!-- SubDataset para o gráfico de tipo de empresa -->
+	<subDataset name="TipoEmpresaDataset" uuid="b1c4d3e8-c3a9-4d3c-9e9f-8a9a8b8c7d6e">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="tipo" class="java.lang.String"/>
+		<field name="quantidade" class="java.lang.Integer"/>
+	</subDataset>
+
+	<!-- Parâmetros do relatório -->
+	<parameter name="TITULO_RELATORIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DATA_GERACAO" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="LOGO_PATH" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="USUARIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TOTAL_EMPRESAS" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="RISCO_COUNT" class="java.util.List" isForPrompting="false"/>
+	<parameter name="STATUS_COUNT" class="java.util.List" isForPrompting="false"/>
+
+	<!-- Campos do EmpresaRelatorioDTO -->
+	<field name="id" class="java.lang.Long"/>
+	<field name="tipoEmpresa" class="java.lang.String"/>
+	<field name="cpfOuCnpj" class="java.lang.String"/>
+	<field name="inscricaoEstadual" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="razaoSocial" class="java.lang.String"/>
+	<field name="nomeFantasia" class="java.lang.String"/>
+	<field name="logomarcaUrl" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="telefonePrincipal" class="java.lang.String"/>
+	<field name="telefoneSecundario" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="grauRisco" class="java.lang.String"/>
+	<field name="cnaePrincipalId" class="java.lang.Long"/>
+	<field name="tipoMatrizFilial" class="java.lang.String"/>
+	<field name="medicoResponsavelPcmsso" class="java.lang.String"/>
+	<field name="medicoResponsavel" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="observacoes" class="java.lang.String"/>
+
+	<!-- ======================
+         TÍTULO
+         ====================== -->
+	<title>
+		<band height="130" splitType="Stretch">
+			<!-- Fundo do cabeçalho -->
+			<rectangle>
+				<reportElement x="0" y="0" width="535" height="90" backcolor="#005C9D" forecolor="#005C9D" uuid="6ca69c23-782a-48ba-bbfc-8f5aa9b7a05c"/>
+			</rectangle>
+
+			<!-- Logo -->
+			<image scaleImage="RetainShape">
+				<reportElement x="10" y="10" width="70" height="70" uuid="19bf75e6-f65d-46a0-a107-d326fb233311"/>
+				<imageExpression><![CDATA[$P{LOGO_PATH}]]></imageExpression>
+			</image>
+
+			<!-- Título principal -->
+			<textField>
+				<reportElement x="90" y="20" width="435" height="30" forecolor="#FFFFFF" style="Titulo" uuid="f4e33118-ea96-4090-b4b3-e81a6006ba6f"/>
+				<textFieldExpression><![CDATA[$P{TITULO_RELATORIO}]]></textFieldExpression>
+			</textField>
+
+			<!-- Subtítulo com data e usuário -->
+			<textField>
+				<reportElement x="90" y="50" width="435" height="20" forecolor="#FFFFFF" style="Subtitulo" uuid="e0e8cd3e-e0c4-40d8-a3e3-d243d97f04f9"/>
+				<textFieldExpression><![CDATA["Total de Empresas: " + $P{TOTAL_EMPRESAS}]]></textFieldExpression>
+			</textField>
+
+			<!-- Informação de geração -->
+			<textField>
+				<reportElement x="5" y="100" width="525" height="20" style="Rodape" uuid="87aa9c54-3bcf-43e9-9ef5-9e9e85bfde9a"/>
+				<textFieldExpression><![CDATA["Relatório gerado por: " + $P{USUARIO} + " em " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format($P{DATA_GERACAO})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+
+	<!-- ======================
+         CABEÇALHO DE PÁGINA
+         ====================== -->
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="5" width="535" height="20" style="Subtitulo" uuid="3d96d2c6-91af-4197-bcb5-3e5b78e1d0a3"/>
+				<text><![CDATA[Dados Cadastrais das Empresas]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="28" width="535" height="1" forecolor="#CCCCCC" uuid="1b74043a-fa51-4924-a941-d91089bb5c22"/>
+			</line>
+		</band>
+	</pageHeader>
+
+	<!-- ======================
+         CABEÇALHO DAS COLUNAS
+         ====================== -->
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="535" height="25" backcolor="#F0F0F0" forecolor="#F0F0F0" uuid="8c38ebd2-6f9c-4e8a-b4c9-de6a2bfef0ea"/>
+			</rectangle>
+
+			<staticText>
+				<reportElement x="0" y="0" width="160" height="20" style="Cabecalho" uuid="45f5e5e7-c0dd-4c8c-b983-9857cb3e4c3a"/>
+				<text><![CDATA[Razão Social]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="160" y="0" width="100" height="20" style="Cabecalho" uuid="d0a757f3-cec3-4e20-a123-84c0c8bd49e0"/>
+				<text><![CDATA[CNPJ/CPF]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="260" y="0" width="90" height="20" style="Cabecalho" uuid="b5669f30-9e5b-423a-b9f4-80e3a6e6392a"/>
+				<text><![CDATA[Grau de Risco]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="350" y="0" width="90" height="20" style="Cabecalho" uuid="6c7f3ce5-9b8e-494a-a3b6-952cf57d7a21"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="440" y="0" width="95" height="20" style="Cabecalho" uuid="d5f4b2e3-2c1f-4f5a-a3b5-4dfb93b33042"/>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+
+	<!-- ======================
+         DETALHE (DADOS)
+         ====================== -->
+	<detail>
+		<band height="75" splitType="Stretch">
+			<!-- Linha 1: Dados básicos -->
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="160" height="20" style="Detalhe" uuid="2b169baa-6c28-4452-82a6-f1b5ea2fc4ce"/>
+				<textFieldExpression><![CDATA[$F{razaoSocial}]]></textFieldExpression>
+			</textField>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="0" width="100" height="20" style="Detalhe" uuid="7ef12c06-a4ad-45fe-9b4e-fe7c15f48344"/>
+				<textFieldExpression><![CDATA[$F{cpfOuCnpj}]]></textFieldExpression>
+			</textField>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="260" y="0" width="90" height="20" style="Detalhe" uuid="8ef12c06-a4ad-45fe-9b4e-fe7c15f48345"/>
+				<textFieldExpression><![CDATA[$F{grauRisco}]]></textFieldExpression>
+			</textField>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="90" height="20" style="Detalhe" uuid="9ef12c06-a4ad-45fe-9b4e-fe7c15f48346"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="440" y="0" width="95" height="20" style="Detalhe" uuid="1ef12c06-a4ad-45fe-9b4e-fe7c15f48347"/>
+				<textFieldExpression><![CDATA[$F{tipoEmpresa}]]></textFieldExpression>
+			</textField>
+
+			<!-- Linha 2: Contato e Endereço -->
+			<staticText>
+				<reportElement x="0" y="25" width="60" height="15" style="Detalhe" uuid="70d82023-c7d3-4fa4-a9aa-36847fc5d9f8"/>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="60" y="25" width="475" height="15" style="Detalhe" uuid="8b2d2c17-a13d-4ea8-a86d-7c42c35324ef"/>
+				<textFieldExpression><![CDATA[$F{endereco} + ", " + $F{cidade} + " - " + $F{estado}]]></textFieldExpression>
+			</textField>
+
+			<staticText>
+				<reportElement x="0" y="40" width="60" height="15" style="Detalhe" uuid="bcf2f6dc-9f06-4893-b11f-ceefb8bb97e4"/>
+				<text><![CDATA[Telefone:]]></text>
+			</staticText>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="40" width="200" height="15" style="Detalhe" uuid="a9b4509c-20df-4d00-8523-2609a0c16cb5"/>
+				<textFieldExpression><![CDATA[$F{telefonePrincipal}]]></textFieldExpression>
+			</textField>
+
+			<staticText>
+				<reportElement x="280" y="40" width="45" height="15" style="Detalhe" uuid="92006ca6-f9fb-491d-a823-7b5373bc70e0"/>
+				<text><![CDATA[E-mail:]]></text>
+			</staticText>
+
+			<textField isBlankWhenNull="true">
+				<reportElement x="325" y="40" width="210" height="15" style="Detalhe" uuid="2a1b07b1-a32c-4c95-9602-0c422c187c62"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+
+			<!-- Separador entre empresas -->
+			<line>
+				<reportElement x="0" y="65" width="535" height="1" forecolor="#EEEEEE" uuid="4f1b75eb-7df6-47cb-bc18-c6b885a05522"/>
+			</line>
+		</band>
+	</detail>
+
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="535" height="30" backcolor="#005C9D" forecolor="#005C9D" uuid="3ef12c06-a4ad-45fe-9b4e-fe7c15f48353"/>
+			</rectangle>
+
+			<textField>
+				<reportElement x="10" y="5" width="300" height="20" forecolor="#FFFFFF" style="Rodape" uuid="4ef12c06-a4ad-45fe-9b4e-fe7c15f48354"/>
+				<textFieldExpression><![CDATA["© " + Calendar.getInstance().get(Calendar.YEAR) + " - Sistema de Saúde Ocupacional"]]></textFieldExpression>
+			</textField>
+
+			<textField evaluationTime="Report">
+				<reportElement x="425" y="5" width="100" height="20" forecolor="#FFFFFF" style="Rodape" uuid="5ef12c06-a4ad-45fe-9b4e-fe7c15f48355"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+
+	<!-- ======================
+         RESUMO / GRÁFICOS
+         ====================== -->
+	<summary>
+		<band height="500" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="535" height="25" style="GraficoTitulo" uuid="c5f069aa-a7ae-45c3-bd7c-77a6d6c3dd54"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Análise de Empresas Cadastradas]]></text>
+			</staticText>
+
+			<!-- Gráfico de Riscos -->
+			<staticText>
+				<reportElement x="0" y="45" width="260" height="20" style="Subtitulo" uuid="b9b4509c-20df-4d00-8523-2609a0c16cb6"/>
+				<text><![CDATA[Empresas por Grau de Risco]]></text>
+			</staticText>
+
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="70" width="260" height="180" uuid="2d4e62c3-0c51-4e20-aac6-bb9112f17689"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="RiscoDataset" uuid="32c7ca36-9c1e-47a6-a9c7-54e90a27c4ab">
+							<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{RISCO_COUNT})]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{key}]]></keyExpression>
+					<valueExpression><![CDATA[$F{value}]]></valueExpression>
+					<labelExpression><![CDATA[$F{key} + " (" + $F{value} + ")"]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+
+			<!-- Gráfico de Status -->
+			<staticText>
+				<reportElement x="275" y="45" width="260" height="20" style="Subtitulo" uuid="c9b4509c-20df-4d00-8523-2609a0c16cb7"/>
+				<text><![CDATA[Empresas por Status]]></text>
+			</staticText>
+
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="275" y="70" width="260" height="180" uuid="5cc89a69-5119-4f16-993c-9ff7bd27e733"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="StatusDataset" uuid="3dfc90a3-96b1-4e7a-a1b7-0c8bd65bfea2">
+							<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{STATUS_COUNT})]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Status"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{key}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{value}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+
+			<!-- Tabela de Resumo -->
+			<staticText>
+				<reportElement x="0" y="270" width="535" height="20" style="Subtitulo" uuid="d9b4509c-20df-4d00-8523-2609a0c16cb8"/>
+				<text><![CDATA[Resumo por Grau de Risco]]></text>
+			</staticText>
+
+			<rectangle>
+				<reportElement x="0" y="295" width="535" height="25" backcolor="#F0F0F0" forecolor="#F0F0F0" uuid="7ef12c06-a4ad-45fe-9b4e-fe7c15f48348"/>
+			</rectangle>
+
+			<staticText>
+				<reportElement x="10" y="295" width="250" height="25" style="Cabecalho" uuid="8ef12c06-a4ad-45fe-9b4e-fe7c15f48349"/>
+				<text><![CDATA[Grau de Risco]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="275" y="295" width="100" height="25" style="Cabecalho" uuid="9ef12c06-a4ad-45fe-9b4e-fe7c15f48350"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="400" y="295" width="100" height="25" style="Cabecalho" uuid="1ef12c06-a4ad-45fe-9b4e-fe7c15f48351"/>
+				<text><![CDATA[Percentual]]></text>
+			</staticText>
+
+			<staticText>
+				<reportElement x="0" y="400" width="535" height="80" style="Rodape" uuid="2ef12c06-a4ad-45fe-9b4e-fe7c15f48352"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[Notas:
+1. Este relatório apresenta todas as empresas cadastradas no sistema.
+2. O grau de risco é baseado nas informações fornecidas durante o cadastro das empresas.
+3. Os gráficos apresentam a distribuição das empresas por grau de risco e status atual.
+4. Para mais informações ou detalhes adicionais, entre em contato com o administrador do sistema.]]></text>
+			</staticText>
+		</band>
+	</summary>
+
+</jasperReport>
