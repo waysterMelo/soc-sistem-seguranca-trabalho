@@ -2,6 +2,7 @@ package com.ocupacional.soc.Entities.Cadastros;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.GrauRisco;
 import com.ocupacional.soc.Enuns.UnidadeOperacional.SituacaoUnidadeOperacional;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
@@ -38,7 +39,14 @@ public class UnidadeOperacionalEntity {
     @ToString.Exclude @EqualsAndHashCode.Exclude
     private EmpresaEntity empresa;
 
-    private String endereco;
+    private String cep;
+    private String cidade;
+    private String estado;
+    private String logradouro;
+    private String numero;
+    private String bairro;
+    private String complemento;
+    private String regiao;
 
     @Column(name = "email_contato")
     private String emailContato;

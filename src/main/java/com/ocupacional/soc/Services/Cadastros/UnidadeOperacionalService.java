@@ -12,4 +12,5 @@ public interface UnidadeOperacionalService {
     Optional<UnidadeOperacionalResponseDTO> buscarPorId(Long unidadeId);
     List<UnidadeOperacionalResponseDTO> listarPorEmpresaId(Long empresaId);
     void deletar(Long unidadeId);
+    Long calcularTotalSetores(Long unidadeId);
 }

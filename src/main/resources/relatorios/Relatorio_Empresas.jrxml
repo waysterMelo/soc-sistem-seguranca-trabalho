@@ -69,13 +69,6 @@
 		<variableExpression><![CDATA[Boolean.TRUE]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<background>
-		<band height="802" splitType="Stretch">
-			<rectangle radius="0">
-				<reportElement mode="Opaque" x="0" y="0" width="20" height="802" backcolor="#3F51B5" uuid="b8b66227-fe0c-4c3f-8064-b5e82c38fc66"/>
-			</rectangle>
-		</band>
-	</background>
 	<title>
 		<band height="170" splitType="Stretch">
 			<rectangle radius="0">

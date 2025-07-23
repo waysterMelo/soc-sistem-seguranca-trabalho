@@ -76,4 +76,15 @@ public class UnidadeOperacionalController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/{unidadeId}/total-setores")
+    public ResponseEntity<Integer> calcularTotalSetores(@PathVariable Long unidadeId) {
+        try {
+            Integer totalSetores = Math.toIntExact(unidadeOperacionalService.calcularTotalSetores(unidadeId));
+            return ResponseEntity.ok(totalSetores);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unidade Operacional não encontrada com ID: " + unidadeId);
+        }
+    }
+
 }

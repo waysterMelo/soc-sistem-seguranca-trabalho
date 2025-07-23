@@ -4,6 +4,10 @@ import com.ocupacional.soc.Dto.Cadastros.EmpresaDto;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Mapper.Cadastros.EmpresaMapper;
 import com.ocupacional.soc.Services.Cadastros.EmpresaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -99,6 +103,20 @@ public class EmpresaController {
         }
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<Page<EmpresaDto>>
+    buscarPorNome(@RequestParam(required = false) String termo,
+                  @PageableDefault(size = 10, sort = "razaoSocial")
+    Pageable pageable) {
+        Page<EmpresaEntity> empresasPage = empresaService.buscarPorTermo(termo, pageable);
+        List<EmpresaDto> empresaDtos = empresasPage.getContent().stream().map(empresaMapper::toEmpresaDto)
+                .toList();
 
+    Page<EmpresaDto> dtoPage = new PageImpl<>(
+            empresaDtos, pageable, empresasPage.getTotalElements()
+    );
 
-} 
+    return ResponseEntity.ok(dtoPage);
+    }
+
+}

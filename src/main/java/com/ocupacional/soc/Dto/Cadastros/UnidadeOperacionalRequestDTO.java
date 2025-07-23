@@ -29,10 +29,15 @@ public class UnidadeOperacionalRequestDTO {
     @NotNull(message = "O ID da empresa é obrigatório.")
     private Long empresaId;
 
-    @Valid
-    private EnderecoDto endereco;
-
-    private boolean usarEnderecoEmpresa = false;
+    private String endereco;
+    private String cep;
+    private String cidade;
+    private String estado;
+    private String logradouro;
+    private Integer numero;
+    private String bairro;
+    private String complemento;
+    private String regiao;
 
     @Email(message = "Formato de e-mail inválido.")
     @Size(max = 255, message = "O e-mail de contato deve ter no máximo 255 caracteres.")

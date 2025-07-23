@@ -1,12 +1,8 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
-import com.ocupacional.soc.Entities.Cadastros.CnaeEntity;
-import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
-import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
-import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
+import com.ocupacional.soc.Entities.Cadastros.*;
 import com.ocupacional.soc.Mapper.Cadastros.EnderecoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Repositories.Cadastros.CnaeRepository;
@@ -19,13 +15,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 @Service
 public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService {
@@ -35,21 +29,18 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
     private final CnaeRepository cnaeRepository;
     private final SetorRepository setorRepository;
     private final UnidadeOperacionalMapper unidadeOperacionalMapper;
-    private final EnderecoMapper enderecoMapper;
 
     public UnidadeOperacionalServiceImpl(
             UnidadeOperacionalRepository unidadeOperacionalRepository,
             EmpresaRepository empresaRepository,
             CnaeRepository cnaeRepository,
             SetorRepository setorRepository,
-            UnidadeOperacionalMapper unidadeOperacionalMapper,
-            EnderecoMapper enderecoMapper) {
+            UnidadeOperacionalMapper unidadeOperacionalMapper) {
         this.unidadeOperacionalRepository = unidadeOperacionalRepository;
         this.empresaRepository = empresaRepository;
         this.cnaeRepository = cnaeRepository;
         this.setorRepository = setorRepository;
         this.unidadeOperacionalMapper = unidadeOperacionalMapper;
-        this.enderecoMapper = enderecoMapper;
     }
 
     @Override
@@ -58,8 +49,6 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         EmpresaEntity empresa = findEmpresaById(empresaId);
         UnidadeOperacionalEntity unidadeEntity = unidadeOperacionalMapper.toEntity(dto);
         unidadeEntity.setEmpresa(empresa);
-
-        unidadeEntity.setEndereco(formatarEnderecoParaString(dto, empresa));
 
         carregarRelacionamentos(unidadeEntity, dto);
         validarConfiguracaoEmpresaTerceira(unidadeEntity);
@@ -78,8 +67,6 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         }
 
         unidadeOperacionalMapper.updateEntityFromDto(dto, unidadeEntity);
-        unidadeEntity.setEndereco(formatarEnderecoParaString(dto, unidadeEntity.getEmpresa()));
-
         carregarRelacionamentos(unidadeEntity, dto);
         validarConfiguracaoEmpresaTerceira(unidadeEntity);
 
@@ -87,77 +74,15 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         return unidadeOperacionalMapper.toResponseDto(updatedUnidade);
     }
 
-    private String formatarEnderecoParaString(UnidadeOperacionalRequestDTO dto, EmpresaEntity empresaContexto) {
-        if (dto.isUsarEnderecoEmpresa()) {
-            if (empresaContexto.getEndereco() == null) {
-                throw new IllegalArgumentException("A empresa selecionada não possui endereço cadastrado para cópia.");
-            }
-            EnderecoDto enderecoDtoDaEmpresa = enderecoMapper.toDto(empresaContexto.getEndereco());
-            return construirStringEnderecoFormatado(enderecoDtoDaEmpresa);
-        } else if (dto.getEndereco() != null) {
-            return construirStringEnderecoFormatado(dto.getEndereco());
-        }
-        return null;
-    }
-
-    private String construirStringEnderecoFormatado(EnderecoDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        List<String> parts = new ArrayList<>();
-        if (StringUtils.hasText(dto.getLogradouro())) parts.add(dto.getLogradouro());
-        if (StringUtils.hasText(dto.getNumero())) parts.add(dto.getNumero());
-        if (StringUtils.hasText(dto.getComplemento())) parts.add(dto.getComplemento());
-
-        String primeiraLinha = String.join(", ", parts.stream().filter(StringUtils::hasText).collect(Collectors.toList()));
-        parts.clear();
-
-        if (StringUtils.hasText(dto.getBairro())) parts.add(dto.getBairro());
-
-        String cidadeEstado = "";
-        if (StringUtils.hasText(dto.getCidade()) && StringUtils.hasText(dto.getEstado())) {
-            cidadeEstado = dto.getCidade() + "/" + dto.getEstado();
-        } else if (StringUtils.hasText(dto.getCidade())) {
-            cidadeEstado = dto.getCidade();
-        } else if (StringUtils.hasText(dto.getEstado())) {
-            cidadeEstado = dto.getEstado();
-        }
-        if(StringUtils.hasText(cidadeEstado)) parts.add(cidadeEstado);
-
-        String segundaLinha = String.join(" - ", parts.stream().filter(StringUtils::hasText).collect(Collectors.toList()));
-        parts.clear();
-
-        String cepFormatado = "";
-        if (StringUtils.hasText(dto.getCep())) cepFormatado = "CEP: " + dto.getCep();
-
-        StringBuilder enderecoCompleto = new StringBuilder();
-        if(StringUtils.hasText(primeiraLinha)) enderecoCompleto.append(primeiraLinha);
-        if(StringUtils.hasText(segundaLinha)) {
-            if(enderecoCompleto.length() > 0) enderecoCompleto.append(" - ");
-            enderecoCompleto.append(segundaLinha);
-        }
-        if(StringUtils.hasText(cepFormatado)) {
-            if(enderecoCompleto.length() > 0) enderecoCompleto.append(" - ");
-            enderecoCompleto.append(cepFormatado);
-        }
-        if (StringUtils.hasText(dto.getRegiao())) {
-            if(enderecoCompleto.length() > 0) enderecoCompleto.append(" (Região: ").append(dto.getRegiao()).append(")");
-            else enderecoCompleto.append("Região: ").append(dto.getRegiao());
-        }
-
-        return enderecoCompleto.length() > 0 ? enderecoCompleto.toString() : null;
-    }
-
-
     private void carregarRelacionamentos(UnidadeOperacionalEntity unidadeEntity, UnidadeOperacionalRequestDTO dto) {
         if (dto.getCnaePrincipalId() != null) {
-            unidadeEntity.setCnaePrincipal(findCnaeById(dto.getCnaePrincipalId(), "CNAE Principal"));
+            unidadeEntity.setCnaePrincipal(findCnaeById(dto.getCnaePrincipalId()));
         } else {
             unidadeEntity.setCnaePrincipal(null);
         }
 
         if (!CollectionUtils.isEmpty(dto.getSetoresIds())) {
-            List<SetorEntity> setores = findEntidadesByIds(setorRepository, dto.getSetoresIds(), "Setores");
+            List<SetorEntity> setores = findEntidadesByIds(setorRepository, dto.getSetoresIds());
             unidadeEntity.setSetores(setores);
         } else {
             unidadeEntity.setSetores(Collections.emptyList());
@@ -185,18 +110,18 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
                 .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + id));
     }
 
-    private CnaeEntity findCnaeById(Long id, String cnaeTypeDescription) {
+    private CnaeEntity findCnaeById(Long id) {
         return cnaeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(cnaeTypeDescription + " não encontrado com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(STR."CNAE Principal não encontrado com ID: \{id}"));
     }
 
-    private <T, ID> List<T> findEntidadesByIds(JpaRepository<T, ID> repository, List<ID> ids, String entityDescription) {
+    private <T, ID> List<T> findEntidadesByIds(JpaRepository<T, ID> repository, List<ID> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
         List<T> entidades = repository.findAllById(ids);
         if (entidades.size() != ids.size()) {
-            throw new EntityNotFoundException("Um ou mais " + entityDescription + " não foram encontrados. IDs fornecidos: " + ids);
+            throw new EntityNotFoundException("Um ou mais " + "Setores" + " não foram encontrados. IDs fornecidos: " + ids);
         }
         return entidades;
     }
@@ -229,4 +154,13 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         UnidadeOperacionalEntity unidade = findUnidadeOperacionalById(unidadeId);
         unidadeOperacionalRepository.delete(unidade);
     }
+
+    @Override
+    public Long calcularTotalSetores(Long unidadeId) {
+        UnidadeOperacionalEntity unidade = unidadeOperacionalRepository.findById(unidadeId)
+                .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + unidadeId));
+
+        return unidade.getSetores() != null ? (long) unidade.getSetores().size() : 0L;
+    }
+
 }

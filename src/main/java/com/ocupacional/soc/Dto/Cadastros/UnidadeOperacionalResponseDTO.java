@@ -19,7 +19,14 @@ public class UnidadeOperacionalResponseDTO {
     private String descricao;
     private SituacaoUnidadeOperacional situacao;
     private EmpresaSimpleResponseDTO empresa;
-    private String endereco;
+    private String cep;
+    private String cidade;
+    private String estado;
+    private String logradouro;
+    private Integer numero;
+    private String bairro;
+    private String complemento;
+    private String regiao;
     private boolean usarEnderecoEmpresa;
     private String emailContato;
     private String dddTelefone1;
@@ -28,7 +35,6 @@ public class UnidadeOperacionalResponseDTO {
     private String numeroTelefone2;
     private GrauRisco grauRisco;
     private CnaeDto cnaePrincipal;
-    private List<CnaeDto> cnaesSecundarios;
     private boolean alocadaEmEmpresaTerceira;
     private TipoMatrizFilial tipoConfiguracaoUnidade;
     private String cnpjEmpresaTerceira;

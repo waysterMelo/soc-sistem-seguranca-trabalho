@@ -2,13 +2,14 @@ package com.ocupacional.soc.Services.Cadastros;
 
 import com.ocupacional.soc.Dto.Relatorios.EmpresaRelatorioDTO;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
-import com.ocupacional.soc.Mapper.Cadastros.EmpresaMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -169,5 +170,10 @@ public class EmpresaService {
         }
     }
 
-
+    public Page<EmpresaEntity> buscarPorTermo(String termo, Pageable pageable) {
+        if(termo == null || termo.trim().isEmpty()) {
+            return empresaRepository.findAll(pageable);
+        }
+        return empresaRepository.buscarPorTermo(termo, pageable);
+    }
 } 
