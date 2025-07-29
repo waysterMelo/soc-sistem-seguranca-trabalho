@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SetorResponseDTO {
-
+public class UnidadeOperacionalSimpleDTO {
     private Long id;
     private String nome;
     private String descricao;
-    private EmpresaSimpleResponseDTO empresa;
-    private UnidadeOperacionalSimpleDTO unidadeOperacional;
-
 }

@@ -80,13 +80,9 @@ public class UnidadeOperacionalEntity {
 
     private String razaoSocialEmpresaTerceira;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "unidade_operacional_setor",
-            joinColumns = @JoinColumn(name = "unidade_operacional_id"),
-            inverseJoinColumns = @JoinColumn(name = "setor_id")
-    )
+    @OneToMany(mappedBy = "unidadeOperacional", fetch = FetchType.LAZY)
     private List<SetorEntity> setores;
+
 
 
 }

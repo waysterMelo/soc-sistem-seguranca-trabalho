@@ -4,6 +4,7 @@ import com.ocupacional.soc.Dto.Cadastros.SetorRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.SetorResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
+import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Mapper.Cadastros.SetorMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
@@ -42,12 +43,21 @@ public class SetorServiceImpl implements SetorService {
                     return new EntityNotFoundException("Empresa não encontrada com ID: " + dto.getEmpresaId());
                 });
 
+        UnidadeOperacionalEntity unidadeOperacional = null;
+        if (dto.getUnidadeOperacionalId() != null) {
+            unidadeOperacional = unidadeOperacionalRepository.findById(dto.getUnidadeOperacionalId())
+                    .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + dto.getUnidadeOperacionalId()));
+        }
+
+
         setorRepository.findByNomeAndEmpresaId(dto.getNome(), dto.getEmpresaId()).ifPresent(existingSetor -> {
             throw new IllegalArgumentException("Setor com o nome '" + dto.getNome() + "' já existe na empresa " + (empresa != null ? empresa.getNomeFantasia() : "ID: "+dto.getEmpresaId()) + ".");
         });
 
         SetorEntity setorEntity = setorMapper.toEntity(dto);
         setorEntity.setEmpresa(empresa);
+        setorEntity.setUnidadeOperacional(unidadeOperacional);
+
 
         try {
             setorEntity = setorRepository.save(setorEntity);
@@ -84,10 +94,18 @@ public class SetorServiceImpl implements SetorService {
     @Override
     @Transactional
     public SetorResponseDTO atualizar(Long id, SetorRequestDTO dto) {
+
         SetorEntity setorEntity = setorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado com ID: " + id));
 
         if (!setorEntity.getEmpresa().getId().equals(dto.getEmpresaId())) {
+        }
+
+        // ← Adicionar lógica para UnidadeOperacional
+        UnidadeOperacionalEntity unidadeOperacional = null;
+        if (dto.getUnidadeOperacionalId() != null) {
+            unidadeOperacional = unidadeOperacionalRepository.findById(dto.getUnidadeOperacionalId())
+                    .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + dto.getUnidadeOperacionalId()));
         }
 
         Optional<SetorEntity> existingSetorWithNewName = setorRepository.findByNomeAndEmpresaId(dto.getNome(), setorEntity.getEmpresa().getId());
@@ -96,16 +114,18 @@ public class SetorServiceImpl implements SetorService {
         }
 
         setorMapper.updateEntityFromDto(dto, setorEntity);
+        setorEntity.setUnidadeOperacional(unidadeOperacional); // ← Adicionar esta linha
 
         setorEntity = setorRepository.save(setorEntity);
         return setorMapper.toResponseDto(setorEntity);
+
     }
 
 
     @Override
     @Transactional
     public void deletar(Long id) {
-       SetorEntity setor = setorRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Setor não encontrado com ID:" + id));
+        SetorEntity setor = setorRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Setor não encontrado com ID:" + id));
         if (unidadeOperacionalRepository.existsById(id)){
             throw new IllegalStateException("Setor não pode ser deletado pois está em uso por uma ou mais unidades operacionais.");
         }

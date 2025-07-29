@@ -10,16 +10,19 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {EmpresaMapper.class})
+@Mapper(componentModel = "spring", uses = {EmpresaMapper.class,
+UnidadeOperacionalMapper.class})
 public interface SetorMapper {
 
     SetorMapper INSTANCE = Mappers.getMapper(SetorMapper.class);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "empresa", ignore = true)
+    @Mapping(target = "unidadeOperacional", ignore = true)
     SetorEntity toEntity(SetorRequestDTO dto);
 
     @Mapping(source = "empresa", target = "empresa")
+    @Mapping(source = "unidadeOperacional", target = "unidadeOperacional")
     SetorResponseDTO toResponseDto(SetorEntity entity);
 
     List<SetorResponseDTO> toResponseDtoList(List<SetorEntity> entities);
@@ -27,5 +30,6 @@ public interface SetorMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "empresa", ignore = true)
+    @Mapping(target = "unidadeOperacional", ignore = true)
     void updateEntityFromDto(SetorRequestDTO dto, @MappingTarget SetorEntity entity);
 }

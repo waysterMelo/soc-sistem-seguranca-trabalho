@@ -67,7 +67,7 @@ public class UnidadeOperacionalController {
         }
     }
 
-    @DeleteMapping("/unidades-operacionais/{unidadeId}")
+    @DeleteMapping("/{unidadeId}")
     public ResponseEntity<Void> deletarUnidadeOperacional(@PathVariable Long unidadeId) {
         try {
             unidadeOperacionalService.deletar(unidadeId);

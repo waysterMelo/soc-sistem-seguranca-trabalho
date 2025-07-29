@@ -16,4 +16,6 @@ public class SetorRequestDTO {
     private String descricao;
     @NotNull(message = "O ID da empresa é obrigatório.")
     private Long empresaId;
+    private Long unidadeOperacionalId;
+
 }
