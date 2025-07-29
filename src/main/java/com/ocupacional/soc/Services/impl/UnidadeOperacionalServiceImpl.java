@@ -3,7 +3,6 @@ package com.ocupacional.soc.Services.impl;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.*;
-import com.ocupacional.soc.Mapper.Cadastros.EnderecoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Repositories.Cadastros.CnaeRepository;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
@@ -11,7 +10,10 @@ import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Services.Cadastros.UnidadeOperacionalService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -141,12 +143,13 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
     @Transactional(readOnly = true)
     public List<UnidadeOperacionalResponseDTO> listarPorEmpresaId(Long empresaId) {
         if (!empresaRepository.existsById(empresaId)) {
-            throw new EntityNotFoundException("Empresa não encontrada com ID: " + empresaId + " ao listar unidades operacionais.");
+            throw new EntityNotFoundException(STR."Empresa não encontrada com ID: \{empresaId} ao listar unidades operacionais.");
         }
         return unidadeOperacionalRepository.findByEmpresaId(empresaId).stream()
                 .map(unidadeOperacionalMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional
@@ -158,9 +161,16 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
     @Override
     public Long calcularTotalSetores(Long unidadeId) {
         UnidadeOperacionalEntity unidade = unidadeOperacionalRepository.findById(unidadeId)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + unidadeId));
+                .orElseThrow(() -> new EntityNotFoundException(STR."Unidade Operacional não encontrada com ID: \{unidadeId}"));
 
         return unidade.getSetores() != null ? (long) unidade.getSetores().size() : 0L;
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UnidadeOperacionalResponseDTO> listarTodos(Pageable pageable) {
+        Page<UnidadeOperacionalEntity> entidades = unidadeOperacionalRepository.findAll(pageable);
+        return entidades.map(unidadeOperacionalMapper::toResponseDto);
+    }
 }

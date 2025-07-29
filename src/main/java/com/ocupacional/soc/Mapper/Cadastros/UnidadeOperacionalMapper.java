@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,9 @@ public interface UnidadeOperacionalMapper {
     @Mapping(source = "cnaePrincipalId", target = "cnaePrincipal", qualifiedByName = "mapCnaeFromId")
     @Mapping(source = "setoresIds", target = "setores", qualifiedByName = "mapSetoresFromIds")
     void updateEntityFromDto(UnidadeOperacionalRequestDTO dto, @MappingTarget UnidadeOperacionalEntity entity);
+
+    List<UnidadeOperacionalResponseDTO> toResponseDto(List<UnidadeOperacionalEntity> entities);
+
 
     @Named("mapEmpresaFromId")
     default EmpresaEntity mapEmpresaFromId(Long id) {

@@ -5,6 +5,10 @@ import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
 import com.ocupacional.soc.Services.Cadastros.UnidadeOperacionalService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.*;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/unidade-operacional")
+@RequestMapping("api/unidade-operacional")
 public class UnidadeOperacionalController {
 
     private final UnidadeOperacionalService unidadeOperacionalService;
@@ -87,4 +91,10 @@ public class UnidadeOperacionalController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<Page<UnidadeOperacionalResponseDTO>> listarTodasUnidades(@PageableDefault(size = 10, sort = "id") Pageable pageable){
+        Page<UnidadeOperacionalResponseDTO> unidades = unidadeOperacionalService.listarTodos(pageable);
+        return ResponseEntity.ok(unidades);
+
+    }
 }
