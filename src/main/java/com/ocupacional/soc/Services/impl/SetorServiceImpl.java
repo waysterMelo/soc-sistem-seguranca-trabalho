@@ -78,7 +78,16 @@ public class SetorServiceImpl implements SetorService {
     @Override
     @Transactional
     public List<SetorResponseDTO> listarTodos() {
-        return setorMapper.toResponseDtoList(setorRepository.findAll());
+        List<SetorEntity> setores = setorRepository.findAll();
+
+        setores.forEach(setor -> {
+            if (setor.getUnidadeOperacional() != null &&
+                    setor.getUnidadeOperacional().getId() == 0) {
+                setor.setUnidadeOperacional(null);
+            }
+        });
+        return setorMapper.toResponseDtoList(setores);
+
     }
 
     @Override

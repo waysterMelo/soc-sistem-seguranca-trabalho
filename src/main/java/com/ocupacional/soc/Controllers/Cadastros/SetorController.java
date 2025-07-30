@@ -46,8 +46,8 @@ public class SetorController {
 
 
     @GetMapping
-    public ResponseEntity<List<SetorResponseDTO>> listarSetores( // Renomeado para listarSetores para clareza
-                                                                 @RequestParam(required = false) Long empresaId) {
+    public ResponseEntity<List<SetorResponseDTO>> listarSetores(@RequestParam(required = false)
+                                                                 Long empresaId) {
         List<SetorResponseDTO> setores;
         if (empresaId != null) {
             try {

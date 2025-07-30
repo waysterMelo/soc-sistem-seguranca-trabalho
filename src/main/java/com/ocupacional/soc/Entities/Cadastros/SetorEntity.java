@@ -1,11 +1,13 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "setores")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SetorEntity {
@@ -26,6 +28,9 @@ public class SetorEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unidade_operacional_id")
     private UnidadeOperacionalEntity unidadeOperacional;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEmpresa status;
 
 
 }

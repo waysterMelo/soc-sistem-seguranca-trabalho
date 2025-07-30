@@ -150,7 +150,6 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
                 .collect(Collectors.toList());
     }
 
-
     @Override
     @Transactional
     public void deletar(Long unidadeId) {
@@ -166,11 +165,17 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         return unidade.getSetores() != null ? (long) unidade.getSetores().size() : 0L;
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public Page<UnidadeOperacionalResponseDTO> listarTodos(Pageable pageable) {
         Page<UnidadeOperacionalEntity> entidades = unidadeOperacionalRepository.findAll(pageable);
         return entidades.map(unidadeOperacionalMapper::toResponseDto);
+    }
+
+    @Override
+    public Page<UnidadeOperacionalResponseDTO> filtrarPorNome(String nome, Pageable pageable) {
+            Page<UnidadeOperacionalEntity> entidades = unidadeOperacionalRepository
+                    .findByNomeContainingIgnoreCase(nome, pageable);
+            return entidades.map(unidadeOperacionalMapper::toResponseDto);
     }
 }

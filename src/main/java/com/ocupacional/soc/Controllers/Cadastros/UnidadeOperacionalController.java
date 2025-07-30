@@ -91,10 +91,24 @@ public class UnidadeOperacionalController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<Page<UnidadeOperacionalResponseDTO>> listarTodasUnidades(@PageableDefault(size = 10, sort = "id") Pageable pageable){
-        Page<UnidadeOperacionalResponseDTO> unidades = unidadeOperacionalService.listarTodos(pageable);
-        return ResponseEntity.ok(unidades);
 
+    @GetMapping
+    public ResponseEntity<Page<UnidadeOperacionalResponseDTO>> listarTodasUnidades(
+            @RequestParam(required = false) String nome,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        Page<UnidadeOperacionalResponseDTO> unidades;
+
+        if (nome != null && !nome.trim().isEmpty()) {
+            // Se um nome foi fornecido, filtrar por nome
+            unidades = unidadeOperacionalService.filtrarPorNome(nome, pageable);
+        } else {
+            // Caso contrário, retornar todas as unidades
+            unidades = unidadeOperacionalService.listarTodos(pageable);
+        }
+
+        return ResponseEntity.ok(unidades);
     }
+
+
 }

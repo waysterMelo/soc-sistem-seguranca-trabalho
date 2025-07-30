@@ -16,4 +16,6 @@ public interface UnidadeOperacionalService {
     void deletar(Long unidadeId);
     Long calcularTotalSetores(Long unidadeId);
     Page<UnidadeOperacionalResponseDTO> listarTodos(Pageable pageable);
+    Page<UnidadeOperacionalResponseDTO> filtrarPorNome(String nome, Pageable pageable);
+
 }

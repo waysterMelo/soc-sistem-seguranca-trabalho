@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,7 @@ public class SetorResponseDTO {
     private String descricao;
     private EmpresaSimpleResponseDTO empresa;
     private UnidadeOperacionalSimpleDTO unidadeOperacional;
+    private StatusEmpresa status;
+
 
 }

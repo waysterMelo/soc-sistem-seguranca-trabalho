@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,6 @@ public class SetorRequestDTO {
     @NotNull(message = "O ID da empresa é obrigatório.")
     private Long empresaId;
     private Long unidadeOperacionalId;
+    private StatusEmpresa status;
 
 }
