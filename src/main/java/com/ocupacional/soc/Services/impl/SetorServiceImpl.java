@@ -136,7 +136,7 @@ public class SetorServiceImpl implements SetorService {
     public void deletar(Long id) {
         SetorEntity setor = setorRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Setor não encontrado com ID:" + id));
         if (unidadeOperacionalRepository.existsById(id)){
-            throw new IllegalStateException("Setor não pode ser deletado pois está em uso por uma ou mais unidades operacionais.");
+            throw new IllegalStateException("Setor não pode ser deletado pois está em uso por uma ou mais unidades operacionais. Inative o setor ou exclua a unidade.");
         }
         setorRepository.deleteById(id);
     }

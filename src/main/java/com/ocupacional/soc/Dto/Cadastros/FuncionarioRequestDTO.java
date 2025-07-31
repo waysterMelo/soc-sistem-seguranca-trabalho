@@ -17,7 +17,7 @@ public class FuncionarioRequestDTO {
     @Size(max = 20) private String rg;
     @Size(max = 50) private String orgaoEmissorRg;
     @PastOrPresent(message = "Data de emissão do RG deve ser no passado ou presente") private LocalDate dataEmissaoRg;
-    @Size(min = 2, max = 2) private String estadoEmissorRg;
+    private String estadoEmissorRg;
     @NotNull(message = "Status é obrigatório") private StatusFuncionario status;
     @Size(max = 50) private String raca;
     @NotNull(message = "Sexo é obrigatório") private Sexo sexo;
@@ -27,10 +27,10 @@ public class FuncionarioRequestDTO {
     @Size(max = 250) private String nomePai;
     @Email(message = "Email inválido") @Size(max = 255) private String email;
     private String observacoes;
-    private boolean criarRegistroProfissional;
     @NotBlank(message = "Matrícula é obrigatória") @Size(max = 50) private String matricula;
     @Valid @NotNull(message = "Endereço é obrigatório") private EnderecoDto endereco;
-    @Valid private String telefones;
+    private String telefone;
+    private Integer idade;
     @NotNull(message = "ID da Empresa é obrigatório") private Long empresaId;
     @NotNull(message = "Data de admissão é obrigatório ")
     private LocalDate dataAdmissao;

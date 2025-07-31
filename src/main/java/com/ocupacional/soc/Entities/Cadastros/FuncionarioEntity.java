@@ -9,7 +9,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "funcionarios")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +26,7 @@ public class FuncionarioEntity {
     @Column(length = 150)
     private String sobrenome;
 
-    @Column(name = "cpf", nullable = false, unique = true, length = 14)
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
     @Column(length = 20)
@@ -37,7 +38,7 @@ public class FuncionarioEntity {
     @Column(name = "data_emissao_rg")
     private LocalDate dataEmissaoRg;
 
-    @Column(name = "estado_emissor_rg", length = 2)
+    @Column(name = "estado_emissor_rg")
     private String estadoEmissorRg;
 
     @Enumerated(EnumType.STRING)
@@ -71,9 +72,6 @@ public class FuncionarioEntity {
     @Column(columnDefinition = "TEXT")
     private String observacoes;
 
-    @Column(name = "criar_registro_profissional", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean criarRegistroProfissional;
-
     @Column(nullable = false, unique = true, length = 50)
     private String matricula;
 
@@ -81,9 +79,7 @@ public class FuncionarioEntity {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
 
-    private String telefone1;
-
-    private String telefone2;
+    private String telefone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
@@ -94,11 +90,6 @@ public class FuncionarioEntity {
     @Column(name = "data_admissao")
     private LocalDate dataAdmissao;
 
-    @Transient
-    public Integer getIdade() {
-        if (this.dataNascimento == null) {
-            return null;
-        }
-        return java.time.Period.between(this.dataNascimento, LocalDate.now()).getYears();
-    }
+    private Integer idade;
+
 }

@@ -27,10 +27,9 @@ public class FuncionarioResponseDTO {
     private String nomePai;
     private String email;
     private String observacoes;
-    private boolean criarRegistroProfissional;
     private String matricula;
     private EnderecoDto endereco;
-    private String telefones;
+    private String telefone;
     private EmpresaSimpleResponseDTO empresa;
     private LocalDate dataAdmissao;
 

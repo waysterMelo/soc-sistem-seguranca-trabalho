@@ -1,6 +1,8 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoDocumento;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoEmpresa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,5 +21,8 @@ public class SetorRequestDTO {
     private Long empresaId;
     private Long unidadeOperacionalId;
     private StatusEmpresa status;
+    private TipoEmpresa tipoEmpresa;
+    private TipoDocumento tipoDocumento;
+    private Integer numeroDocumento;
 
 }
