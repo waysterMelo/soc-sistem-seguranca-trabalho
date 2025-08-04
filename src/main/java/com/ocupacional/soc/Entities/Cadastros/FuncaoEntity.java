@@ -69,6 +69,8 @@ public class FuncaoEntity {
     @Builder.Default
     private List<FuncaoExamePcmsoEntity> examesPcmso = new ArrayList<>();
 
+    @OneToMany(mappedBy = "funcao", fetch = FetchType.LAZY)
+    private List<FuncionarioEntity> funcionarios = new ArrayList<>();
 
     public void addRiscoPGR(RiscoTrabalhistaPgrEntity risco) {
         riscosPGR.add(risco);

@@ -92,4 +92,8 @@ public class FuncionarioEntity {
 
     private Integer idade;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "funcao_id", nullable = false)
+    private FuncaoEntity funcao;
+
 }

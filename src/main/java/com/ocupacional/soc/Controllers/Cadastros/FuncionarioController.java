@@ -17,7 +17,6 @@ public class FuncionarioController {
 
     private final FuncionarioService funcionarioService;
 
-    // Injeção de dependência via construtor
     public FuncionarioController(FuncionarioService funcionarioService) {
         this.funcionarioService = funcionarioService;
     }
@@ -36,9 +35,6 @@ public class FuncionarioController {
 
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<FuncionarioResponseDTO> buscarFuncionarioPorCpf(@PathVariable String cpf) {
-        // É importante sanitizar ou validar o formato do CPF aqui ou no service
-        // para evitar problemas de segurança ou queries malformadas,
-        // embora a validação de formato já esteja no DTO para criação/atualização.
         FuncionarioResponseDTO responseDTO = funcionarioService.buscarFuncionarioPorCpf(cpf);
         return ResponseEntity.ok(responseDTO);
     }

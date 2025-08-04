@@ -34,6 +34,10 @@ public class FuncionarioRequestDTO {
     @NotNull(message = "ID da Empresa é obrigatório") private Long empresaId;
     @NotNull(message = "Data de admissão é obrigatório ")
     private LocalDate dataAdmissao;
+    @NotNull(message = "ID da Função é obrigatório")
+    private Long funcaoId;
+
+
 
 
 }

@@ -32,5 +32,6 @@ public class FuncionarioResponseDTO {
     private String telefone;
     private EmpresaSimpleResponseDTO empresa;
     private LocalDate dataAdmissao;
+    private FuncaoSimplificadaDTO funcao;
 
 }

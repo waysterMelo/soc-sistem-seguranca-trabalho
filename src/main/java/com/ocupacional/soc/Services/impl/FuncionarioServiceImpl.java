@@ -8,6 +8,7 @@ import com.ocupacional.soc.Exceptions.InvalidRequestException;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
+import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncionarioRepository;
 import com.ocupacional.soc.Services.Cadastros.FuncionarioService;
 import jakarta.transaction.Transactional;
@@ -18,11 +19,12 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor // Cria construtor para todas as dependências final
+@RequiredArgsConstructor
 public class FuncionarioServiceImpl implements FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
     private final EmpresaRepository empresaRepository;
+    private final FuncaoRepository funcaoRepository;
     private final FuncionarioMapper funcionarioMapper;
 
     @Override
@@ -40,13 +42,15 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             });
         }
 
-        FuncionarioEntity funcionarioEntity = funcionarioMapper.requestDtoToEntity(requestDTO); // O AfterMapping cuidará dos telefones
+
+
+        FuncionarioEntity funcionarioEntity = funcionarioMapper.requestDtoToEntity(requestDTO);
 
         EmpresaEntity empresa = empresaRepository.findById(requestDTO.getEmpresaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada com ID: " + requestDTO.getEmpresaId()));
         funcionarioEntity.setEmpresa(empresa);
 
-        // A lógica de telefones é agora tratada pelo @AfterMapping no FuncionarioMapper para criação
+        funcionarioEntity.setFuncao(funcaoRepository.getReferenceById(requestDTO.getFuncaoId()));
 
         FuncionarioEntity savedFuncionario = funcionarioRepository.save(funcionarioEntity);
         return funcionarioMapper.entityToResponseDto(savedFuncionario);
@@ -113,6 +117,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             EmpresaEntity novaEmpresa = empresaRepository.findById(requestDTO.getEmpresaId())
                     .orElseThrow(() -> new ResourceNotFoundException("Nova empresa não encontrada com ID: " + requestDTO.getEmpresaId()));
             funcionarioExistente.setEmpresa(novaEmpresa);
+        }
+
+        if (!funcionarioExistente.getFuncao().getId().equals(requestDTO.getFuncaoId())) {
+            funcionarioExistente.setFuncao(funcaoRepository.getReferenceById(requestDTO.getFuncaoId()));
         }
 
         FuncionarioEntity updatedFuncionario = funcionarioRepository.save(funcionarioExistente);
