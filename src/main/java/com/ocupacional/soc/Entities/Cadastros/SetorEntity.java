@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "setores")
 @Getter
@@ -44,5 +47,9 @@ public class SetorEntity {
     private TipoDocumento tipoDocumento;
 
     private Integer numeroDocumento;
+
+    @OneToMany(mappedBy = "setor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FuncionarioEntity> funcionarios = new ArrayList<>();
+
 
 }

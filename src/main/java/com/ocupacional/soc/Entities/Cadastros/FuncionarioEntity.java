@@ -96,4 +96,9 @@ public class FuncionarioEntity {
     @JoinColumn(name = "funcao_id", nullable = false)
     private FuncaoEntity funcao;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "setor_id")
+    private SetorEntity setor;
+
+
 }

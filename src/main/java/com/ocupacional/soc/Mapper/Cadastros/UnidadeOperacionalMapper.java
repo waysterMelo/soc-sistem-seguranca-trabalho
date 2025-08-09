@@ -24,18 +24,15 @@ public interface UnidadeOperacionalMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "empresaId", target = "empresa", qualifiedByName = "mapEmpresaFromId")
     @Mapping(source = "cnaePrincipalId", target = "cnaePrincipal", qualifiedByName = "mapCnaeFromId")
-    @Mapping(source = "setoresIds", target = "setores", qualifiedByName = "mapSetoresFromIds")
     UnidadeOperacionalEntity toEntity(UnidadeOperacionalRequestDTO dto);
 
     @Mapping(source = "empresa", target = "empresa")
     @Mapping(source = "cnaePrincipal", target = "cnaePrincipal")
-    @Mapping(source = "setores", target = "setores")
     UnidadeOperacionalResponseDTO toResponseDto(UnidadeOperacionalEntity entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "empresa", ignore = true)
     @Mapping(source = "cnaePrincipalId", target = "cnaePrincipal", qualifiedByName = "mapCnaeFromId")
-    @Mapping(source = "setoresIds", target = "setores", qualifiedByName = "mapSetoresFromIds")
     void updateEntityFromDto(UnidadeOperacionalRequestDTO dto, @MappingTarget UnidadeOperacionalEntity entity);
 
     List<UnidadeOperacionalResponseDTO> toResponseDto(List<UnidadeOperacionalEntity> entities);

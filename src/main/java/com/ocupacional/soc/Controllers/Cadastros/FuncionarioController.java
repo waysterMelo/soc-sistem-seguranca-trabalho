@@ -58,4 +58,17 @@ public class FuncionarioController {
         funcionarioService.deletarFuncionario(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/setor/{setorId}")
+    public ResponseEntity<Page<FuncionarioResponseDTO>> listarFuncionariosPorEmpresaSetor(
+            @PathVariable Long setorId,
+            @PageableDefault(size = 10, sort = "nome") Pageable pageable){
+
+        Page<FuncionarioResponseDTO> pageResponse =
+                funcionarioService.listarFuncionariosPorEmpresaESetor
+                        (setorId,pageable);
+        return ResponseEntity.ok(pageResponse);
+    }
+
+
 }

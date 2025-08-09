@@ -61,16 +61,6 @@ public class UnidadeOperacionalRequestDTO {
     @NotNull(message = "O CNAE principal é obrigatório.")
     private Long cnaePrincipalId;
 
-    private boolean alocadaEmEmpresaTerceira = false;
-
-    private TipoMatrizFilial tipoConfiguracaoUnidade;
-
-    @Size(max = 18, message = "O CNPJ da empresa terceira deve ter no máximo 18 caracteres.")
-    private String cnpjEmpresaTerceira;
-
-    @Size(max = 255, message = "A razão social da empresa terceira deve ter no máximo 255 caracteres.")
-    private String razaoSocialEmpresaTerceira;
-
     private List<Long> setoresIds;
 
 

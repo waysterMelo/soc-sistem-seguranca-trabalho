@@ -4,18 +4,23 @@ import com.ocupacional.soc.Dto.Cadastros.FuncionarioRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncionarioEntity;
+import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
 import com.ocupacional.soc.Exceptions.InvalidRequestException;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.FuncionarioMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncionarioRepository;
+import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
 import com.ocupacional.soc.Services.Cadastros.FuncionarioService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -26,6 +31,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     private final EmpresaRepository empresaRepository;
     private final FuncaoRepository funcaoRepository;
     private final FuncionarioMapper funcionarioMapper;
+    private final SetorRepository setorRepository;
 
     @Override
     @Transactional
@@ -42,8 +48,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             });
         }
 
-
-
         FuncionarioEntity funcionarioEntity = funcionarioMapper.requestDtoToEntity(requestDTO);
 
         EmpresaEntity empresa = empresaRepository.findById(requestDTO.getEmpresaId())
@@ -51,6 +55,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionarioEntity.setEmpresa(empresa);
 
         funcionarioEntity.setFuncao(funcaoRepository.getReferenceById(requestDTO.getFuncaoId()));
+
+        SetorEntity setor = setorRepository.findById(requestDTO.getSetorId())
+                .orElseThrow(() -> new EntityNotFoundException("Setor não encontrado com ID: " + requestDTO.getSetorId()));
+
+        funcionarioEntity.setSetor(setor);
 
         FuncionarioEntity savedFuncionario = funcionarioRepository.save(funcionarioEntity);
         return funcionarioMapper.entityToResponseDto(savedFuncionario);
@@ -119,8 +128,16 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             funcionarioExistente.setEmpresa(novaEmpresa);
         }
 
+        // Atualiza a função se necessário
         if (!funcionarioExistente.getFuncao().getId().equals(requestDTO.getFuncaoId())) {
             funcionarioExistente.setFuncao(funcaoRepository.getReferenceById(requestDTO.getFuncaoId()));
+        }
+
+        // Atualiza o setor se necessário
+        if (requestDTO.getSetorId() != null) {
+            SetorEntity setor = setorRepository.findById(requestDTO.getSetorId())
+                    .orElseThrow(() -> new EntityNotFoundException(STR."Setor não encontrado com ID: \{requestDTO.getSetorId()}"));
+            funcionarioExistente.setSetor(setor);
         }
 
         FuncionarioEntity updatedFuncionario = funcionarioRepository.save(funcionarioExistente);
@@ -137,4 +154,18 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         // estiver vinculado a outras entidades importantes que impediriam a exclusão.
         funcionarioRepository.deleteById(id);
     }
+
+    @Override
+    public Page<FuncionarioResponseDTO> listarFuncionariosPorEmpresaESetor(Long setorId,
+                                                                           Pageable pageable) {
+
+       setorRepository.findById(setorId).orElseThrow(() ->
+               new ResourceNotFoundException(STR."Setor não encontrado \{setorId}"));
+
+        Page<FuncionarioEntity> funcionarios =
+               funcionarioRepository.findWithFilters(setorId, pageable);
+       return funcionarios.map(funcionarioMapper::entityToResponseDto);
+    }
+
+
 }

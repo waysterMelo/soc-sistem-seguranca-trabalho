@@ -27,7 +27,6 @@ public class UnidadeOperacionalResponseDTO {
     private String bairro;
     private String complemento;
     private String regiao;
-    private boolean usarEnderecoEmpresa;
     private String emailContato;
     private String dddTelefone1;
     private String numeroTelefone1;
@@ -35,9 +34,5 @@ public class UnidadeOperacionalResponseDTO {
     private String numeroTelefone2;
     private GrauRisco grauRisco;
     private CnaeDto cnaePrincipal;
-    private boolean alocadaEmEmpresaTerceira;
-    private TipoMatrizFilial tipoConfiguracaoUnidade;
-    private String cnpjEmpresaTerceira;
-    private String razaoSocialEmpresaTerceira;
     private List<SetorResponseDTO> setores;
 }

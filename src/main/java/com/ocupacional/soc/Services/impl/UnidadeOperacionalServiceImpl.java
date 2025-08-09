@@ -53,7 +53,6 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         unidadeEntity.setEmpresa(empresa);
 
         carregarRelacionamentos(unidadeEntity, dto);
-        validarConfiguracaoEmpresaTerceira(unidadeEntity);
 
         UnidadeOperacionalEntity savedUnidade = unidadeOperacionalRepository.save(unidadeEntity);
         return unidadeOperacionalMapper.toResponseDto(savedUnidade);
@@ -70,7 +69,6 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
 
         unidadeOperacionalMapper.updateEntityFromDto(dto, unidadeEntity);
         carregarRelacionamentos(unidadeEntity, dto);
-        validarConfiguracaoEmpresaTerceira(unidadeEntity);
 
         UnidadeOperacionalEntity updatedUnidade = unidadeOperacionalRepository.save(unidadeEntity);
         return unidadeOperacionalMapper.toResponseDto(updatedUnidade);
@@ -91,25 +89,14 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         }
     }
 
-    private void validarConfiguracaoEmpresaTerceira(UnidadeOperacionalEntity unidadeEntity) {
-        if (unidadeEntity.isAlocadaEmEmpresaTerceira()) {
-            if (isNullOrBlank(unidadeEntity.getCnpjEmpresaTerceira()) || isNullOrBlank(unidadeEntity.getRazaoSocialEmpresaTerceira())) {
-                throw new IllegalArgumentException("CNPJ e Razão Social da empresa terceira são obrigatórios quando a unidade está alocada em empresa terceira.");
-            }
-        } else {
-            unidadeEntity.setCnpjEmpresaTerceira(null);
-            unidadeEntity.setRazaoSocialEmpresaTerceira(null);
-        }
-    }
-
     private EmpresaEntity findEmpresaById(Long id) {
         return empresaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(STR."Empresa não encontrada com ID: \{id}"));
     }
 
     private UnidadeOperacionalEntity findUnidadeOperacionalById(Long id) {
         return unidadeOperacionalRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Unidade Operacional não encontrada com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(STR."Unidade Operacional não encontrada com ID: \{id}"));
     }
 
     private CnaeEntity findCnaeById(Long id) {
@@ -123,13 +110,9 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
         }
         List<T> entidades = repository.findAllById(ids);
         if (entidades.size() != ids.size()) {
-            throw new EntityNotFoundException("Um ou mais " + "Setores" + " não foram encontrados. IDs fornecidos: " + ids);
+            throw new EntityNotFoundException(STR."Um ou mais Setores não foram encontrados. IDs fornecidos: \{ids}");
         }
         return entidades;
-    }
-
-    private boolean isNullOrBlank(String str) {
-        return str == null || str.isBlank();
     }
 
     @Override

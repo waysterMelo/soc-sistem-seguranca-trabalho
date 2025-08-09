@@ -70,19 +70,7 @@ public class UnidadeOperacionalEntity {
     @JoinColumn(name = "cnae_principal_id")
     private CnaeEntity cnaePrincipal;
 
-    @Column(nullable = false)
-    private boolean alocadaEmEmpresaTerceira = false;
-
-    @Enumerated(EnumType.STRING)
-    private TipoMatrizFilial tipoConfiguracaoUnidade;
-
-    private String cnpjEmpresaTerceira;
-
-    private String razaoSocialEmpresaTerceira;
-
     @OneToMany(mappedBy = "unidadeOperacional", fetch = FetchType.LAZY)
     private List<SetorEntity> setores;
-
-
 
 }

@@ -12,4 +12,6 @@ public interface FuncionarioService {
     Page<FuncionarioResponseDTO> listarFuncionarios(Pageable pageable, Long empresaId);
     FuncionarioResponseDTO atualizarFuncionario(Long id, FuncionarioRequestDTO requestDTO);
     void deletarFuncionario(Long id);
+    Page<FuncionarioResponseDTO> listarFuncionariosPorEmpresaESetor(Long setorId, Pageable pageable);
+
 }

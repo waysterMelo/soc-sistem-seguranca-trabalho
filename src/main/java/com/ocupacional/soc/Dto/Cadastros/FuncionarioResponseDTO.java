@@ -33,5 +33,6 @@ public class FuncionarioResponseDTO {
     private EmpresaSimpleResponseDTO empresa;
     private LocalDate dataAdmissao;
     private FuncaoSimplificadaDTO funcao;
+    private SetorSimpleResponseDTO setor;
 
 }
