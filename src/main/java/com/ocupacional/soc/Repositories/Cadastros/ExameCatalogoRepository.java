@@ -4,19 +4,14 @@ import com.ocupacional.soc.Entities.Cadastros.ExameCatalogoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ExameCatalogoRepository extends JpaRepository<ExameCatalogoEntity, Long>{
-    boolean existsByCodigoExame(String codigoExame);
-    Optional<ExameCatalogoEntity> findByCodigoExame(String codigoExame);
 
-    // Para busca paginada
-    Page<ExameCatalogoEntity> findByNomeExameContainingIgnoreCaseOrCodigoExameContainingIgnoreCase(String nomeExame, String codigoExame, Pageable pageable);
+    @Query("select e from ExameCatalogoEntity e where lower(e.nomeExame) like lower(concat('%', :nome,'%'))")
+    Page<ExameCatalogoEntity> findByNomeExame(@Param("nome") String nome, Pageable pageable);
 
-    // Para listar todos com filtro (sem paginação)
-    List<ExameCatalogoEntity> findByNomeExameContainingIgnoreCaseOrCodigoExameContainingIgnoreCase(String nomeExame, String codigoExame);
 }

@@ -11,7 +11,8 @@ public interface RiscoCatalogoService {
     RiscoCatalogoResponseDTO criarRisco(RiscoCatalogoRequestDTO requestDTO);
     RiscoCatalogoResponseDTO buscarRiscoPorId(Long id);
     Page<RiscoCatalogoResponseDTO> listarRiscos(Pageable pageable, GrupoRisco grupo);
-    List<RiscoCatalogoResponseDTO> listarTodosRiscos(GrupoRisco grupo); // Para popular selects, por exemplo
+    List<RiscoCatalogoResponseDTO> listarTodosRiscos(GrupoRisco grupo);
     RiscoCatalogoResponseDTO atualizarRisco(Long id, RiscoCatalogoRequestDTO requestDTO);
     void deletarRisco(Long id);
+    Page<RiscoCatalogoResponseDTO> listarRiscosPorDescricao(String descricao, Pageable pageable);
 }

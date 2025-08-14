@@ -1,5 +1,8 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorResponsavelRequestDTO;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoGfip;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,9 +40,11 @@ public class FuncaoRequestDTO {
     private Integer quantidadeFuncionarios;
 
     @NotBlank(message = "A descrição da função não pode ser vazia.")
-    private String descricaoFuncao; // Será mapeado para 'descricao' na entidade
+    private String descricaoFuncao;
 
     private TipoGfip tipoGfip;
+
+    private StatusEmpresa status;
 
     private String atividadesInsalubres;
 
@@ -47,8 +54,8 @@ public class FuncaoRequestDTO {
     private List<RiscoTrabalhistaPgrRequestDTO> riscosPGR;
 
     @Valid
-    private List<ProfissionalResponsavelRequestDTO>profissionaisResponsaveis;
-
+    @JsonProperty("prestadoresResponsaveis")
+    private List<PrestadorResponsavelRequestDTO> prestadoresResponsaveis = new ArrayList<>();
     @Valid
     private List<FuncaoAgenteNocivoRequestDTO> agentesNocivosEsocial;
 

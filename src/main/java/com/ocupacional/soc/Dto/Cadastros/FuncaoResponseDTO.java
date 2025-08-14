@@ -1,11 +1,14 @@
 package com.ocupacional.soc.Dto.Cadastros;
 
+import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoSimplificadoDTO;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoGfip;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 @Data
 @Builder
@@ -20,12 +23,13 @@ public class FuncaoResponseDTO {
     private String nomeCbo;
     private String nome;
     private Integer quantidadeFuncionarios;
-    private String descricaoFuncao; // Será mapeado de 'descricao' da entidade
+    private String descricaoFuncao;
     private TipoGfip tipoGfip;
     private String atividadesInsalubres;
     private String informacoesComplementaresRegistrosAmbientais;
     private List<RiscoTrabalhistaPgrResponseDTO> riscosPGR;
-    private List<ProfissionalResponsavelResponseDTO> profissionaisResponsaveis;
+    private List<PrestadorServicoSimplificadoDTO> prestadoresResponsaveis = new ArrayList<>();
     private List<FuncaoAgenteNocivoResponseDTO> agentesNocivosEsocial;
     private List<FuncaoExamePcmsoResponseDTO> examesPcmso;
+    private StatusEmpresa status;
 }

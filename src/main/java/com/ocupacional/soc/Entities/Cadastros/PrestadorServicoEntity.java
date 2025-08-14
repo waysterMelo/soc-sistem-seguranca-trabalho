@@ -19,7 +19,6 @@ public class PrestadorServicoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // --- Informações Básicas ---
     @Column(nullable = false, length = 100)
     private String nome;
 

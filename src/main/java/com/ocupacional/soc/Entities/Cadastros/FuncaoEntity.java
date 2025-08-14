@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoGfip;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,9 +58,14 @@ public class FuncaoEntity {
     @Builder.Default
     private List<RiscoTrabalhistaPgrEntity> riscosPGR = new ArrayList<>();
 
-    @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "funcao_prestador_servico",
+            joinColumns = @JoinColumn(name = "funcao_id"),
+            inverseJoinColumns = @JoinColumn(name = "prestador_servico_id")
+    )
     @Builder.Default
-    private List<ProfissionalRegistrosEntity> profissionaisResponsaveis = new ArrayList<>();
+    private List<PrestadorServicoEntity> prestadoresResponsaveis = new ArrayList<>();
 
     @OneToMany(mappedBy = "funcao", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
@@ -72,6 +78,9 @@ public class FuncaoEntity {
     @OneToMany(mappedBy = "funcao", fetch = FetchType.LAZY)
     private List<FuncionarioEntity> funcionarios = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private StatusEmpresa status;
+
     public void addRiscoPGR(RiscoTrabalhistaPgrEntity risco) {
         riscosPGR.add(risco);
         risco.setFuncao(this);
@@ -82,14 +91,17 @@ public class FuncaoEntity {
         risco.setFuncao(null);
     }
 
-    public void addProfissionalResponsavel(ProfissionalRegistrosEntity profissional) {
-        profissionaisResponsaveis.add(profissional);
-        profissional.setFuncao(this);
+    public void addPrestadorResponsavel(PrestadorServicoEntity prestador) {
+        if (prestadoresResponsaveis == null) {
+            prestadoresResponsaveis = new ArrayList<>();
+        }
+        prestadoresResponsaveis.add(prestador);
     }
 
-    public void removeProfissionalResponsavel(ProfissionalRegistrosEntity profissional) {
-        profissionaisResponsaveis.remove(profissional);
-        profissional.setFuncao(null);
+    public void removePrestadorResponsavel(PrestadorServicoEntity prestador) {
+        if (prestadoresResponsaveis != null) {
+            prestadoresResponsaveis.remove(prestador);
+        }
     }
 
     public void addAgenteNocivoEsocial(FuncaoAgenteNocivoEntity agenteNocivo) {
@@ -111,10 +123,9 @@ public class FuncaoEntity {
     }
 
     public void removeExamePcmso(FuncaoExamePcmsoEntity exame) {
-       if (this.examesPcmso != null){
-           this.examesPcmso.remove(exame);
-           exame.setFuncao(null);
-       }
+        if (this.examesPcmso != null){
+            this.examesPcmso.remove(exame);
+            exame.setFuncao(null);
+        }
     }
-
 }

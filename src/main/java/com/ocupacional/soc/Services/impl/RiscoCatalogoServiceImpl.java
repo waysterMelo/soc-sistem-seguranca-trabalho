@@ -28,11 +28,6 @@ public class RiscoCatalogoServiceImpl implements RiscoCatalogoService {
     @Override
     @Transactional
     public RiscoCatalogoResponseDTO criarRisco(RiscoCatalogoRequestDTO requestDTO) {
-        log.info("Criando novo risco no catálogo: {}", requestDTO.getDescricao());
-        // Adicionar validação para evitar duplicidade se necessário
-        // riscoCatalogoRepository.findByGrupoAndDescricao(requestDTO.getGrupo(), requestDTO.getDescricao()).ifPresent(r -> {
-        // throw new IllegalArgumentException("Risco com esta descrição já existe neste grupo.");
-        // });
         RiscoCatalogoEntity entity = riscoCatalogoMapper.requestDtoToEntity(requestDTO);
         RiscoCatalogoEntity savedEntity = riscoCatalogoRepository.save(entity);
         return riscoCatalogoMapper.toResponseDTO(savedEntity);
@@ -42,7 +37,7 @@ public class RiscoCatalogoServiceImpl implements RiscoCatalogoService {
     public RiscoCatalogoResponseDTO buscarRiscoPorId(Long id) {
         log.debug("Buscando risco no catálogo por ID: {}", id);
         RiscoCatalogoEntity entity = riscoCatalogoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Risco (Catálogo) não encontrado com ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(STR."Risco (Catálogo) não encontrado com ID: \{id}"));
         return riscoCatalogoMapper.toResponseDTO(entity);
     }
 
@@ -51,9 +46,6 @@ public class RiscoCatalogoServiceImpl implements RiscoCatalogoService {
         log.debug("Listando riscos do catálogo. Página: {}, Tamanho: {}, Grupo: {}", pageable.getPageNumber(), pageable.getPageSize(), grupo);
         Page<RiscoCatalogoEntity> pageEntity;
         if (grupo != null) {
-            // Implementar busca paginada por grupo se o JpaRepository não suportar diretamente
-            // ou buscar todos e paginar na mão (menos eficiente para grandes datasets)
-            // Para simplificar, vamos buscar todos do grupo e paginar na aplicação (não ideal para produção com muitos dados)
             List<RiscoCatalogoEntity> listByGrupo = riscoCatalogoRepository.findByGrupo(grupo);
             List<RiscoCatalogoResponseDTO> dtoList = riscoCatalogoMapper.toResponseDTOList(listByGrupo);
 
@@ -86,9 +78,7 @@ public class RiscoCatalogoServiceImpl implements RiscoCatalogoService {
     public RiscoCatalogoResponseDTO atualizarRisco(Long id, RiscoCatalogoRequestDTO requestDTO) {
         log.info("Atualizando risco no catálogo ID: {}. Nova descrição: {}", id, requestDTO.getDescricao());
         RiscoCatalogoEntity entity = riscoCatalogoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Risco (Catálogo) não encontrado com ID: " + id));
-
-        // Adicionar validação para evitar duplicidade se o nome/grupo mudar, se necessário
+                .orElseThrow(() -> new ResourceNotFoundException(STR."Risco (Catálogo) não encontrado com ID: \{id}"));
 
         entity.setGrupo(requestDTO.getGrupo());
         entity.setDescricao(requestDTO.getDescricao());
@@ -101,13 +91,16 @@ public class RiscoCatalogoServiceImpl implements RiscoCatalogoService {
     public void deletarRisco(Long id) {
         log.info("Deletando risco no catálogo ID: {}", id);
         if (!riscoCatalogoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Risco (Catálogo) não encontrado com ID: " + id);
+            throw new ResourceNotFoundException(STR."Risco (Catálogo) não encontrado com ID: \{id}");
         }
-        // Adicionar verificação se o risco está em uso antes de deletar, se necessário
-        // Ex: if (riscoTrabalhistaPgrRepository.existsByRiscoCatalogoId(id)) {
-        // throw new IllegalStateException("Este risco está vinculado a uma ou mais funções e não pode ser deletado.");
-        // }
         riscoCatalogoRepository.deleteById(id);
         log.info("Risco ID: {} deletado do catálogo.", id);
+    }
+
+    @Override
+    @Transactional
+    public Page<RiscoCatalogoResponseDTO> listarRiscosPorDescricao(String descricao, Pageable pageable) {
+        Page<RiscoCatalogoEntity> riscos = riscoCatalogoRepository.findByDescricao(descricao, pageable);
+        return riscos.map(riscoCatalogoMapper::toResponseDTO);
     }
 }

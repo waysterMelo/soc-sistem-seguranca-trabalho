@@ -2,7 +2,6 @@ package com.ocupacional.soc.Mapper.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.ExameCatalogoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.ExameCatalogoResponseDTO;
-import com.ocupacional.soc.Dto.Cadastros.ExameCatalogoSimpleResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.ExameCatalogoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,18 +27,15 @@ public interface ExameCatalogoMapper {
 
 
     @Named("toExameCatalogoSimpleResponseDTO")
-    default ExameCatalogoSimpleResponseDTO entityToSimpleResponseDto(ExameCatalogoEntity entity){
+    default ExameCatalogoResponseDTO entityToSimpleResponseDto(ExameCatalogoEntity entity){
         if (entity == null){
             return null;
         }
-        ExameCatalogoSimpleResponseDTO dto = new ExameCatalogoSimpleResponseDTO();
+        ExameCatalogoResponseDTO dto = new ExameCatalogoResponseDTO();
         dto.setId(entity.getId());
         dto.setCodigoExame(entity.getCodigoExame());
         dto.setNomeExame(entity.getNomeExame());
-
-        // Log para depuração (opcional, remova após o teste)
- System.out.println("ExameCatalogoMapper.entityToSimpleResponseDto - Entidade Nome: " + entity.getNomeExame() + ", DTO Nome: " + dto.getNomeExame());
-       return dto;
+        return dto;
     }
 
 }

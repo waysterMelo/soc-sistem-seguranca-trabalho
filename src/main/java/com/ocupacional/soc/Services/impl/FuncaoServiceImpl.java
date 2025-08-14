@@ -8,6 +8,7 @@ import com.ocupacional.soc.Mapper.Cadastros.FuncaoAgenteNocivoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.*;
+import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class FuncaoServiceImpl implements FuncaoService {
     private final RiscoCatalogoRepository riscoCatalogoRepository;
     private final FuncaoMapper funcaoMapper;
     private final FuncaoAgenteNocivoMapper funcaoAgenteNocivoMapper;
+    private final PrestadorServicoRepository prestadorServicoRepository;
     private final FuncaoExamePcmsoMapper funcaoExamePcmsoMapper;
 
     @Override
@@ -55,10 +57,6 @@ public class FuncaoServiceImpl implements FuncaoService {
     public FuncaoResponseDTO buscarFuncaoPorId(Long id) {
         log.debug("Buscando função por ID: {}", id);
         FuncaoEntity funcaoEntity = findFuncaoById(id);
-        // Aqui, as coleções lazy serão carregadas se o mapper tentar acessá-las.
-        // Se houver problemas com LazyInitializationException, pode ser necessário usar @EntityGraph
-        // ou buscar explicitamente as coleções antes de mapear.
-        // Por ora, vamos confiar que o mapper dentro da transação resolva.
         return funcaoMapper.entityToResponseDTO(funcaoEntity);
     }
 
@@ -88,14 +86,19 @@ public class FuncaoServiceImpl implements FuncaoService {
         }
     }
 
+    private PrestadorServicoEntity findPrestadorServicoById(Long id) {
+        return prestadorServicoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Prestador de Serviço não encontrado com ID: " + id));
+    }
+
+
     private FuncaoEntity buildFuncaoEntity(FuncaoEntity funcaoExistente, FuncaoRequestDTO requestDTO) {
         FuncaoEntity funcaoEntity;
         if (funcaoExistente == null) { // Criação
             funcaoEntity = funcaoMapper.requestDtoToEntity(requestDTO);
         } else { // Atualização
             funcaoEntity = funcaoExistente;
-            // Atualizar campos básicos da FuncaoEntity a partir do DTO
-            // O MapStruct não faz merge por padrão, então fazemos manualmente ou usamos um método de update no mapper
+
             funcaoEntity.setNome(requestDTO.getNome());
             funcaoEntity.setQuantidadeFuncionarios(requestDTO.getQuantidadeFuncionarios());
             funcaoEntity.setDescricao(requestDTO.getDescricaoFuncao()); // Mapeado de descricaoFuncao
@@ -128,14 +131,14 @@ public class FuncaoServiceImpl implements FuncaoService {
         }
 
         // Profissionais Responsáveis
-        funcaoEntity.getProfissionaisResponsaveis().clear();
-        if (!CollectionUtils.isEmpty(requestDTO.getProfissionaisResponsaveis())) {
-            requestDTO.getProfissionaisResponsaveis().forEach(profDTO -> {
-                ProfissionalRegistrosEntity profissionalEntity = new ProfissionalRegistrosEntity();
-                profissionalEntity.setFuncionario(findFuncionarioById(profDTO.getFuncionarioId()));
-                funcaoEntity.addProfissionalResponsavel(profissionalEntity);
+        funcaoEntity.getPrestadoresResponsaveis().clear();
+        if (!CollectionUtils.isEmpty(requestDTO.getPrestadoresResponsaveis())) {
+            requestDTO.getPrestadoresResponsaveis().forEach(prestadorDTO -> {
+                PrestadorServicoEntity prestadorEntity = findPrestadorServicoById(prestadorDTO.getPrestadorServicoId());
+                funcaoEntity.addPrestadorResponsavel(prestadorEntity);
             });
         }
+
 
         // Agentes Nocivos eSocial (Novo)
         funcaoEntity.getAgentesNocivosEsocial().clear();
@@ -154,15 +157,8 @@ public class FuncaoServiceImpl implements FuncaoService {
             requestDTO.getExamesPcmso().forEach(exameDTO -> {
                 ExameCatalogoEntity catalogoExame = findExameCatalogoById(exameDTO.getExameCatalogoId());
 
-                // ✅ PONTO DE DEBUG: Verifique aqui
-                 System.out.println("ID do Exame: " + catalogoExame.getId());
-                System.out.println("Código do Exame (entidade): " + catalogoExame.getCodigoExame());
-                System.out.println("Nome do Exame (entidade ANTES do mapeamento): " + catalogoExame.getNomeExame());
-
-
                 FuncaoExamePcmsoEntity funcaoExameEntity = funcaoExamePcmsoMapper.requestDtoToEntity(exameDTO);
-                funcaoExameEntity.setExameCatalogo(catalogoExame); // Garantir que a entidade completa está lá
-                // O tipoExame, periodicidade e obrigatorio já são mapeados pelo funcaoExamePcmsoMapper
+                funcaoExameEntity.setExameCatalogo(catalogoExame);
                 funcaoEntity.addExamePcmso(funcaoExameEntity);
             });
         }

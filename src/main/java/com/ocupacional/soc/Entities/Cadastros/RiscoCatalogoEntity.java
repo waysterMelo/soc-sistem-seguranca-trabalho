@@ -2,18 +2,17 @@ package com.ocupacional.soc.Entities.Cadastros;
 
 import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco; // [upload:soc/Enuns/CadastroFuncoes/GrupoRisco.java]
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "riscos_catalogo")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RiscoCatalogoEntity {
+public class
+RiscoCatalogoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

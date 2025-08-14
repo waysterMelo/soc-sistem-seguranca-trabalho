@@ -7,6 +7,7 @@ import com.ocupacional.soc.Services.Cadastros.RiscoCatalogoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,23 +25,15 @@ public class RiscoCatalogoController {
     }
 
     @PostMapping
-    public ResponseEntity<RiscoCatalogoResponseDTO> criarRisco(@Valid @RequestBody RiscoCatalogoRequestDTO requestDTO) {
-        RiscoCatalogoResponseDTO responseDTO = riscoCatalogoService.criarRisco(requestDTO);
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public RiscoCatalogoResponseDTO criarRisco(@Valid @RequestBody RiscoCatalogoRequestDTO requestDTO) {
+        return riscoCatalogoService.criarRisco(requestDTO);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RiscoCatalogoResponseDTO> buscarRiscoPorId(@PathVariable Long id) {
         RiscoCatalogoResponseDTO responseDTO = riscoCatalogoService.buscarRiscoPorId(id);
         return ResponseEntity.ok(responseDTO);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<RiscoCatalogoResponseDTO>> listarRiscos(
-            @PageableDefault(size = 10) Pageable pageable,
-            @RequestParam(required = false) GrupoRisco grupo) {
-        Page<RiscoCatalogoResponseDTO> pageResponse = riscoCatalogoService.listarRiscos(pageable, grupo);
-        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping("/todos")
@@ -57,8 +50,17 @@ public class RiscoCatalogoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarRisco(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
         riscoCatalogoService.deletarRisco(id);
-        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pesquisa")
+    public ResponseEntity<Page<RiscoCatalogoResponseDTO>>
+    listarRiscosDescricao(@RequestParam(required = false) String descricao,
+                          @PageableDefault(size = 10) Pageable pageable){
+        Page<RiscoCatalogoResponseDTO> lista =
+                riscoCatalogoService.listarRiscosPorDescricao(descricao, pageable);
+        return ResponseEntity.ok(lista);
     }
 }

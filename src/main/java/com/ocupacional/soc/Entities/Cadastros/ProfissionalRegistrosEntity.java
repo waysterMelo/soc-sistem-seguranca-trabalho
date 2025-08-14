@@ -1,16 +1,14 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "profissional_registros")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +23,7 @@ public class ProfissionalRegistrosEntity {
     private FuncaoEntity funcao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "funcionario_id", nullable = false) // Alterado de medico_id para funcionario_id
+    @JoinColumn(name = "funcionario_id", nullable = false)
     private FuncionarioEntity funcionario;
 
     @Column(name = "data_entrada_cargo")

@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FuncaoExamePcmsoResponseDTO {
 
-    private Long id; // ID da entidade FuncaoExamePcmsoEntity
-    private ExameCatalogoSimpleResponseDTO exameCatalogo;
+    private Long id;
+    private ExameCatalogoResponseDTO exameCatalogo;
     private TipoExameFuncao tipoExame;
     private Integer periodicidadeMeses;
     private boolean obrigatorio;
