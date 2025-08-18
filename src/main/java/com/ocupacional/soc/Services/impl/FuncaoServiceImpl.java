@@ -3,6 +3,8 @@ package com.ocupacional.soc.Services.impl;
 import com.ocupacional.soc.Dto.Cadastros.FuncaoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncaoResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.*;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
+import com.ocupacional.soc.Exceptions.BusinessException;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoAgenteNocivoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
@@ -13,6 +15,7 @@ import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -169,13 +172,35 @@ public class FuncaoServiceImpl implements FuncaoService {
     @Override
     @Transactional
     public void deletarFuncao(Long id) {
-        log.info("Iniciando exclusão da função ID: {}", id);
+
         if (!funcaoRepository.existsById(id)) {
-            log.warn("Tentativa de deletar função não existente com ID: {}", id);
-            throw new ResourceNotFoundException("Função não encontrada com ID: " + id);
+
+            throw new ResourceNotFoundException(STR."Função não encontrada com ID: \{id}");
         }
-        funcaoRepository.deleteById(id);
-        log.info("Função excluída com sucesso. ID: {}", id);
+
+        try {
+            funcaoRepository.deleteById(id);
+        }catch (DataIntegrityViolationException e){
+            throw new BusinessException("Não é possível excluir a função, pois ela está sendo utilizada por outro registro.");
+        }
+
+    }
+
+    @Override
+    public FuncaoResponseDTO inativarFuncao(Long id) {
+        FuncaoEntity funcao = funcaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Função não encontrada com id: " + id));
+        funcao.setStatus(StatusEmpresa.INATIVO);
+        FuncaoEntity funcaoInativada = funcaoRepository.save(funcao);
+        return funcaoMapper.entityToResponseDTO(funcaoInativada);
+    }
+
+    @Override
+    public Page<FuncaoResponseDTO> listarFuncaoPorSetor(Long setorId, Pageable pageable) {
+        log.debug("Listando funções por setor ID: {} com paginação: página {}, tamanho {}",
+                setorId, pageable.getPageNumber(), pageable.getPageSize());
+        Page<FuncaoEntity> funcoes = funcaoRepository.findAllBySetorId(setorId, pageable);
+        return funcoes.map(funcaoMapper::entityToResponseDTO);
     }
 
     // Métodos auxiliares find...
@@ -218,4 +243,6 @@ public class FuncaoServiceImpl implements FuncaoService {
         return riscoCatalogoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Risco (Catálogo) não encontrado com ID: " + id));
     }
+
+
 }

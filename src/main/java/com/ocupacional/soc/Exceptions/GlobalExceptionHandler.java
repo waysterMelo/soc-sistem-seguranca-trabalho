@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -109,7 +110,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Atenção!",
-                ex.getMessage(),                           // ← “CPF já cadastrado”
+                ex.getMessage(),
                 req.getDescription(false).replace("uri=", "")
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
@@ -128,6 +129,30 @@ public class GlobalExceptionHandler {
                 req.getDescription(false).replace("uri=", "")
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, WebRequest request) {
+
+        String mensagem = "Operação não permitida devido a restrições de integridade de dados";
+
+        // Personalizar mensagem baseada no tipo de violação
+        if (ex.getMessage().contains("foreign key constraint fails")) {
+            mensagem = "Não é possível excluir este registro, pois ele está sendo referenciado por outros dados";
+        } else if (ex.getMessage().contains("Duplicate entry")) {
+            mensagem = "Já existe um registro com essas informações";
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de dados",
+                mensagem,
+                request.getDescription(false).replace("uri=", "")
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
 

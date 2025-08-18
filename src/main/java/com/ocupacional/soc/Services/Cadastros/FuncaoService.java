@@ -12,4 +12,6 @@ public interface FuncaoService {
     Page<FuncaoResponseDTO> listarFuncoes(Pageable pageable);
     FuncaoResponseDTO atualizarFuncao(Long id, FuncaoRequestDTO funcaoRequestDTO);
     void deletarFuncao(Long id);
+    FuncaoResponseDTO inativarFuncao(Long id);
+    Page<FuncaoResponseDTO> listarFuncaoPorSetor(Long setorId, Pageable pageable);
 }
