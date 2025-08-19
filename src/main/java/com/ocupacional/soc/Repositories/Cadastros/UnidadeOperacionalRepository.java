@@ -13,5 +13,5 @@ public interface UnidadeOperacionalRepository  extends JpaRepository<UnidadeOper
 
     List<UnidadeOperacionalEntity> findByEmpresaId(Long empresaId);
     Page<UnidadeOperacionalEntity> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
-
+    boolean existsBySetores_Id(Long setorId);
 }

@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface FuncaoRepository extends JpaRepository<FuncaoEntity, Long> {
     Page<FuncaoEntity> findAllBySetorId(Long setorId, Pageable pageable);
+    boolean existsBySetorId(Long setorId);
 }

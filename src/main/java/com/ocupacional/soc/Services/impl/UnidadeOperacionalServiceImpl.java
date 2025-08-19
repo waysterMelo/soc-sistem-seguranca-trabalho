@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -67,13 +68,32 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
             throw new IllegalArgumentException("Não é permitido alterar a empresa associada à unidade operacional por este método.");
         }
 
+        // Atualiza os campos simples da entidade
         unidadeOperacionalMapper.updateEntityFromDto(dto, unidadeEntity);
-        carregarRelacionamentos(unidadeEntity, dto);
+
+        // --- INÍCIO DA CORREÇÃO ---
+        // Apenas modifica os relacionamentos se o campo setoresIds foi enviado no DTO.
+        // Se for nulo, significa que o usuário não quis alterar os setores.
+        if (dto.getSetoresIds() != null) {
+            carregarRelacionamentos(unidadeEntity, dto);
+        } else {
+            // Se cnaePrincipalId também não for editável nesta tela separadamente,
+            // você pode mover a lógica do Cnae para dentro do 'if' também.
+            // Por enquanto, vamos focar apenas nos setores.
+            if (dto.getCnaePrincipalId() != null) {
+                unidadeEntity.setCnaePrincipal(findCnaeById(dto.getCnaePrincipalId()));
+            } else {
+                unidadeEntity.setCnaePrincipal(null);
+            }
+        }
+        // --- FIM DA CORREÇÃO ---
 
         UnidadeOperacionalEntity updatedUnidade = unidadeOperacionalRepository.save(unidadeEntity);
         return unidadeOperacionalMapper.toResponseDto(updatedUnidade);
     }
 
+    // O método carregarRelacionamentos pode ser simplificado se você mover a lógica do Cnae
+// para dentro do 'if' acima. Por ora, vamos mantê-lo para a criação.
     private void carregarRelacionamentos(UnidadeOperacionalEntity unidadeEntity, UnidadeOperacionalRequestDTO dto) {
         if (dto.getCnaePrincipalId() != null) {
             unidadeEntity.setCnaePrincipal(findCnaeById(dto.getCnaePrincipalId()));
@@ -81,8 +101,12 @@ public class UnidadeOperacionalServiceImpl implements UnidadeOperacionalService 
             unidadeEntity.setCnaePrincipal(null);
         }
 
+        // Esta parte agora só será chamada se dto.getSetoresIds() não for nulo.
         if (!CollectionUtils.isEmpty(dto.getSetoresIds())) {
-            List<SetorEntity> setores = findEntidadesByIds(setorRepository, dto.getSetoresIds());
+            List<SetorEntity> setores = setorRepository.findAllById(dto.getSetoresIds());
+            if (setores.size() != dto.getSetoresIds().size()) {
+                throw new EntityNotFoundException("Um ou mais Setores não foram encontrados.");
+            }
             unidadeEntity.setSetores(setores);
         } else {
             unidadeEntity.setSetores(Collections.emptyList());

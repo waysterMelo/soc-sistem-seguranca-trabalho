@@ -40,6 +40,7 @@ public interface FuncaoMapper {
     @Mapping(source = "empresa", target = "empresa")
     @Mapping(source = "setor", target = "setor")
     @Mapping(source = "cbo.id", target = "cboId")
+    @Mapping(source = "cbo.codigoCbo", target = "codigoCbo")
     @Mapping(source = "cbo.nomeOcupacao", target = "nomeCbo")
     @Mapping(source = "descricao", target = "descricaoFuncao")
     @Mapping(source = "riscosPGR", target = "riscosPGR")

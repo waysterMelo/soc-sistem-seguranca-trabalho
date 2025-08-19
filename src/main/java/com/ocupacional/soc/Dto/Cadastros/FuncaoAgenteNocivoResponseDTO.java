@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FuncaoAgenteNocivoResponseDTO {
 
-    private Long id; // ID da entidade FuncaoAgenteNocivoEntity
+    private Long id;
     private AgenteNocivoCatalogoSimpleResponseDTO agenteNocivoCatalogo;
 
 }

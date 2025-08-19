@@ -20,6 +20,6 @@ public class SetorResponseDTO {
     private StatusEmpresa status;
     private TipoEmpresa tipoEmpresa;
     private TipoDocumento tipoDocumento;
-    private Integer numeroDocumento;
+    private Long numeroDocumento;
 
 }

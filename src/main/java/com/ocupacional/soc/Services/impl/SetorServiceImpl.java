@@ -7,6 +7,7 @@ import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Mapper.Cadastros.SetorMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
+import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.SetorRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Services.Cadastros.SetorService;
@@ -25,12 +26,15 @@ public class SetorServiceImpl implements SetorService {
     private final SetorMapper setorMapper;
     private final EmpresaRepository empresaRepository;
     private final UnidadeOperacionalRepository unidadeOperacionalRepository;
+    private final FuncaoRepository funcaoRepository;
 
-    public SetorServiceImpl(SetorRepository setorRepository, SetorMapper setorMapper, EmpresaRepository empresaRepository, UnidadeOperacionalRepository unidadeOperacionalRepository) {
+    public SetorServiceImpl(SetorRepository setorRepository, SetorMapper setorMapper, EmpresaRepository empresaRepository,
+                            UnidadeOperacionalRepository unidadeOperacionalRepository, FuncaoRepository funcaoRepository) {
         this.setorRepository = setorRepository;
         this.setorMapper = setorMapper;
         this.empresaRepository = empresaRepository;
         this.unidadeOperacionalRepository = unidadeOperacionalRepository;
+        this.funcaoRepository = funcaoRepository;
     }
 
 
@@ -99,7 +103,6 @@ public class SetorServiceImpl implements SetorService {
         return setorMapper.toResponseDtoList(setores);
     }
 
-
     @Override
     @Transactional
     public SetorResponseDTO atualizar(Long id, SetorRequestDTO dto) {
@@ -110,7 +113,6 @@ public class SetorServiceImpl implements SetorService {
         if (!setorEntity.getEmpresa().getId().equals(dto.getEmpresaId())) {
         }
 
-        // ← Adicionar lógica para UnidadeOperacional
         UnidadeOperacionalEntity unidadeOperacional = null;
         if (dto.getUnidadeOperacionalId() != null) {
             unidadeOperacional = unidadeOperacionalRepository.findById(dto.getUnidadeOperacionalId())
@@ -123,21 +125,30 @@ public class SetorServiceImpl implements SetorService {
         }
 
         setorMapper.updateEntityFromDto(dto, setorEntity);
-        setorEntity.setUnidadeOperacional(unidadeOperacional); // ← Adicionar esta linha
+        setorEntity.setUnidadeOperacional(unidadeOperacional);
 
         setorEntity = setorRepository.save(setorEntity);
         return setorMapper.toResponseDto(setorEntity);
 
     }
 
-
     @Override
     @Transactional
     public void deletar(Long id) {
-        SetorEntity setor = setorRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Setor não encontrado com ID:" + id));
-        if (unidadeOperacionalRepository.existsById(id)){
-            throw new IllegalStateException("Setor não pode ser deletado pois está em uso por uma ou mais unidades operacionais. Inative o setor ou exclua a unidade.");
+        if (!setorRepository.existsById(id)) {
+            throw new EntityNotFoundException("Setor não encontrado com ID:" + id);
         }
+
+
+        if (unidadeOperacionalRepository.existsBySetores_Id(id)) {
+            throw new IllegalStateException("Setor não pode ser deletado pois está em uso por uma ou mais unidades operacionais.");
+        }
+
+        if (funcaoRepository.existsBySetorId(id)) {
+            throw new IllegalStateException("Não é possível excluir o setor, pois ele está sendo utilizado por uma ou mais Funções.");
+        }
+
+
         setorRepository.deleteById(id);
     }
 

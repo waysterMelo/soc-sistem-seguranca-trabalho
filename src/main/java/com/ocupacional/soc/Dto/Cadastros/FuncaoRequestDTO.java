@@ -50,15 +50,12 @@ public class FuncaoRequestDTO {
 
     private String informacoesComplementaresRegistrosAmbientais;
 
-    @Valid
     private List<RiscoTrabalhistaPgrRequestDTO> riscosPGR;
 
-    @Valid
     @JsonProperty("prestadoresResponsaveis")
     private List<PrestadorResponsavelRequestDTO> prestadoresResponsaveis = new ArrayList<>();
-    @Valid
+
     private List<FuncaoAgenteNocivoRequestDTO> agentesNocivosEsocial;
 
-    @Valid
     private List<FuncaoExamePcmsoRequestDTO> examesPcmso;
 }

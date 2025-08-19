@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LtcatRepository extends JpaRepository<LtcatEntity, Long> {
+    boolean existsByFuncoes_Id(Long funcaoId);
 }

@@ -11,6 +11,7 @@ import com.ocupacional.soc.Mapper.Cadastros.FuncaoExamePcmsoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.*;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
+import com.ocupacional.soc.Repositories.SegurancaTrabalho.LtcatRepository;
 import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class FuncaoServiceImpl implements FuncaoService {
     private final FuncaoAgenteNocivoMapper funcaoAgenteNocivoMapper;
     private final PrestadorServicoRepository prestadorServicoRepository;
     private final FuncaoExamePcmsoMapper funcaoExamePcmsoMapper;
+    private final LtcatRepository ltcatRepository;
 
     @Override
     @Transactional
@@ -172,18 +174,20 @@ public class FuncaoServiceImpl implements FuncaoService {
     @Override
     @Transactional
     public void deletarFuncao(Long id) {
-
         if (!funcaoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Função não encontrada com ID: " + id);
+        }
 
-            throw new ResourceNotFoundException(STR."Função não encontrada com ID: \{id}");
+        if (ltcatRepository.existsByFuncoes_Id(id)) {
+            throw new BusinessException("Não é possível excluir a função, pois ela está sendo utilizada em um ou mais registros de LTCAT.");
         }
 
         try {
             funcaoRepository.deleteById(id);
-        }catch (DataIntegrityViolationException e){
-            throw new BusinessException("Não é possível excluir a função, pois ela está sendo utilizada por outro registro.");
-        }
+        } catch (DataIntegrityViolationException e) {
 
+            throw new BusinessException("Não é possível excluir a função, pois ela está sendo utilizada por outro registro (ex: Funcionário).");
+        }
     }
 
     @Override
@@ -203,7 +207,6 @@ public class FuncaoServiceImpl implements FuncaoService {
         return funcoes.map(funcaoMapper::entityToResponseDTO);
     }
 
-    // Métodos auxiliares find...
     private FuncaoEntity findFuncaoById(Long id) {
         return funcaoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com ID: " + id));

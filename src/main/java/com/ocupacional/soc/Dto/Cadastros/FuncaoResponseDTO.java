@@ -20,6 +20,7 @@ public class FuncaoResponseDTO {
     private EmpresaSimpleResponseDTO empresa;
     private SetorResponseDTO setor;
     private Long cboId;
+    private String codigoCbo;
     private String nomeCbo;
     private String nome;
     private Integer quantidadeFuncionarios;

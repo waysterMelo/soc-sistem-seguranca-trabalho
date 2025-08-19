@@ -9,6 +9,7 @@ import com.ocupacional.soc.Enuns.CadastroEmpresas.TipoMatrizFilial;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "unidades_operacionais")
@@ -70,7 +71,29 @@ public class UnidadeOperacionalEntity {
     @JoinColumn(name = "cnae_principal_id")
     private CnaeEntity cnaePrincipal;
 
-    @OneToMany(mappedBy = "unidadeOperacional", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "unidadeOperacional", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<SetorEntity> setores;
+
+    public void setSetores(List<SetorEntity> novosSetores) {
+        // 1. Remove a referência desta unidade de todos os setores antigos.
+        if (this.setores != null) {
+            this.setores.forEach(setorAntigo -> setorAntigo.setUnidadeOperacional(null));
+        }
+
+        // 2. Limpa completamente a lista de setores da unidade.
+        if (this.setores == null) {
+            this.setores = new ArrayList<>();
+        } else {
+            this.setores.clear();
+        }
+
+        // 3. Adiciona os novos setores, estabelecendo o vínculo em ambos os lados.
+        if (novosSetores != null) {
+            novosSetores.forEach(novoSetor -> {
+                this.setores.add(novoSetor);
+                novoSetor.setUnidadeOperacional(this);
+            });
+        }
+    }
 
 }
