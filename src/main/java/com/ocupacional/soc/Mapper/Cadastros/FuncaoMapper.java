@@ -48,7 +48,7 @@ public interface FuncaoMapper {
     @Mapping(source = "examesPcmso", target = "examesPcmso")
     FuncaoResponseDTO entityToResponseDTO(FuncaoEntity entity);
 
-    @Named("longIdToEmpresaEntity") // Renomeado para clareza
+    @Named("longIdToEmpresaEntity")
     default EmpresaEntity longIdToEmpresaEntity(Long id) {
         if (id == null) return null;
         EmpresaEntity empresa = new EmpresaEntity();
@@ -56,7 +56,7 @@ public interface FuncaoMapper {
         return empresa;
     }
 
-    @Named("longIdToSetorEntity") // Renomeado para clareza
+    @Named("longIdToSetorEntity")
     default SetorEntity longIdToSetorEntity(Long id) {
         if (id == null) return null;
         SetorEntity setor = new SetorEntity();
@@ -64,7 +64,7 @@ public interface FuncaoMapper {
         return setor;
     }
 
-    @Named("longIdToCboEntity") // Renomeado para clareza
+    @Named("longIdToCboEntity")
     default CboEntity longIdToCboEntity(Long id) {
         if (id == null) return null;
         CboEntity cbo = new CboEntity();

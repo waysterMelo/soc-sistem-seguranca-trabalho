@@ -2,6 +2,7 @@ package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Entities.Cadastros.CnaeEntity;
 import com.ocupacional.soc.Services.Cadastros.CnaeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cnaes")
+@RequiredArgsConstructor
 public class CnaeController {
 
-    @Autowired
-    private CnaeService cnaeService;
+
+    private final  CnaeService cnaeService;
+
+
 
     @GetMapping
     public ResponseEntity<List<CnaeEntity>> listarTodos() {
