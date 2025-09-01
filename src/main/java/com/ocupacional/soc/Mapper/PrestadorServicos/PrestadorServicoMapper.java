@@ -16,6 +16,8 @@ public interface PrestadorServicoMapper {
 
     // De Entity para DTO
     @Mapping(target = "cboId", source = "cbo.id")
+    @Mapping(target = "cboNomeOcupacao", source = "cbo.nomeOcupacao")
+    @Mapping(target = "status", source = "status")
     PrestadorServicoResponseDTO toDto(PrestadorServicoEntity entity);
 
 

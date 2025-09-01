@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroPrestador.TipoConselho;
 import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class PrestadorServicoEntity {
     @Column(nullable = false, length = 100)
     private String sobrenome;
 
-    @Column(unique = true, length = 14) // Formato com máscara: XXX.XXX.XXX-XX
+    @Column(unique = true, length = 14)
     private String cpf;
 
     @Column(length = 20)
@@ -50,11 +51,11 @@ public class PrestadorServicoEntity {
 
     // --- Outras Informações ---
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cbo_id") // Relação com a tabela de CBOs
+    @JoinColumn(name = "cbo_id")
     private CboEntity cbo;
 
     @Column(length = 20)
-    private String nis; // PIS/PASEP/NIT
+    private String nis;
 
     @Enumerated(EnumType.STRING)
     private TipoConselho conselho;
@@ -62,7 +63,10 @@ public class PrestadorServicoEntity {
     @Column(length = 50)
     private String numeroInscricaoConselho;
 
-    @Column(length = 2) // Sigla do estado, ex: MG, SP
+    @Column(length = 2)
     private String estadoConselho;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEmpresa status;
 
 }

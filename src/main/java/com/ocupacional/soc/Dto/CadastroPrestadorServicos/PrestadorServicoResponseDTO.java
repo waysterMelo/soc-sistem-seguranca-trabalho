@@ -2,6 +2,7 @@ package com.ocupacional.soc.Dto.CadastroPrestadorServicos;
 
 
 import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroPrestador.TipoConselho;
 import com.ocupacional.soc.Enuns.Funcionario.Sexo;
 import lombok.Getter;
@@ -24,9 +25,10 @@ public class PrestadorServicoResponseDTO extends PrestadorServicoRequestDTO {
     private String telefone2;
     private String email;
     private Long cboId;
+    private String cboNomeOcupacao;
     private String nis;
     private TipoConselho conselho;
     private String numeroInscricaoConselho;
     private String estadoConselho;
-
+    private StatusEmpresa status;
 }

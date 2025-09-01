@@ -20,4 +20,6 @@ public interface PrestadorServicoService {
     void delete(Long id);
 
     void importar(MultipartFile file);
+
+    PrestadorServicoResponseDTO findById(Long id);
 }

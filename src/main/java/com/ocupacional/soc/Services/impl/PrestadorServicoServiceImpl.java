@@ -3,6 +3,7 @@ package com.ocupacional.soc.Services.impl;
 import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoRequestDTO;
 import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Exceptions.BusinessException;
 import com.ocupacional.soc.Exceptions.NotFoundException;
 import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
@@ -29,17 +30,20 @@ public class PrestadorServicoServiceImpl implements PrestadorServicoService {
     @Transactional
     public PrestadorServicoResponseDTO create(PrestadorServicoRequestDTO dto) {
         validarCpfUnico(dto.getCpf(), null);
+
         PrestadorServicoEntity entity = prestadorServicoMapper.toEntity(dto);
         entity.setCbo(cboRepo.getReferenceById(dto.getCboId()));
+        entity.setStatus(StatusEmpresa.ATIVO);
         return prestadorServicoMapper.toDto(repo.save(entity));
     }
 
     @Override
     public PrestadorServicoResponseDTO update(Long id, PrestadorServicoRequestDTO dto) {
        PrestadorServicoEntity entity = repo.findById(id).orElseThrow(() -> new NotFoundException("Prestador não encontrado"));
-        validarCpfUnico(dto.getCpf(), null);
+        validarCpfUnico(dto.getCpf(), id);
         prestadorServicoMapper.updateEntityFromDto(dto, entity);
         entity.setCbo(cboRepo.getReferenceById(dto.getCboId()));
+        repo.save(entity);
         return prestadorServicoMapper.toDto(entity);
     }
 
@@ -75,5 +79,12 @@ public class PrestadorServicoServiceImpl implements PrestadorServicoService {
     private void validarCpfUnico(String cpf, Long idAtual){
         repo.findByCpf(cpf).filter(p ->
                 !p.getId().equals(idAtual)).ifPresent(p -> { throw new BusinessException("CPF já cadastrado"); });
+    }
+
+
+    public PrestadorServicoResponseDTO findById(Long id) {
+        var prestador = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prestador não encontrado"));
+        return prestadorServicoMapper.toDto(prestador);
     }
 }
