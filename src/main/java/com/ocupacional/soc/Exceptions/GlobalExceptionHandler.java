@@ -139,7 +139,7 @@ public class GlobalExceptionHandler {
 
         // Personalizar mensagem baseada no tipo de violação
         if (ex.getMessage().contains("foreign key constraint fails")) {
-            mensagem = "Não é possível excluir este registro, pois ele está sendo referenciado por outros dados";
+            mensagem = "Não é possível excluir este registro, pois ele está sendo referenciado por outros dados - Inative-o";
         } else if (ex.getMessage().contains("Duplicate entry")) {
             mensagem = "Já existe um registro com essas informações";
         }
