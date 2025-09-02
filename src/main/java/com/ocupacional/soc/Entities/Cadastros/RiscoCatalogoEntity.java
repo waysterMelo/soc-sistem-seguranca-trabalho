@@ -1,6 +1,6 @@
 package com.ocupacional.soc.Entities.Cadastros;
 
-import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco; // [upload:soc/Enuns/CadastroFuncoes/GrupoRisco.java]
+import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +24,5 @@ RiscoCatalogoEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
-
 
 }

@@ -4,6 +4,7 @@ import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoResponseDTO;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.GrupoRisco;
 import com.ocupacional.soc.Services.Cadastros.RiscoCatalogoService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,4 +64,5 @@ public class RiscoCatalogoController {
                 riscoCatalogoService.listarRiscosPorDescricao(descricao, pageable);
         return ResponseEntity.ok(lista);
     }
+
 }
