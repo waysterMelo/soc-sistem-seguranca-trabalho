@@ -1,0 +1,39 @@
+{
+  "unidadeOperacionalId": 1,
+  "prestadorServicoId": 1,
+  "termoValidacao": "Texto de teste para o termo de validação.",
+  "documentoBase": "Texto de teste para o documento base.",
+  "responsavelEmpresa": "Nome do Gestor Responsável",
+  "dataDocumento": "2025-09-03",
+  "dataRevisao": null,
+  "termoCiencia": "Texto de teste para o termo de ciência.",
+  "planoAcaoMetodologia": "5W2H_PDCA",
+  "planoAcaoOrientacoes": "<b>Orientações de teste com HTML.</b>",
+  "consideracoesFinais": "Texto de teste para as considerações finais.",
+  "mapaRiscos": [
+    {
+      "funcaoId": 14,
+      "riscoCatalogoIds": [1, 2],
+      "riscosPersonalizados": [
+        "Nenhum risco personalizado para esta função."
+      ]
+    }
+  ],
+  "planoAcaoRiscos": [
+    {
+      "riscoId": 1,
+      "acao": "Instalar corrimão na escada principal.",
+      "responsavel": "Equipa de Manutenção",
+      "prazo": "2025-10-15",
+      "status": "A Fazer"
+    },
+    {
+      "riscoId": 2,
+      "acao": "Realizar treino de ergonomia.",
+      "responsavel": "Recursos Humanos",
+      "prazo": "2025-11-20",
+      "status": "A Fazer"
+    }
+  ],
+  "status": "ATIVO"
+}

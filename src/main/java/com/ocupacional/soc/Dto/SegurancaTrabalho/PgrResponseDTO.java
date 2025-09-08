@@ -1,8 +1,9 @@
 package com.ocupacional.soc.Dto.SegurancaTrabalho;
 
+import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
 import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.MetodologiaPlanoAcao;
-import com.ocupacional.soc.Enuns.SegurancaTrabalho.TipoPgr;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public class PgrResponseDTO {
     private Long id;
     private UnidadeOperacionalResponseDTO unidadeOperacional;
+    private PrestadorServicoResponseDTO prestadorServico;
+    private StatusEmpresa status;
     private String conteudoCapa;
     private String termoValidacao;
     private String documentoBase;

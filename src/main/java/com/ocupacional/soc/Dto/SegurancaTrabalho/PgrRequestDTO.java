@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Dto.SegurancaTrabalho;
 
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.MetodologiaPlanoAcao;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.TipoPgr;
 import jakarta.validation.Valid;
@@ -12,6 +13,8 @@ import java.util.List;
 public class PgrRequestDTO {
     @NotNull
     private Long unidadeOperacionalId;
+    private Long prestadorServicoId;
+    private StatusEmpresa status;
     private String termoValidacao;
     private String documentoBase;
     private String responsavelEmpresa;

@@ -5,6 +5,7 @@ import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrMapaRiscoFuncaoResponseDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
+import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
@@ -18,6 +19,7 @@ import com.ocupacional.soc.Mapper.SegurancaTrabalho.PlanoAcaoRiscoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.RiscoCatalogoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
+import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.PgrRepository;
 import com.ocupacional.soc.Services.SegurancaTrabalho.PgrService;
 import jakarta.annotation.PostConstruct;
@@ -25,6 +27,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,17 +52,26 @@ public class PgrServiceImpl implements PgrService {
     private final UnidadeOperacionalRepository unidadeOperacionalRepository;
     private final FuncaoRepository funcaoRepository;
     private final RiscoCatalogoRepository riscoCatalogoRepository;
+    private final PrestadorServicoRepository prestadorServicoRepository;
     private final PgrMapaRiscoFuncaoMapper mapaRiscoMapper;
     private final PlanoAcaoRiscoMapper planoAcaoMapper;
     private final UnidadeOperacionalMapper unidadeOperacionalMapper;
 
-    private final Path root = Paths.get("uploads/pgr-capas");
+    @Value("${file.upload-dir.pgr-capas}")
+    private String uploadDir;
+
+    private Path root;
 
     @PostConstruct
     public void init() {
         try {
+            root = Paths.get(uploadDir).toAbsolutePath().normalize();
+            System.out.println("Inicializando diretório de upload: " + root);
             Files.createDirectories(root);
+            System.out.println("Diretório de upload criado com sucesso!");
         } catch (IOException e) {
+            System.err.println("Erro ao inicializar o diretório de upload: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Não foi possível inicializar o diretório de upload!");
         }
     }
@@ -67,12 +79,15 @@ public class PgrServiceImpl implements PgrService {
     @Override
     @Transactional
     public PgrResponseDTO createPgr(PgrRequestDTO requestDTO, MultipartFile capa) {
+
         PgrEntity pgrEntity = new PgrEntity();
         updatePgrFields(pgrEntity, requestDTO);
 
         if (capa != null && !capa.isEmpty()) {
             String filename = saveFile(capa);
             pgrEntity.setConteudoCapa(filename);
+        } else {
+            System.out.println("Nenhuma capa foi enviada ou o arquivo está vazio.");
         }
 
         UnidadeOperacionalEntity unidade = findUnidadeById(requestDTO.getUnidadeOperacionalId());
@@ -83,7 +98,8 @@ public class PgrServiceImpl implements PgrService {
         updateMapaDeRiscos(savedPgrEntity, requestDTO);
         updatePlanoDeAcao(savedPgrEntity, requestDTO);
 
-        return pgrMapper.toDto(pgrRepository.save(savedPgrEntity));
+        PgrEntity finalEntity = pgrRepository.save(savedPgrEntity);
+        return pgrMapper.toDto(finalEntity);
     }
 
     @Override
@@ -134,7 +150,7 @@ public class PgrServiceImpl implements PgrService {
     @Override
     @Transactional
     public PgrResponseDTO updatePgr(Long id, PgrRequestDTO requestDTO, MultipartFile capa) {
-        System.out.println("--- DEBUG: updatePgr ---");
+        
         PgrEntity pgrEntity = pgrRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PGR não encontrado com ID: " + id));
 
@@ -156,8 +172,14 @@ public class PgrServiceImpl implements PgrService {
 
         updateMapaDeRiscos(pgrEntity, requestDTO);
         updatePlanoDeAcao(pgrEntity, requestDTO);
-        System.out.println("-----------------------");
-        return pgrMapper.toDto(pgrRepository.save(pgrEntity));
+        
+        PgrEntity savedEntity = pgrRepository.save(pgrEntity);
+
+        if (savedEntity.getConteudoCapa() != null) {
+            System.out.println("Conteúdo da capa após atualização: " + savedEntity.getConteudoCapa());
+        }
+
+        return pgrMapper.toDto(savedEntity);
     }
 
     @Override
@@ -199,6 +221,13 @@ public class PgrServiceImpl implements PgrService {
         entity.setPlanoAcaoMetodologia(dto.getPlanoAcaoMetodologia());
         entity.setPlanoAcaoOrientacoes(dto.getPlanoAcaoOrientacoes());
         entity.setConsideracoesFinais(dto.getConsideracoesFinais());
+        entity.setStatus(dto.getStatus());
+        
+        // Atualiza o prestador de serviço se um ID foi fornecido
+        if (dto.getPrestadorServicoId() != null) {
+            PrestadorServicoEntity prestador = findPrestadorById(dto.getPrestadorServicoId());
+            entity.setPrestadorServico(prestador);
+        }
     }
 
     private UnidadeOperacionalEntity findUnidadeById(Long id) {
@@ -214,6 +243,11 @@ public class PgrServiceImpl implements PgrService {
     private RiscoCatalogoEntity findRiscoById(Long id) {
         return riscoCatalogoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Risco do Catálogo não encontrado com ID: " + id));
+    }
+
+    private PrestadorServicoEntity findPrestadorById(Long id) {
+        return prestadorServicoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Prestador de Serviço não encontrado com ID: " + id));
     }
 
     private void updatePlanoDeAcao(PgrEntity pgrEntity, PgrRequestDTO requestDTO) {
@@ -236,23 +270,48 @@ public class PgrServiceImpl implements PgrService {
     private String saveFile(MultipartFile file) {
         try {
             String originalFilename = Objects.requireNonNull(file.getOriginalFilename());
-            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            String filename = UUID.randomUUID() + extension;
-            Files.copy(file.getInputStream(), this.root.resolve(filename));
+            String extension = "";
+            
+            // Verifica se há extensão no arquivo
+            int lastDotIndex = originalFilename.lastIndexOf(".");
+            if (lastDotIndex > 0) {
+                extension = originalFilename.substring(lastDotIndex);
+            }
+            
+            // Gera um nome de arquivo seguro
+            String filename = UUID.randomUUID().toString() + extension;
+
+            Path targetPath = this.root.resolve(filename);
+
+            // Verifica se o diretório existe
+            if (!Files.exists(this.root)) {
+                System.out.println("Diretório não existe, criando...");
+                Files.createDirectories(this.root);
+            }
+            
+            Files.copy(file.getInputStream(), targetPath);
+            
             return filename;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Não foi possível salvar o arquivo. Erro: " + e.getMessage());
         }
     }
 
     private void deleteFile(String filename) {
         if (filename == null || filename.isBlank()) {
+            System.out.println("Nenhum arquivo para deletar (filename é null ou vazio)");
             return;
         }
         try {
-            Files.deleteIfExists(this.root.resolve(filename));
+            System.out.println("Tentando deletar o arquivo: " + filename);
+            Path filePath = this.root.resolve(filename);
+            System.out.println("Caminho completo do arquivo a ser deletado: " + filePath.toAbsolutePath());
+            boolean deleted = Files.deleteIfExists(filePath);
+            System.out.println("Arquivo deletado: " + deleted);
         } catch (IOException e) {
             System.err.println("Falha ao deletar o arquivo: " + filename + " Erro: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
