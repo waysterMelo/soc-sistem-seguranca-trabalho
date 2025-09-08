@@ -11,5 +11,5 @@ public class PgrMapaRiscoFuncaoResponseDTO {
     private Long funcaoId;
     private String nomeFuncao;
     private Set<RiscoCatalogoSimpleResponseDTO> riscosDoCatalogo;
-    private List<String> riscosPersonalizados;
+    
 }

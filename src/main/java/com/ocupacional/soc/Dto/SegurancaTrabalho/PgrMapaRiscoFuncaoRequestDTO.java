@@ -9,5 +9,5 @@ public class PgrMapaRiscoFuncaoRequestDTO {
     @NotNull
     private Long funcaoId;
     private List<Long> riscoCatalogoIds;
-    private List<String> riscosPersonalizados;
+    
 }

@@ -53,6 +53,9 @@ public class SetorEntity {
     @OneToMany(mappedBy = "setor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FuncionarioEntity> funcionarios = new ArrayList<>();
 
+    @OneToMany(mappedBy = "setor", fetch = FetchType.LAZY)
+    private List<FuncaoEntity> funcoes = new ArrayList<>();
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

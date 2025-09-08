@@ -11,6 +11,6 @@ public interface PgrMapaRiscoFuncaoMapper {
     @Mapping(source = "funcao.id", target = "funcaoId")
     @Mapping(source = "funcao.nome", target = "nomeFuncao")
     @Mapping(source = "riscosDoCatalogo", target = "riscosDoCatalogo")
-    @Mapping(source = "riscosPersonalizados", target = "riscosPersonalizados")
-    PgrMapaRiscoFuncaoResponseDTO toDto(PgrMapaRiscoFuncaoEntity entity);
+    PgrMapaRiscoFuncaoResponseDTO
+    toDto(PgrMapaRiscoFuncaoEntity entity);
 }

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_PGR" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0f44e0fd-9f3f-4407-8734-4aa8c4163225">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Base" isDefault="true" fontName="Arial" fontSize="10" pdfFontName="Helvetica" pdfEncoding="Cp1252"/>
+	<style name="Titulo" style="Base" fontSize="22" isBold="true"/>
+	<style name="Subtitulo" style="Base" forecolor="#3F51B5" fontSize="14" isBold="true"/>
+	<style name="CabecalhoTabela" style="Base" mode="Opaque" forecolor="#FFFFFF" backcolor="#3F51B5" fontSize="9" isBold="true"/>
+	<style name="DetalheTabela" style="Base" fontSize="8"/>
+	<parameter name="LOGO_PATH" class="java.lang.String"/>
+	<parameter name="DATA_GERACAO" class="java.util.Date"/>
+	<field name="empresaRazaoSocial" class="java.lang.String"/>
+	<field name="empresaCnpj" class="java.lang.String"/>
+	<field name="unidadeNome" class="java.lang.String"/>
+	<field name="unidadeEndereco" class="java.lang.String"/>
+	<field name="responsavelEmpresa" class="java.lang.String"/>
+	<field name="dataDocumento" class="java.time.LocalDate"/>
+	<field name="consideracoesFinais" class="java.lang.String"/>
+	<field name="mapaDeRiscos" class="java.lang.String"/>
+	<field name="planoDeAcao" class="java.lang.String"/>
+	<title>
+		<band height="360" splitType="Stretch">
+			<image hAlign="Center">
+				<reportElement x="40" y="40" width="100" height="100" uuid="7a7f4577-d71d-4f27-848a-6b8a8b8c7d6e"/>
+				<imageExpression><![CDATA[$P{LOGO_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Titulo" x="150" y="60" width="405" height="40" forecolor="#3F51B5" uuid="55c79872-9b24-4f0e-a9b8-3e4b3e8c7d6e"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Programa de Gerenciamento de Riscos (PGR)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="200" width="555" height="150" backcolor="#F0F0F0" uuid="9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="20" y="210" width="100" height="20" uuid="a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razão Social:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="210" width="415" height="20" uuid="b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"/>
+				<textFieldExpression><![CDATA[$F{empresaRazaoSocial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="240" width="100" height="20" uuid="c1d2e3f4-a5b6-7c8d-9e0f-1a2b3c4d5e6f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CNPJ:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="240" width="415" height="20" uuid="d1e2f3a4-b5c6-7d8e-9f0a-1b2c3d4e5f6a"/>
+				<textFieldExpression><![CDATA[$F{empresaCnpj}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="270" width="100" height="20" uuid="e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidade:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="270" width="415" height="20" uuid="f1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c"/>
+				<textFieldExpression><![CDATA[$F{unidadeNome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="300" width="100" height="20" uuid="0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="300" width="415" height="20" uuid="1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e"/>
+				<textFieldExpression><![CDATA[$F{unidadeEndereco}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="200" splitType="Stretch">
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="10" width="555" height="20" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"/>
+				<text><![CDATA[Inventário de Riscos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="0" y="40" width="180" height="25" uuid="2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Grupo de Risco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="180" y="40" width="375" height="25" uuid="3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c7d8e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Descrição do Risco]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="DetalheTabela" x="0" y="65" width="555" height="100" uuid="4c5d6e7f-8a9b-0c1d-2e3f-4a5b6c7d8e9f"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mapaDeRiscos}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="200" splitType="Stretch">
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="10" width="555" height="20" uuid="5d6e7f8a-9b0c-1d2e-3f4a-5b6c7d8e9f0a"/>
+				<text><![CDATA[Plano de Ação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="0" y="40" width="120" height="25" uuid="6e7f8a9b-0c1d-2e3f-4a5b-6c7d8e9f0a1b"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Risco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="120" y="40" width="215" height="25" uuid="7f8a9b0c-1d2e-3f4a-5b6c-7d8e9f0a1b2c"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Ação Proposta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="335" y="40" width="100" height="25" uuid="8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Responsável]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="435" y="40" width="60" height="25" uuid="9b0c1d2e-3f4a-5b6c-7d8e-9f0a1b2c3d4e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Prazo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="CabecalhoTabela" x="495" y="40" width="60" height="25" uuid="0c1d2e3f-4a5b-6c7d-8e9f-0a1b2c3d4e5f"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="DetalheTabela" x="0" y="65" width="555" height="100" uuid="1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6a"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{planoDeAcao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<textField>
+				<reportElement style="Base" x="455" y="10" width="100" height="20" uuid="2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="200">
+			<staticText>
+				<reportElement style="Subtitulo" x="0" y="20" width="555" height="20" uuid="3f4a5b6c-7d8e-9f0a-1b2c-3d4e5f6a7b8c"/>
+				<text><![CDATA[Considerações Finais]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement x="0" y="50" width="555" height="50" uuid="4a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d"/>
+				<textElement>
+					<paragraph spacingBefore="5" spacingAfter="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consideracoesFinais}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="40" y="150" width="200" height="1" uuid="5b6c7d8e-9f0a-1b2c-3d4e-5f6a7b8c9d0e"/>
+			</line>
+			<staticText>
+				<reportElement x="40" y="155" width="200" height="20" uuid="6c7d8e9f-0a1b-2c3d-4e5f-6a7b8c9d0e1f"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Responsável Técnico]]></text>
+			</staticText>
+			<line>
+				<reportElement x="315" y="150" width="200" height="1" uuid="7d8e9f0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="315" y="155" width="200" height="20" uuid="8e9f0a1b-2c3d-4e5f-6a7b-8c9d0e1f2a3b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{responsavelEmpresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

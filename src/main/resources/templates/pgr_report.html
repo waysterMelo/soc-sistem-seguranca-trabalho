@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>PGR - Programa de Gerenciamento de Riscos</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        /* Basic styles for printing and A4 page layout */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            .page {
+                page-break-after: always;
+            }
+            .page:last-of-type {
+                page-break-after: auto;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        body {
+            background-color: #e9ecef;
+        }
+
+        .report-container {
+            max-width: 21cm;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .page {
+            padding: 2cm;
+            min-height: 29.7cm;
+            box-sizing: border-box;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+
+        .signature-area {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .signature-line {
+            display: inline-block;
+            width: 350px;
+            border-bottom: 1px solid #495057;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="download-button-container" class="position-fixed bottom-0 end-0 p-3 no-print" style="z-index: 1030;">
+    <button id="download-pdf" class="btn btn-primary btn-lg shadow-lg">
+        <i class="fas fa-file-pdf me-2"></i> Download PDF
+    </button>
+</div>
+
+<div class="report-container" id="report-to-print" th:if="${pgr != null}">
+
+    <!-- Página 1: Identificação e Introdução -->
+    <div class="page">
+        <header class="pb-4 mb-4 border-bottom">
+            <div class="d-flex align-items-center">
+                <img th:if="${pgr.conteudoCapa}" th:src="${pgr.conteudoCapa}" alt="Logo" style="height: 80px; width: 80px; object-fit: cover;" class="me-4 rounded-circle border p-1"/>
+                <img th:unless="${pgr.conteudoCapa}" th:src="@{/imagens/logo.png}" alt="Logo" style="height: 80px;" class="me-4"/>
+                <div>
+                    <h1 class="h2 mb-1 fw-bold text-primary">Programa de Gerenciamento de Riscos</h1>
+                    <p class="mb-0 fs-5 text-muted" th:text="${pgr.unidadeOperacional?.empresa?.nomeFantasia}">Nome da Empresa</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="text-muted mb-1"><i class="fas fa-calendar-alt me-2"></i>Data do Documento</div>
+                        <div class="fs-5 fw-bold" th:text="${#temporals.format(pgr.dataDocumento, 'dd/MM/yyyy')}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                     <div class="card-body text-center">
+                        <div class="text-muted mb-1"><i class="fas fa-calendar-check me-2"></i>Data da Revisão</div>
+                        <div class="fs-5 fw-bold" th:if="${pgr.dataRevisao != null}" th:text="${#temporals.format(pgr.dataRevisao, 'dd/MM/yyyy')}"></div>
+                        <div class="fs-5 fw-bold text-warning" th:unless="${pgr.dataRevisao != null}">Não agendada</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">1. Identificação da Organização</h2>
+        <div class="card">
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-building fa-fw me-2 text-muted"></i>Razão Social</span>
+                        <strong th:text="${pgr.unidadeOperacional?.empresa?.razaoSocial}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-store fa-fw me-2 text-muted"></i>Nome Fantasia</span>
+                        <strong th:text="${pgr.unidadeOperacional?.empresa?.nomeFantasia}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-industry fa-fw me-2 text-muted"></i>Unidade Operacional</span>
+                        <strong th:text="${pgr.unidadeOperacional?.nome}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-barcode fa-fw me-2 text-muted"></i>CNAE Principal</span>
+                        <strong th:text="${pgr.unidadeOperacional?.cnaePrincipal?.codigo} + ' - ' + ${pgr.unidadeOperacional?.cnaePrincipal?.descricao}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-exclamation-triangle fa-fw me-2 text-muted"></i>Grau de Risco</span>
+                        <span class="badge bg-warning text-dark" th:text="${pgr.unidadeOperacional?.grauRisco}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-map-marker-alt fa-fw me-2 text-muted"></i>Endereço Completo</span>
+                        </div>
+                        <div class="text-end mt-1">
+                            <strong class="d-block" th:text="${pgr.unidadeOperacional?.logradouro} + ', ' + ${pgr.unidadeOperacional?.numero} + ' - ' + ${pgr.unidadeOperacional?.bairro}"></strong>
+                            <strong class="d-block" th:text="${pgr.unidadeOperacional?.cidade} + '/' + ${pgr.unidadeOperacional?.estado} + ' - CEP: ' + ${pgr.unidadeOperacional?.cep}"></strong>
+                            <strong class="d-block" th:if="${pgr.unidadeOperacional?.complemento}" th:text="${pgr.unidadeOperacional?.complemento}"></strong>
+                        </div>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-at fa-fw me-2 text-muted"></i>E-mail</span>
+                        <strong th:text="${pgr.unidadeOperacional?.emailContato}"></strong>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-phone fa-fw me-2 text-muted"></i>Telefone</span>
+                        <strong th:text="'(' + ${pgr.unidadeOperacional?.dddTelefone1} + ') ' + ${pgr.unidadeOperacional?.numeroTelefone1}"></strong>
+                    </li>
+                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-user-tie fa-fw me-2 text-muted"></i>Responsável pela Empresa</span>
+                        <strong th:text="${pgr.responsavelEmpresa}"></strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 class="section-title">2. Introdução (Documento Base)</h2>
+        <div class="card">
+            <div class="card-body">
+                <div th:utext="${pgr.documentoBase}"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página 2: Setores e Metodologia -->
+    <div class="page">
+        <h2 class="section-title">3. Setores da Unidade</h2>
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(pgr.unidadeOperacional?.setores)}" class="text-center text-muted">
+                    Nenhum setor registrado.
+                </div>
+                <table class="table table-striped table-bordered" th:unless="${#lists.isEmpty(pgr.unidadeOperacional?.setores)}">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Nome do Setor</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="setor : ${pgr.unidadeOperacional.setores}">
+                            <td th:text="${setor.nome}"></td>
+                            <td th:text="${setor.descricao}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2 class="section-title">4. Metodologia do Plano de Ação</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Metodologia</h5>
+                <p class="card-text" th:text="${pgr.planoAcaoMetodologia}"></p>
+                <hr/>
+                <h5 class="card-title">Orientações</h5>
+                <div th:utext="${pgr.planoAcaoOrientacoes}"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página 3: Riscos -->
+    <div class="page">
+        <h2 class="section-title">5. Plano de Ação de Riscos</h2>
+        <div class="card">
+            <div class="card-body">
+                 <div th:if="${#lists.isEmpty(pgr.planoAcaoRiscos)}" class="text-center text-muted">
+                    Nenhum plano de ação registrado.
+                </div>
+                <table class="table table-sm table-striped table-bordered" th:unless="${#lists.isEmpty(pgr.planoAcaoRiscos)}">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Risco</th>
+                            <th>Grupo</th>
+                            <th>Ação Proposta</th>
+                            <th>Responsável</th>
+                            <th>Prazo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="plano : ${pgr.planoAcaoRiscos}">
+                            <td th:text="${plano.risco?.descricao}"></td>
+                            <td th:text="${plano.risco?.grupo}"></td>
+                            <td th:text="${plano.acao} ?: 'Não especificada'"></td>
+                            <td th:text="${plano.responsavel}"></td>
+                            <td th:text="${#temporals.format(plano.prazo, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <span th:if="${plano.status == 'Concluído'}" class="badge bg-success" th:text="${plano.status}"></span>
+                                <span th:if="${plano.status == 'Pendente' or plano.status == 'A Fazer'}" class="badge bg-warning" th:text="${plano.status}"></span>
+                                <span th:if="${plano.status != 'Concluído' && plano.status != 'Pendente' && plano.status != 'A Fazer'}" class="badge bg-danger" th:text="${plano.status}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2 class="section-title">6. Mapa de Riscos por Função</h2>
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(pgr.mapaRiscos)}" class="text-center text-muted">
+                    Nenhum mapa de risco registrado.
+                </div>
+                <table class="table table-sm table-striped table-bordered" th:unless="${#lists.isEmpty(pgr.mapaRiscos)}">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Função</th>
+                            <th>Riscos do Catálogo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="mapa : ${pgr.mapaRiscos}">
+                            <td th:text="${mapa.nomeFuncao}" class="fw-bold"></td>
+                            <td>
+                                <div th:if="${not #lists.isEmpty(mapa.riscosDoCatalogo)}">
+                                    <span th:each="risco : ${mapa.riscosDoCatalogo}" class="badge bg-primary-subtle text-primary-emphasis rounded-pill me-1" th:text="${risco.descricao}"></span>
+                                </div>
+                                <div th:if="${#lists.isEmpty(mapa.riscosDoCatalogo)}" class="text-muted">
+                                    Nenhum risco do catálogo associado.
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página 4: Considerações Finais e Termos -->
+    <div class="page">
+        <h2 class="section-title">7. Considerações Finais</h2>
+        <div class="card">
+            <div class="card-body" th:text="${pgr.consideracoesFinais}"></div>
+        </div>
+
+        <h2 class="section-title">8. Termos e Assinaturas</h2>
+        <div class="card mb-4">
+             <div class="card-header"><i class="fas fa-file-signature me-2"></i>Termo de Validação dos Profissionais</div>
+            <div class="card-body" th:text="${pgr.termoValidacao}"></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><i class="fas fa-building me-2"></i>Termo de Ciência da Empresa</div>
+            <div class="card-body" th:text="${pgr.termoCiencia}"></div>
+        </div>
+
+        <div class="signature-area">
+            <div class="signature-line"></div>
+            <div class="fw-bold" th:text="${pgr.responsavelEmpresa}"></div>
+            <div class="text-muted">Responsável pela Empresa</div>
+        </div>
+        
+        <footer class="text-center text-muted pt-5 mt-5 border-top">
+            <p>Este documento foi gerado eletronicamente e é parte integrante do PGR da empresa.</p>
+            <p>ID do Documento: <span th:text="${pgr.id}"></span> &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</div>
+
+<!-- PDF Generation Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script th:inline="javascript">
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        const element = document.getElementById('report-to-print');
+        const pgrId = /*[[${pgr.id}]]*/ 'PGR'; // Get PGR ID for filename
+        const empresaNome = /*[[${pgr.unidadeOperacional.empresa.nomeFantasia}]]*/ 'Empresa';
+        const filename = `PGR - ${empresaNome} - ID ${pgrId}.pdf`;
+
+        const opt = {
+            margin:       [0.5, 0.5, 0.5, 0.5], // margins in inches [top, left, bottom, right]
+            filename:     filename,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // New Promise-based usage:
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
+
+</body>
+</html>

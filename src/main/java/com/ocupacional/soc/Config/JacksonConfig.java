@@ -9,11 +9,8 @@ public class JacksonConfig {
 
     @Bean
     public Hibernate6Module hibernateModule() {
-        // Alterado para Hibernate6Module
         Hibernate6Module module = new Hibernate6Module();
 
-        // Esta linha é opcional, mas recomendada.
-        // Ela previne que o Jackson force o carregamento de dados "lazy".
         module.disable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
 
         return module;
