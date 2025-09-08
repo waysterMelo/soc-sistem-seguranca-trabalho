@@ -2,6 +2,7 @@ package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrResponseDTO;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Services.SegurancaTrabalho.PgrService;
 import com.ocupacional.soc.Services.impl.PgrServiceImpl;
 import jakarta.validation.Valid;
@@ -38,6 +39,14 @@ public class PgrController {
             @PathVariable Long empresaId,
             @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(pgrService.getAllPgrsByEmpresa(empresaId, pageable));
+    }
+
+    @GetMapping("/empresa/{empresaId}/status-filter")
+    public ResponseEntity<Page<PgrResponseDTO>> getAllPgrsByEmpresaAndStatus(
+            @PathVariable Long empresaId,
+            @RequestParam(required = false) StatusEmpresa status,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(pgrService.getAllPgrsByEmpresaAndStatus(empresaId, status, pageable));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

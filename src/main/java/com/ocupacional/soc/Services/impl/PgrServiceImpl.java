@@ -11,6 +11,7 @@ import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrMapaRiscoFuncaoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.PlanoAcaoRiscoEntity;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.PgrMapaRiscoFuncaoMapper;
@@ -92,7 +93,7 @@ public class PgrServiceImpl implements PgrService {
 
         UnidadeOperacionalEntity unidade = findUnidadeById(requestDTO.getUnidadeOperacionalId());
         pgrEntity.setUnidadeOperacional(unidade);
-
+        pgrEntity.setStatus(StatusEmpresa.ATIVO);
         PgrEntity savedPgrEntity = pgrRepository.save(pgrEntity);
 
         updateMapaDeRiscos(savedPgrEntity, requestDTO);
@@ -145,6 +146,11 @@ public class PgrServiceImpl implements PgrService {
     @Override
     public Page<PgrResponseDTO> getAllPgrsByEmpresa(Long empresaId, Pageable pageable) {
         return pgrRepository.findByUnidadeOperacional_Empresa_Id(empresaId, pageable).map(pgrMapper::toDto);
+    }
+
+    @Override
+    public Page<PgrResponseDTO> getAllPgrsByEmpresaAndStatus(Long empresaId, StatusEmpresa status, Pageable pageable) {
+        return pgrRepository.findByEmpresaIdAndStatus(empresaId, status, pageable).map(pgrMapper::toDto);
     }
 
     @Override
