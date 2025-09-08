@@ -14,4 +14,5 @@ public interface PgrService {
     Page<PgrResponseDTO> getAllPgrsByEmpresaAndStatus(Long empresaId, StatusEmpresa status, Pageable pageable);
     PgrResponseDTO updatePgr(Long id, PgrRequestDTO requestDTO, MultipartFile capa);
     void deletePgr(Long id);
+    PgrResponseDTO inactivatedPgr(Long id);
 }

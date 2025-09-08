@@ -78,4 +78,10 @@ public class PgrController {
         }
     }
 
+    @PatchMapping("/{id}/inactivated")
+    public ResponseEntity<PgrResponseDTO> inativarPgr(@PathVariable Long id){
+        PgrResponseDTO pgr = pgrService.inactivatedPgr(id);
+        return ResponseEntity.ok(pgr);
+    }
+
 }

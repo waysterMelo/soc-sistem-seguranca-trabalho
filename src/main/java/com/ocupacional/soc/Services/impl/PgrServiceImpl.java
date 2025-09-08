@@ -197,6 +197,16 @@ public class PgrServiceImpl implements PgrService {
         pgrRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public PgrResponseDTO inactivatedPgr(Long id) {
+        PgrEntity entidade = pgrRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Pgr não encontrado com : " + id));
+        entidade.setStatus(StatusEmpresa.INATIVO);
+        PgrEntity inativada = pgrRepository.save(entidade);
+        return pgrMapper.toDto(inativada);
+    }
+
     private void updateMapaDeRiscos(PgrEntity pgrEntity, PgrRequestDTO requestDTO) {
         pgrEntity.getMapaRiscos().clear();
         if (!CollectionUtils.isEmpty(requestDTO.getMapaRiscos())) {
