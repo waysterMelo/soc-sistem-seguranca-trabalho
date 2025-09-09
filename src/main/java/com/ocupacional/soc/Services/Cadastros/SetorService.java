@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Services.Cadastros;
 
+import com.ocupacional.soc.Dto.Cadastros.SetorComFuncoesDTO;
 import com.ocupacional.soc.Dto.Cadastros.SetorRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.SetorResponseDTO;
 
@@ -14,5 +15,6 @@ public interface SetorService {
     SetorResponseDTO atualizar(Long id, SetorRequestDTO dto);
     void deletar(Long id);
     Optional<SetorResponseDTO> buscarPorNomeEEmpresa(String nome, Long empresaId);
+    List<SetorComFuncoesDTO> listarSetoresComFuncoesPorEmpresa(Long empresaId);
 
 }

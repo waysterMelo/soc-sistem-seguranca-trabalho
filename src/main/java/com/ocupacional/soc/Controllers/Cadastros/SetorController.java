@@ -1,5 +1,6 @@
 package com.ocupacional.soc.Controllers.Cadastros;
 
+import com.ocupacional.soc.Dto.Cadastros.SetorComFuncoesDTO;
 import com.ocupacional.soc.Dto.Cadastros.SetorRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.SetorResponseDTO;
 import com.ocupacional.soc.Services.Cadastros.SetorService;
@@ -72,6 +73,16 @@ public class SetorController {
                     .map(ResponseEntity::ok)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Setor com nome '" + nome + "' não encontrado na empresa ID: " + empresaId));
         } catch (EntityNotFoundException e) { // Captura EntityNotFoundException vinda do serviço (ex: empresa não encontrada)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/com-funcoes")
+    public ResponseEntity<List<SetorComFuncoesDTO>> listarSetoresComFuncoes(@RequestParam Long empresaId) {
+        try {
+            List<SetorComFuncoesDTO> setoresComFuncoes = setorService.listarSetoresComFuncoesPorEmpresa(empresaId);
+            return ResponseEntity.ok(setoresComFuncoes);
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
