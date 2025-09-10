@@ -5,10 +5,8 @@ import com.ocupacional.soc.Entities.BibliografiaEntity;
 import com.ocupacional.soc.Entities.Cadastros.*;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.LtcatSituacao;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +15,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ltcat")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,17 +37,36 @@ public class LtcatEntity {
     @Enumerated(EnumType.STRING)
     private LtcatSituacao situacao;
 
-    @Lob private String comentariosInternos;
-    @Lob private String condicoesPreliminares;
-    @Lob private String conteudoCapa;
-    @Lob private String laudoResponsabilidadeTecnica;
-    @Lob private String laudoIntroducao;
-    @Lob private String laudoObjetivos;
-    @Lob private String laudoConsideracoesGerais;
-    @Lob private String laudoCriteriosAvaliacao;
-    @Lob private String recomendacoesTecnicas;
-    @Lob private String conclusao;
-    @Lob private String planejamentoAnual;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String comentariosInternos;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String condicoesPreliminares;
+    @Lob
+    private String imagemCapa;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String laudoResponsabilidadeTecnica;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String laudoIntroducao;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String laudoObjetivos;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String laudoConsideracoesGerais;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String laudoCriteriosAvaliacao;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String recomendacoesTecnicas;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String conclusao;
+
 
     @OneToMany(mappedBy = "ltcat", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

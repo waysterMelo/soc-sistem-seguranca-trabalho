@@ -22,7 +22,7 @@ public class LtcatResponseDTO {
     private LtcatSituacao situacao;
     private String comentariosInternos;
     private String condicoesPreliminares;
-    private String conteudoCapa;
+    private String imagemCapa;
     private String laudoResponsabilidadeTecnica;
     private String laudoIntroducao;
     private String laudoObjetivos;
@@ -30,12 +30,9 @@ public class LtcatResponseDTO {
     private String laudoCriteriosAvaliacao;
     private String recomendacoesTecnicas;
     private String conclusao;
-    private String planejamentoAnual;
     private List<LtcatAgenteNocivoResponseDTO> agentesNocivos;
-    private Set<ProfissionalResponsavelResponseDTO> profissionaisAmbientais;
     private Set<PrestadorServicoResponseDTO> prestadoresServico;
     private Set<AparelhoResponseDTO> aparelhos;
     private Set<BibliografiaResponseDTO> bibliografias;
     private Set<FuncaoResponseDTO> funcoes;
-    private Set<EmpresaSimpleResponseDTO> empresasContratantes;
 }

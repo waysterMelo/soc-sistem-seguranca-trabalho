@@ -2,14 +2,16 @@ package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
-import com.ocupacional.soc.Services.SegurancaTrabalho.LtcatService;
+import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/ltcat")
@@ -18,9 +20,11 @@ public class LtcatController {
 
     private final LtcatService ltcatService;
 
-    @PostMapping
-    public ResponseEntity<LtcatResponseDTO> createLtcat(@Valid @RequestBody LtcatRequestDTO dto) {
-        return new ResponseEntity<>(ltcatService.createLtcat(dto), HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<LtcatResponseDTO> createLtcat(
+            @Valid @RequestPart("ltcat") LtcatRequestDTO dto,
+            @RequestPart(value = "imagemCapa", required = false) MultipartFile imagemCapa) {
+        return new ResponseEntity<>(ltcatService.createLtcat(dto, imagemCapa), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -33,9 +37,12 @@ public class LtcatController {
         return ResponseEntity.ok(ltcatService.getAllLtcats(pageable));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<LtcatResponseDTO> updateLtcat(@PathVariable Long id, @Valid @RequestBody LtcatRequestDTO dto) {
-        return ResponseEntity.ok(ltcatService.updateLtcat(id, dto));
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<LtcatResponseDTO> updateLtcat(
+            @PathVariable Long id,
+            @Valid @RequestPart("ltcat") LtcatRequestDTO dto,
+            @RequestPart(value = "imagemCapa", required = false) MultipartFile imagemCapa) {
+        return ResponseEntity.ok(ltcatService.updateLtcat(id, dto, imagemCapa));
     }
 
     @DeleteMapping("/{id}")

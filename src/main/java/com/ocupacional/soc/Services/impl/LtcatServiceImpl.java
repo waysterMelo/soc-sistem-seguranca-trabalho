@@ -13,12 +13,15 @@ import com.ocupacional.soc.Repositories.BibliografiaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.*;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.LtcatRepository;
-import com.ocupacional.soc.Services.SegurancaTrabalho.LtcatService;
+import com.ocupacional.soc.Services.Aparelhos.FileStorageService;
+import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatFileStorageService;
+import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,12 +40,17 @@ public class LtcatServiceImpl implements LtcatService {
     private final FuncaoRepository funcaoRepository;
     private final EmpresaRepository empresaRepository;
     private final AgenteNocivoCatalogoRepository agenteNocivoCatalogoRepository;
+    private final LtcatFileStorageService ltcatFileStorageService;
 
     @Override
     @Transactional
-    public LtcatResponseDTO createLtcat(LtcatRequestDTO dto) {
-        LtcatEntity ltcatEntity = buildLtcatEntity(new LtcatEntity(), dto);
-        return ltcatMapper.toDto(ltcatRepository.save(ltcatEntity));
+    public LtcatResponseDTO createLtcat(LtcatRequestDTO dto, MultipartFile imagemCapa) {
+       LtcatEntity entity = buildLtcatEntity(new LtcatEntity(), dto);
+        if (imagemCapa != null && !imagemCapa.isEmpty()) {
+            String fileUrl = ltcatFileStorageService.storeFile(imagemCapa);
+            entity.setImagemCapa(fileUrl);
+        }
+        return ltcatMapper.toDto(ltcatRepository.save(entity));
     }
 
     @Override
@@ -59,9 +67,15 @@ public class LtcatServiceImpl implements LtcatService {
 
     @Override
     @Transactional
-    public LtcatResponseDTO updateLtcat(Long id, LtcatRequestDTO dto) {
+    public LtcatResponseDTO updateLtcat(Long id, LtcatRequestDTO dto, MultipartFile imagemCapa) {
         LtcatEntity ltcatEntity = ltcatRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("LTCAT não encontrado com ID: " + id));
+
+        if (imagemCapa != null && !imagemCapa.isEmpty()) {
+            ltcatFileStorageService.deleteFile(ltcatEntity.getImagemCapa()); // Deleta a imagem antiga
+            String newFileUrl = ltcatFileStorageService.storeFile(imagemCapa);
+            ltcatEntity.setImagemCapa(newFileUrl);
+        }
 
         ltcatEntity = buildLtcatEntity(ltcatEntity, dto);
         return ltcatMapper.toDto(ltcatRepository.save(ltcatEntity));
@@ -70,9 +84,10 @@ public class LtcatServiceImpl implements LtcatService {
     @Override
     @Transactional
     public void deleteLtcat(Long id) {
-        if (!ltcatRepository.existsById(id)) {
-            throw new ResourceNotFoundException("LTCAT não encontrado com ID: " + id);
-        }
+        LtcatEntity ltcatEntity = ltcatRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("LTCAT não encontrado com ID: " + id));
+
+        ltcatFileStorageService.deleteFile(ltcatEntity.getImagemCapa());
         ltcatRepository.deleteById(id);
     }
 
@@ -84,7 +99,7 @@ public class LtcatServiceImpl implements LtcatService {
         entity.setSituacao(dto.getSituacao());
         entity.setComentariosInternos(dto.getComentariosInternos());
         entity.setCondicoesPreliminares(dto.getCondicoesPreliminares());
-        entity.setConteudoCapa(dto.getConteudoCapa());
+        entity.setImagemCapa(dto.getImagemCapa());
         entity.setLaudoResponsabilidadeTecnica(dto.getLaudoResponsabilidadeTecnica());
         entity.setLaudoIntroducao(dto.getLaudoIntroducao());
         entity.setLaudoObjetivos(dto.getLaudoObjetivos());
@@ -92,7 +107,6 @@ public class LtcatServiceImpl implements LtcatService {
         entity.setLaudoCriteriosAvaliacao(dto.getLaudoCriteriosAvaliacao());
         entity.setRecomendacoesTecnicas(dto.getRecomendacoesTecnicas());
         entity.setConclusao(dto.getConclusao());
-        entity.setPlanejamentoAnual(dto.getPlanejamentoAnual());
 
         if(dto.getProfissionaisAmbientaisIds() != null) entity.setProfissionaisAmbientais(new HashSet<>(profissionalRegistrosRepository.findAllById(dto.getProfissionaisAmbientaisIds())));
         if(dto.getPrestadoresServicoIds() != null) entity.setPrestadoresServico(new HashSet<>(prestadorServicoRepository.findAllById(dto.getPrestadoresServicoIds())));

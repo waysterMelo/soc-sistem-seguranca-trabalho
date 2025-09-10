@@ -21,7 +21,7 @@ public class AparelhoServiceImpl implements AparelhoService {
 
     private final AparelhoRepository repository;
     private final AparelhoMapper mapper;
-    private final FileStorageService fileStorageService;
+    private final FileStorageService aparelhofileStorageService;
 
     @Override
     public Page<AparelhoResponseDTO> findAll(Pageable pageable, String search) {
@@ -42,7 +42,7 @@ public class AparelhoServiceImpl implements AparelhoService {
     public AparelhoResponseDTO create(AparelhoRequestDTO dto, MultipartFile certificado) {
         AparelhoEntity entity = mapper.toEntity(dto);
         if (certificado != null && !certificado.isEmpty()) {
-            String fileUrl = fileStorageService.storeFile(certificado);
+            String fileUrl = aparelhofileStorageService.storeFile(certificado);
             entity.setCertificadoUrl(fileUrl);
         }
         AparelhoEntity savedEntity = repository.save(entity);
@@ -59,8 +59,8 @@ public class AparelhoServiceImpl implements AparelhoService {
         mapper.updateEntityFromDto(dto, entity);
 
         if (certificado != null && !certificado.isEmpty()) {
-            fileStorageService.deleteFile(oldFileUrl); // Deleta o arquivo antigo
-            String newFileUrl = fileStorageService.storeFile(certificado);
+            aparelhofileStorageService.deleteFile(oldFileUrl); // Deleta o arquivo antigo
+            String newFileUrl = aparelhofileStorageService.storeFile(certificado);
             entity.setCertificadoUrl(newFileUrl);
         }
 
@@ -74,7 +74,7 @@ public class AparelhoServiceImpl implements AparelhoService {
         AparelhoEntity entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aparelho não encontrado com ID: " + id));
 
-        fileStorageService.deleteFile(entity.getCertificadoUrl());
+        aparelhofileStorageService.deleteFile(entity.getCertificadoUrl());
         repository.delete(entity);
     }
 }

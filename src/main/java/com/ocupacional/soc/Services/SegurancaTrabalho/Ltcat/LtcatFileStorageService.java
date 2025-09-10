@@ -1,0 +1,76 @@
+package com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat;
+
+import com.ocupacional.soc.Exceptions.BusinessException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+import java.util.UUID;
+
+@Service
+public class LtcatFileStorageService {
+
+    private final Path fileStorageLocation;
+
+    public LtcatFileStorageService(@Value("${file.upload-dir.ltcat-capas}") String uploadDir) {
+        this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+        try {
+            Files.createDirectories(this.fileStorageLocation);
+        } catch (Exception ex) {
+            throw new BusinessException("Não foi possível criar o diretório para armazenar as capas da LTCAT.", ex);
+        }
+    }
+
+    public String storeFile(MultipartFile file) {
+        // ... (lógica interna do método permanece a mesma) ...
+        String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String fileExtension = "";
+        try {
+            if (originalFileName.contains("..")) {
+                throw new BusinessException("Nome de arquivo inválido: " + originalFileName);
+            }
+            int dotIndex = originalFileName.lastIndexOf('.');
+            if (dotIndex > 0) {
+                fileExtension = originalFileName.substring(dotIndex);
+            }
+            String newFileName = UUID.randomUUID().toString() + fileExtension;
+
+            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            return ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/uploads/capa-ltcat/")
+                    .path(newFileName)
+                    .toUriString();
+
+        } catch (IOException ex) {
+            throw new BusinessException("Não foi possível armazenar o arquivo " + originalFileName, ex);
+        }
+    }
+
+    public void deleteFile(String fileUrl) {
+        if (fileUrl == null || fileUrl.isBlank()) {
+            return;
+        }
+        try {
+            String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            if(Files.exists(filePath)){
+                Files.delete(filePath);
+            }
+        } catch (Exception ex) {
+            System.err.println("Não foi possível deletar o arquivo: " + fileUrl);
+        }
+    }
+
+}

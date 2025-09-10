@@ -17,7 +17,6 @@ public class LtcatRequestDTO {
     private LtcatSituacao situacao;
     private String comentariosInternos;
     private String condicoesPreliminares;
-    private String conteudoCapa;
     private String laudoResponsabilidadeTecnica;
     private String laudoIntroducao;
     private String laudoObjetivos;
@@ -25,7 +24,6 @@ public class LtcatRequestDTO {
     private String laudoCriteriosAvaliacao;
     private String recomendacoesTecnicas;
     private String conclusao;
-    private String planejamentoAnual;
     @Valid
     private List<LtcatAgenteNocivoRequestDTO> agentesNocivos;
     private List<Long> profissionaisAmbientaisIds;
@@ -34,4 +32,5 @@ public class LtcatRequestDTO {
     private List<Long> bibliografiasIds;
     private List<Long> funcoesIds;
     private List<Long> empresasContratantesIds;
+    private String imagemCapa;
 }
