@@ -1,7 +1,8 @@
 package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatListDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/ltcat")
+@RequestMapping("/ltcat")
 @RequiredArgsConstructor
 public class LtcatController {
 
@@ -32,7 +33,7 @@ public class LtcatController {
         return ResponseEntity.ok(ltcatService.getLtcatById(id));
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Page<LtcatResponseDTO>> getAllLtcats(Pageable pageable) {
         return ResponseEntity.ok(ltcatService.getAllLtcats(pageable));
     }

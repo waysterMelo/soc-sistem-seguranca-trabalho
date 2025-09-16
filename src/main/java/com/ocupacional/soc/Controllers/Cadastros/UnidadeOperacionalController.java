@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/unidade-operacional")
+@RequestMapping("/unidade-operacional")
 public class UnidadeOperacionalController {
 
     private final UnidadeOperacionalService unidadeOperacionalService;

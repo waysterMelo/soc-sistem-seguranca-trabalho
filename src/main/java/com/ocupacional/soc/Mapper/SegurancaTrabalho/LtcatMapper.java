@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Mapper.SegurancaTrabalho;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatListDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatEntity;
 import com.ocupacional.soc.Mapper.Cadastros.*;
 import com.ocupacional.soc.Mapper.Mapper.AparelhoMapper;
@@ -15,11 +16,14 @@ import org.mapstruct.Mapping;
         AparelhoMapper.class,
         BibliografiaMapper.class,
         FuncaoMapper.class,
-        EmpresaMapper.class
+        EmpresaMapper.class,UnidadeOperacionalMapper.class
 })
 public interface LtcatMapper {
 
-    @Mapping(source = "unidadeOperacional.id", target = "unidadeOperacionalId")
-    @Mapping(source = "unidadeOperacional.nome", target = "nomeUnidadeOperacional")
+    @Mapping(source = "unidadeOperacional", target = "unidadeOperacional")
     LtcatResponseDTO toDto(LtcatEntity entity);
+
+    @Mapping(source = "unidadeOperacional.nome", target = "nomeUnidadeOperacional")
+    @Mapping(source = "unidadeOperacional.empresa.nomeFantasia", target = "nomeEmpresa")
+    LtcatListDTO toListDto(LtcatEntity entity);
 }

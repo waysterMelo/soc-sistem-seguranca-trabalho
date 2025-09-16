@@ -32,7 +32,7 @@ public class LtcatFileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        // ... (lógica interna do método permanece a mesma) ...
+
         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String fileExtension = "";
         try {
@@ -48,13 +48,10 @@ public class LtcatFileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/uploads/capa-ltcat/")
-                    .path(newFileName)
-                    .toUriString();
+            return STR."uploads/capa-ltcat/\{newFileName}";
 
         } catch (IOException ex) {
-            throw new BusinessException("Não foi possível armazenar o arquivo " + originalFileName, ex);
+            throw new BusinessException(STR."Não foi possível armazenar o arquivo \{originalFileName}", ex);
         }
     }
 

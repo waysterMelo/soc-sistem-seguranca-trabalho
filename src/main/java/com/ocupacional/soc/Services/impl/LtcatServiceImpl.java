@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.AgenteNocivoCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatAgenteNocivoEntity;
@@ -13,7 +13,6 @@ import com.ocupacional.soc.Repositories.BibliografiaRepository;
 import com.ocupacional.soc.Repositories.Cadastros.*;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.LtcatRepository;
-import com.ocupacional.soc.Services.Aparelhos.FileStorageService;
 import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatFileStorageService;
 import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatService;
 import jakarta.transaction.Transactional;
@@ -55,9 +54,9 @@ public class LtcatServiceImpl implements LtcatService {
 
     @Override
     public LtcatResponseDTO getLtcatById(Long id) {
-        return ltcatRepository.findById(id)
+        return ltcatRepository.findByIdWithDetails(id)
                 .map(ltcatMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("LTCAT não encontrado com ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(STR."LTCAT não encontrado com ID: \{id}"));
     }
 
     @Override
@@ -108,7 +107,6 @@ public class LtcatServiceImpl implements LtcatService {
         entity.setRecomendacoesTecnicas(dto.getRecomendacoesTecnicas());
         entity.setConclusao(dto.getConclusao());
 
-        if(dto.getProfissionaisAmbientaisIds() != null) entity.setProfissionaisAmbientais(new HashSet<>(profissionalRegistrosRepository.findAllById(dto.getProfissionaisAmbientaisIds())));
         if(dto.getPrestadoresServicoIds() != null) entity.setPrestadoresServico(new HashSet<>(prestadorServicoRepository.findAllById(dto.getPrestadoresServicoIds())));
         if(dto.getAparelhosIds() != null) entity.setAparelhos(new HashSet<>(aparelhoRepository.findAllById(dto.getAparelhosIds())));
         if(dto.getBibliografiasIds() != null) entity.setBibliografias(new HashSet<>(bibliografiaRepository.findAllById(dto.getBibliografiasIds())));

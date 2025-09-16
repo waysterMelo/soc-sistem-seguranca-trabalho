@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtcatResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

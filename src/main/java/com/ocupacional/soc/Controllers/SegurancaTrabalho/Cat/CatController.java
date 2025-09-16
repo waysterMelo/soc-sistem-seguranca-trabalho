@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cat")
+@RequestMapping("/cat")
 @RequiredArgsConstructor
 public class CatController {
 

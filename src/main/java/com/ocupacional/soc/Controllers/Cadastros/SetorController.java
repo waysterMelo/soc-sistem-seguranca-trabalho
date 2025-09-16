@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/setores")
+@RequestMapping("/setores")
 public class SetorController {
 
     private final SetorService setorService;

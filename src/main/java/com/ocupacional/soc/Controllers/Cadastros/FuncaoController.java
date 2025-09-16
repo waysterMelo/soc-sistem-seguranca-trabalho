@@ -2,10 +2,9 @@ package com.ocupacional.soc.Controllers.Cadastros;
 
 import com.ocupacional.soc.Dto.Cadastros.FuncaoRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncaoResponseDTO;
-import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import com.ocupacional.soc.Services.Cadastros.FuncaoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,15 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/funcoes")
+@RequestMapping("/funcoes")
+@RequiredArgsConstructor
 public class FuncaoController {
 
     private final FuncaoService funcaoService;
-
-    @Autowired
-    public FuncaoController(FuncaoService funcaoService) {
-        this.funcaoService = funcaoService;
-    }
 
     @PostMapping
     public ResponseEntity<FuncaoResponseDTO> criarFuncao(@Valid @RequestBody FuncaoRequestDTO requestDTO) {

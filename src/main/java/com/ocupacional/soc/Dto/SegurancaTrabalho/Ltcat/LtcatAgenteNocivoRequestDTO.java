@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Dto.SegurancaTrabalho;
+package com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

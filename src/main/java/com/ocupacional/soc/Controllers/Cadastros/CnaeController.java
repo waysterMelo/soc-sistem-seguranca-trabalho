@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cnaes")
+@RequestMapping("/cnaes")
 @RequiredArgsConstructor
 public class CnaeController {
 

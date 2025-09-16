@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Dto.SegurancaTrabalho;
+package com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat;
 
 import lombok.Data;
 

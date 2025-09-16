@@ -73,13 +73,6 @@ public class LtcatEntity {
     private List<LtcatAgenteNocivoEntity> agentesNocivos = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "ltcat_profissionais_ambientais",
-            joinColumns = @JoinColumn(name = "ltcat_id"),
-            inverseJoinColumns = @JoinColumn(name = "profissional_id"))
-    @Builder.Default
-    private Set<ProfissionalRegistrosEntity> profissionaisAmbientais = new HashSet<>();
-
-    @ManyToMany
     @JoinTable(name = "ltcat_prestadores_servico",
             joinColumns = @JoinColumn(name = "ltcat_id"),
             inverseJoinColumns = @JoinColumn(name = "prestador_id"))

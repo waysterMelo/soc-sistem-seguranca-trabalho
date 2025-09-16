@@ -36,7 +36,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         String fileExtension = "";
         try {
             if (originalFileName.contains("..")) {
-                throw new BusinessException("Nome de arquivo inválido: " + originalFileName);
+                throw new BusinessException(STR."Nome de arquivo inválido: \{originalFileName}");
             }
             int dotIndex = originalFileName.lastIndexOf('.');
             if (dotIndex > 0) {
@@ -47,13 +47,10 @@ public class FileStorageServiceImpl implements FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/uploads/certificados-aparelhos/")
-                    .path(newFileName)
-                    .toUriString();
+            return STR."/uploads/certificados-aparelhos/\{newFileName}";
 
         } catch (IOException ex) {
-            throw new BusinessException("Não foi possível armazenar o arquivo " + originalFileName, ex);
+            throw new BusinessException(STR."Não foi possível armazenar o arquivo \{originalFileName}", ex);
         }
     }
 
@@ -69,9 +66,8 @@ public class FileStorageServiceImpl implements FileStorageService {
                 Files.delete(filePath);
             }
         } catch (Exception ex) {
-            // Log a warning instead of throwing an exception
-            // as failing to delete an old file should not fail the main operation
-            System.err.println("Não foi possível deletar o arquivo: " + fileUrl);
+
+            System.err.println(STR."Não foi possível deletar o arquivo: \{fileUrl}");
         }
     }
 

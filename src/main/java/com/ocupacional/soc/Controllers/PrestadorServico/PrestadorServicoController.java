@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/prestadores")
+@RequestMapping("/prestadores")
 @RequiredArgsConstructor
 @TableGenerator(name = "Prestadores de Serviço")
 public class PrestadorServicoController {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/reports/pgr")
+@RequestMapping("/reports/pgr")
 @RequiredArgsConstructor
 public class PgrReportController {
 

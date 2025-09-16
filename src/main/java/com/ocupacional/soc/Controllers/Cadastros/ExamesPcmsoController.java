@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/api/exames")
+@RequestMapping("/exames")
 @RestController
 @RequiredArgsConstructor
 public class ExamesPcmsoController {

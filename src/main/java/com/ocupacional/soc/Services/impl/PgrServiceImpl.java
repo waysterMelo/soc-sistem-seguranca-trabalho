@@ -307,10 +307,12 @@ public class PgrServiceImpl implements PgrService {
             
             Files.copy(file.getInputStream(), targetPath);
             
-            return filename;
+           return STR."/uploads/pgr-capas/\{filename}";
+
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Não foi possível salvar o arquivo. Erro: " + e.getMessage());
+            throw new RuntimeException(STR."Não foi possível salvar o arquivo. Erro: \{e.getMessage()}");
         }
     }
 

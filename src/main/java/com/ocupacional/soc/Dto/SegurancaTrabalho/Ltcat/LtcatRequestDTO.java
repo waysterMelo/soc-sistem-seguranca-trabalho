@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Dto.SegurancaTrabalho;
+package com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat;
 
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.LtcatSituacao;
 import jakarta.validation.Valid;

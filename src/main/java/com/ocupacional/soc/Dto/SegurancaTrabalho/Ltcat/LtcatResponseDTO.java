@@ -1,10 +1,10 @@
-package com.ocupacional.soc.Dto.SegurancaTrabalho;
+package com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat;
 
 import com.ocupacional.soc.Dto.Aparelhos.AparelhoResponseDTO;
 import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
-import com.ocupacional.soc.Dto.Cadastros.EmpresaSimpleResponseDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncaoResponseDTO;
-import com.ocupacional.soc.Dto.Cadastros.ProfissionalResponsavelResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.BibliografiaResponseDTO;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.LtcatSituacao;
 import lombok.Data;
 import java.time.LocalDate;
@@ -14,8 +14,7 @@ import java.util.Set;
 @Data
 public class LtcatResponseDTO {
     private Long id;
-    private Long unidadeOperacionalId;
-    private String nomeUnidadeOperacional;
+    private UnidadeOperacionalResponseDTO unidadeOperacional;
     private LocalDate dataDocumento;
     private LocalDate dataVencimento;
     private Integer alertaValidadeDias;

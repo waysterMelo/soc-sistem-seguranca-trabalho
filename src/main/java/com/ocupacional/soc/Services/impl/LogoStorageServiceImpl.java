@@ -38,7 +38,7 @@ public class LogoStorageServiceImpl implements LogoStorageService {
         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try {
             if (originalFileName.contains("..")) {
-                throw new BusinessException("Nome de arquivo inválido: " + originalFileName);
+                throw new BusinessException(STR."Nome de arquivo inválido: \{originalFileName}");
             }
 
             // Gera um nome de arquivo único para evitar conflitos e problemas de segurança
@@ -53,9 +53,11 @@ public class LogoStorageServiceImpl implements LogoStorageService {
             Path targetLocation = this.logoStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return newFileName; // Retorna apenas o nome do arquivo para ser usado na URL
+            return STR."/logos/\{newFileName}";
+
+
         } catch (IOException ex) {
-            throw new BusinessException("Não foi possível armazenar a logo " + originalFileName, ex);
+            throw new BusinessException(STR."Não foi possível armazenar a logo \{originalFileName}", ex);
         }
     }
 
@@ -64,11 +66,7 @@ public class LogoStorageServiceImpl implements LogoStorageService {
         if (fileName == null || fileName.isBlank()) {
             return null;
         }
-        // Constrói a URL de acesso público para a logo
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/logos/") // Este path deve corresponder ao configurado no WebMvcConfig
-                .path(fileName)
-                .toUriString();
+        return STR."/logos/\{fileName}";
     }
 
 

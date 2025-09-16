@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/riscos-catalogo")
+@RequestMapping("/riscos-catalogo")
 public class RiscoCatalogoController {
 
     private final RiscoCatalogoService riscoCatalogoService;
