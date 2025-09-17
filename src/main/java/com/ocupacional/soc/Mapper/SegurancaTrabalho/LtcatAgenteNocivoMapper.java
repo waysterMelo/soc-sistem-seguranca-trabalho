@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Mapper.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatAgenteNocivoResponseDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatAgenteNocivoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat.LtcatAgenteNocivoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -18,7 +18,7 @@ public class UnidadeOperacionalResponseDTO {
     private String nome;
     private String descricao;
     private SituacaoUnidadeOperacional situacao;
-    private EmpresaSimpleResponseDTO empresa;
+    private EmpresaDto empresa;
     private String cep;
     private String cidade;
     private String estado;

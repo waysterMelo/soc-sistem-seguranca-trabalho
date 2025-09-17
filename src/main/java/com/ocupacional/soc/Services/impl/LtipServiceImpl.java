@@ -2,7 +2,7 @@ package com.ocupacional.soc.Services.impl;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtipEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.LtipMapper;
 import com.ocupacional.soc.Repositories.Aparelhos.AparelhoRepository;
@@ -11,12 +11,14 @@ import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.LtipRepository;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.Nr16AnexoRepository;
+import com.ocupacional.soc.Services.SegurancaTrabalho.Ltip.LtipFileStorageService;
 import com.ocupacional.soc.Services.SegurancaTrabalho.LtipService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 
@@ -31,6 +33,7 @@ public class LtipServiceImpl implements LtipService {
     private final Nr16AnexoRepository nr16AnexoRepository;
     private final BibliografiaRepository bibliografiaRepository;
     private final AparelhoRepository aparelhoRepository;
+    private final LtipFileStorageService ltipFileStorageService;
 
 
     @Override
@@ -42,19 +45,30 @@ public class LtipServiceImpl implements LtipService {
 
     @Override
     @Transactional
-    public LtipResponseDTO createLtip(LtipRequestDTO dto) {
+    public LtipResponseDTO createLtip(LtipRequestDTO dto, MultipartFile imagemCapa) {
         LtipEntity ltipEntity = new LtipEntity();
         buildLtipEntity(ltipEntity, dto);
+        if (imagemCapa != null && !imagemCapa.isEmpty()) {
+            String fileUrl = ltipFileStorageService.storeFile(imagemCapa);
+            ltipEntity.setImagemCapa(fileUrl);
+        }
         LtipEntity savedEntity = ltipRepository.save(ltipEntity);
         return ltipMapper.toDto(savedEntity);
     }
 
     @Override
     @Transactional
-    public LtipResponseDTO updateLtip(Long id, LtipRequestDTO dto) {
+    public LtipResponseDTO updateLtip(Long id, LtipRequestDTO dto, MultipartFile imagemCapa) {
         LtipEntity ltipEntity = ltipRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("LTIP não encontrado com ID: " + id));
         buildLtipEntity(ltipEntity, dto);
+        if (imagemCapa != null && !imagemCapa.isEmpty()) {
+            if (ltipEntity.getImagemCapa() != null && !ltipEntity.getImagemCapa().isEmpty()) {
+                ltipFileStorageService.deleteFile(ltipEntity.getImagemCapa());
+            }
+            String newFileUrl = ltipFileStorageService.storeFile(imagemCapa);
+            ltipEntity.setImagemCapa(newFileUrl);
+        }
         LtipEntity updatedEntity = ltipRepository.save(ltipEntity);
         return ltipMapper.toDto(updatedEntity);
     }
@@ -69,8 +83,11 @@ public class LtipServiceImpl implements LtipService {
     @Override
     @Transactional
     public void deleteLtip(Long id) {
-        if (!ltipRepository.existsById(id)) {
-            throw new ResourceNotFoundException("LTIP não encontrado com ID: " + id);
+        LtipEntity ltipEntity = ltipRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("LTIP não encontrado com ID: " + id));
+
+        if (ltipEntity.getImagemCapa() != null && !ltipEntity.getImagemCapa().isEmpty()) {
+            ltipFileStorageService.deleteFile(ltipEntity.getImagemCapa());
         }
         ltipRepository.deleteById(id);
     }
@@ -97,7 +114,6 @@ public class LtipServiceImpl implements LtipService {
         entity.setInicioValidade(dto.getInicioValidade());
         entity.setProximaRevisao(dto.getProximaRevisao());
         entity.setAlertaValidadeDias(dto.getAlertaValidadeDias());
-        entity.setConteudoCapa(dto.getConteudoCapa());
         entity.setIntroducao(dto.getIntroducao());
         entity.setObjetivo(dto.getObjetivo());
         entity.setDefinicoes(dto.getDefinicoes());

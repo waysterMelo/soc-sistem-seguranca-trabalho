@@ -1,6 +1,5 @@
 package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatListDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat.LtcatService;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/ltcat")
@@ -46,9 +46,17 @@ public class LtcatController {
         return ResponseEntity.ok(ltcatService.updateLtcat(id, dto, imagemCapa));
     }
 
-    @DeleteMapping("/{id}")
+        @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLtcat(@PathVariable Long id) {
         ltcatService.deleteLtcat(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/report")
+    public ModelAndView getLtcatReport(@PathVariable Long id) {
+        ModelAndView mav = new ModelAndView("ltcat");
+        LtcatResponseDTO ltcatDto = ltcatService.getLtcatById(id);
+        mav.addObject("ltcat", ltcatDto);
+        return mav;
     }
 }

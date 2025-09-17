@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>LTCAT - Laudo Técnico das Condições Ambientais de Trabalho</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        @media print {
+            body { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+            .page { page-break-after: always; }
+            .page:last-of-type { page-break-after: auto; }
+            .no-print { display: none !important; }
+            .page-break-before { page-break-before: always; }
+        }
+        body { background-color: #e9ecef; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 10pt; }
+        .report-container { max-width: 21cm; margin: 2rem auto; background: white; box-shadow: 0 0 15px rgba(0,0,0,0.1); border: 1px solid #dee2e6; }
+        .page { padding: 2cm; min-height: 29.7cm; box-sizing: border-box; position: relative; }
+        .section-title { border-bottom: 2px solid #0d6efd; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1.5rem; font-weight: 600; color: #0d6efd; font-size: 14pt; }
+        .sub-section-title { font-weight: bold; color: #343a40; margin-top: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #0d6efd; padding-left: 0.75rem; font-size: 12pt;}
+        .signature-area { margin-top: 50px; text-align: center; }
+        .signature-line { display: inline-block; width: 300px; border-bottom: 1px solid #495057; margin-top: 40px; }
+        .footer { position: absolute; bottom: 1cm; left: 2cm; right: 2cm; text-align: center; font-size: 0.8em; color: #6c757d; }
+        .table th { background-color: #f0f2f5; font-size: 9pt; }
+        .list-group-item { font-size: 9pt; }
+        b { color: #343a40; }
+    </style>
+</head>
+<body>
+
+<div class="report-container" id="report-to-print" th:if="${ltcat != null}">
+
+    <div class="page d-flex flex-column justify-content-center align-items-center text-center">
+                        <img th:if="${ltcat.imagemCapa != null and !ltcat.imagemCapa.isEmpty()}" th:src="|/api${ltcat.imagemCapa}|" alt="Imagem de Capa do LTCAT" style="max-height: 200px; max-width: 100%; margin-bottom: 2rem;"/>
+        <img th:if="${(ltcat.imagemCapa == null or ltcat.imagemCapa.isEmpty()) and ltcat.unidadeOperacional?.empresa?.logomarcaUrl != null}" th:src="|/api${ltcat.unidadeOperacional.empresa.logomarcaUrl}|" alt="Logo Empresa" style="max-height: 150px; margin-bottom: 2rem;"/>
+        <h1 class="display-5 fw-bold text-primary mt-4">LTCAT</h1>
+        <p class="lead fs-5">Laudo Técnico das Condições Ambientais de Trabalho</p>
+        <hr style="width: 50%;"/>
+        <h2 class="h3 mt-4" th:text="${ltcat.unidadeOperacional?.empresa?.nomeFantasia}"></h2>
+        <p class="fs-5" th:text="${ltcat.unidadeOperacional?.nome}"></p>
+        <div class="mt-auto">
+            <p class="mb-0">Data do Documento</p>
+            <p class="fw-bold" th:text="${#temporals.format(ltcat.dataDocumento, 'dd/MM/yyyy')}"></p>
+        </div>
+    </div>
+
+    <div class="page">
+        <h2 class="section-title">1. Identificação da Organização</h2>
+        <div class="card">
+            <div class="card-header"><b>Dados da Empresa</b></div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Razão Social:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.razaoSocial}"></span></li>
+                    <li class="list-group-item"><b>Nome Fantasia:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.nomeFantasia}"></span></li>
+                    <li class="list-group-item"><b>CNPJ:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.cpfOuCnpj}"></span></li>
+                    <li class="list-group-item"><b>Inscrição Estadual:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.inscricaoEstadual}"></span></li>
+                    <li class="list-group-item"><b>Endereço (Empresa):</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.endereco?.logradouro} + ', ' + ${ltcat.unidadeOperacional?.empresa?.endereco?.numero}"></span></li>
+                    <li class="list-group-item"><b>Bairro / Cidade / UF:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.endereco?.bairro} + ', ' + ${ltcat.unidadeOperacional?.empresa?.endereco?.cidade} + '/' + ${ltcat.unidadeOperacional?.empresa?.endereco?.estado}"></span></li>
+                    <li class="list-group-item"><b>Telefone Principal:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.telefonePrincipal}"></span></li>
+                    <li class="list-group-item"><b>Email:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.email}"></span></li>
+                    <li class="list-group-item"><b>CNAE:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.empresa?.cnaePrincipal?.codigo} + ' - ' + ${ltcat.unidadeOperacional?.empresa?.cnaePrincipal?.descricao}"></span></li>
+                    <li class="list-group-item"><b>Grau de Risco:</b> <span class="float-end badge bg-warning text-dark" th:text="${ltcat.unidadeOperacional?.empresa?.grauRisco}"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="sub-section-title mt-4">Unidade Operacional Avaliada</h3>
+        <div class="card">
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Nome da Unidade:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.nome}"></span></li>
+                    <li class="list-group-item"><b>Endereço da Unidade:</b> <span class="float-end" th:text="${ltcat.unidadeOperacional?.logradouro} + ', ' + ${ltcat.unidadeOperacional?.numero} + ' - ' + ${ltcat.unidadeOperacional?.bairro} + ', ' + ${ltcat.unidadeOperacional?.cidade} + '/' + ${ltcat.unidadeOperacional?.estado}"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="sub-section-title mt-4">Vigência do Documento</h3>
+        <div class="row">
+            <div class="col-md-4"><b>Data do Documento:</b> <span th:text="${#temporals.format(ltcat.dataDocumento, 'dd/MM/yyyy')}"></span></div>
+            <div class="col-md-4"><b>Data de Vencimento:</b> <span th:text="${#temporals.format(ltcat.dataVencimento, 'dd/MM/yyyy')}"></span></div>
+            <div class="col-md-4"><b>Situação:</b> <span class="badge bg-info" th:text="${ltcat.situacao}"></span></div>
+        </div>
+
+        <div class="footer">
+            <p>ID do Documento: <span th:text="${ltcat.id}"></span></p>
+        </div>
+    </div>
+
+    <div class="page">
+        <h2 class="section-title">2. Sumário Executivo</h2>
+        <p>Este laudo analisa as condições ambientais de trabalho para as seguintes funções:</p>
+        <ul>
+            <li th:each="funcao : ${ltcat.funcoes}" th:text="${funcao.nome} + ' (Setor: ' + ${funcao.setor.nome} + ')'"></li>
+        </ul>
+
+        <h2 class="section-title">3. Introdução</h2>
+        <div th:utext="${ltcat.laudoIntroducao}"></div>
+        <h2 class="section-title">4. Objetivos</h2>
+        <div th:utext="${ltcat.laudoObjetivos}"></div>
+        <h2 class="section-title">5. Condições Preliminares</h2>
+        <div th:utext="${ltcat.condicoesPreliminares}"></div>
+        <h2 class="section-title">6. Critérios de Avaliação</h2>
+        <div th:utext="${ltcat.laudoCriteriosAvaliacao}"></div>
+        <div class="footer">
+            <p>ID do Documento: <span th:text="${ltcat.id}"></span></p>
+        </div>
+    </div>
+
+    <div th:each="funcao, iterStat : ${ltcat.funcoes}" class="page page-break-before">
+        <h2 class="section-title" th:text="'7.' + ${iterStat.count} + ' Análise por Função: ' + ${funcao.nome}"></h2>
+
+        <div class="card mb-4">
+            <div class="card-header"><b th:text="${funcao.nome}"></b></div>
+            <div class="card-body">
+                <p><b>Setor:</b> <span th:text="${funcao.setor?.nome}"></span></p>
+                <p><b>CBO:</b> <span th:text="${funcao.codigoCbo} + ' - ' + ${funcao.nomeCbo}"></span></p>
+                <p><b>Tipo GFIP:</b> <span th:text="${funcao.tipoGfip}"></span></p>
+                <p class="mt-3"><b>Descrição das Atividades:</b></p>
+                <div class="p-2 border bg-light rounded" th:utext="${funcao.descricaoFuncao}"></div>
+                <p class="mt-3"><b>Atividades Insalubres:</b></p>
+                <div class="p-2 border bg-light rounded" th:text="${funcao.atividadesInsalubres}"></div>
+            </div>
+        </div>
+
+        <h3 class="sub-section-title">Agentes Nocivos Associados (eSocial)</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-primary">
+                <tr>
+                    <th>Código eSocial</th>
+                    <th>Descrição do Agente Nocivo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="agente : ${funcao.agentesNocivosEsocial}">
+                    <td th:text="${agente.agenteNocivoCatalogo?.codigoEsocial}"></td>
+                    <td th:text="${agente.agenteNocivoCatalogo?.descricao}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(funcao.agentesNocivosEsocial)}">
+                    <td colspan="2" class="text-center text-muted">Nenhum agente nocivo (eSocial) associado a esta função.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="sub-section-title">Riscos do PGR Associados</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-success">
+                <tr>
+                    <th>Grupo de Risco</th>
+                    <th>Descrição do Risco</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="riscoPGR : ${funcao.riscosPGR}">
+                    <td th:text="${riscoPGR.riscoCatalogo?.grupo}"></td>
+                    <td th:text="${riscoPGR.riscoCatalogo?.descricao}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(funcao.riscosPGR)}">
+                    <td colspan="2" class="text-center text-muted">Nenhum risco do PGR associado a esta função.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>ID do Documento: <span th:text="${ltcat.id}"></span></p>
+        </div>
+    </div>
+
+    <div class="page page-break-before">
+        <h2 class="section-title">8. Aparelhos Utilizados</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                <tr>
+                    <th>Descrição</th>
+                    <th>Marca/Modelo</th>
+                    <th>Data de Calibração</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="aparelho : ${ltcat.aparelhos}">
+                    <td th:text="${aparelho.descricao}"></td>
+                    <td th:text="${aparelho.marca} + ' / ' + ${aparelho.modelo}"></td>
+                    <td th:text="${#temporals.format(aparelho.dataCalibracao, 'dd/MM/yyyy')}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(ltcat.aparelhos)}">
+                    <td colspan="3" class="text-center text-muted">Nenhum aparelho informado.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="section-title">9. Recomendações Técnicas</h2>
+        <div th:utext="${ltcat.recomendacoesTecnicas}"></div>
+
+        <div class="footer">
+            <p>ID do Documento: <span th:text="${ltcat.id}"></span></p>
+        </div>
+    </div>
+
+    <div class="page page-break-before">
+        <h2 class="section-title">10. Conclusão Geral</h2>
+        <div th:utext="${ltcat.conclusao}"></div>
+
+        <h2 class="section-title">11. Bibliografia</h2>
+        <ul class="list-group">
+            <li th:each="bib : ${ltcat.bibliografias}" class="list-group-item" th:text="${bib.titulo} + ' - ' + ${bib.autor} + ' (' + ${bib.anoPublicacao} + ')'"></li>
+            <li th:if="${#lists.isEmpty(ltcat.bibliografias)}" class="list-group-item text-muted">Nenhuma referência bibliográfica informada.</li>
+        </ul>
+
+        <h2 class="section-title">12. Responsabilidade Técnica e Assinaturas</h2>
+        <div class="card">
+            <div class="card-body">
+                <div th:utext="${ltcat.laudoResponsabilidadeTecnica}"></div>
+            </div>
+        </div>
+
+        <div th:each="resp : ${ltcat.prestadoresServico}" class="signature-area">
+            <div class="signature-line"></div>
+            <div class="fw-bold" th:text="${resp.nome} + ' ' + ${resp.sobrenome}"></div>
+            <div class="text-muted" th:text="${resp.cboNomeOcupacao}"></div>
+            <div class="text-muted" th:text="${resp.conselho} + ': ' + ${resp.numeroInscricaoConselho} + '/' + ${resp.estadoConselho}"></div>
+        </div>
+
+        <div class="footer">
+            <p>Este documento foi gerado eletronicamente. &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Todos os direitos reservados.</p>
+            <p>ID do Documento: <span th:text="${ltcat.id}"></span></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script th:inline="javascript">
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        const element = document.getElementById('report-to-print');
+        const ltcatId = /*[[${ltcat.id}]]*/ 'LTCAT';
+        const empresaNome = /*[[${ltcat.unidadeOperacional.empresa.nomeFantasia}]]*/ 'Empresa';
+        const filename = `LTCAT - ${empresaNome} - ID ${ltcatId}.pdf`;
+
+        const opt = {
+            margin: [0, 0.5, 0.5, 0],
+            filename:     filename,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
+
+</body>
+</html>

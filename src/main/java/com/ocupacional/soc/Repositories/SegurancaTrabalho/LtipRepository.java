@@ -1,6 +1,6 @@
 package com.ocupacional.soc.Repositories.SegurancaTrabalho;
 
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtipEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

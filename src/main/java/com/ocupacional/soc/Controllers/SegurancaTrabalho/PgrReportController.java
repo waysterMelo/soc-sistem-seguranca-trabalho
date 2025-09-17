@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.Relatorios.PgrRelatorioDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.PgrMapaRiscoFuncaoMapper;

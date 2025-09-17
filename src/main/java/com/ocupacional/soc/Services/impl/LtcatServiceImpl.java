@@ -4,8 +4,8 @@ import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltcat.LtcatResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.AgenteNocivoCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatAgenteNocivoEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat.LtcatAgenteNocivoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat.LtcatEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.LtcatMapper;
 import com.ocupacional.soc.Repositories.Aparelhos.AparelhoRepository;
@@ -32,7 +32,6 @@ public class LtcatServiceImpl implements LtcatService {
     private final LtcatRepository ltcatRepository;
     private final LtcatMapper ltcatMapper;
     private final UnidadeOperacionalRepository unidadeOperacionalRepository;
-    private final ProfissionalRegistrosRepository profissionalRegistrosRepository;
     private final PrestadorServicoRepository prestadorServicoRepository;
     private final AparelhoRepository aparelhoRepository;
     private final BibliografiaRepository bibliografiaRepository;
@@ -68,16 +67,18 @@ public class LtcatServiceImpl implements LtcatService {
     @Transactional
     public LtcatResponseDTO updateLtcat(Long id, LtcatRequestDTO dto, MultipartFile imagemCapa) {
         LtcatEntity ltcatEntity = ltcatRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("LTCAT não encontrado com ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(STR."LTCAT não encontrado com ID: \{id}"));
 
         if (imagemCapa != null && !imagemCapa.isEmpty()) {
-            ltcatFileStorageService.deleteFile(ltcatEntity.getImagemCapa()); // Deleta a imagem antiga
+            ltcatFileStorageService.deleteFile(ltcatEntity.getImagemCapa());
             String newFileUrl = ltcatFileStorageService.storeFile(imagemCapa);
             ltcatEntity.setImagemCapa(newFileUrl);
         }
 
         ltcatEntity = buildLtcatEntity(ltcatEntity, dto);
-        return ltcatMapper.toDto(ltcatRepository.save(ltcatEntity));
+        LtcatEntity savedEntity = ltcatRepository.save(ltcatEntity);
+
+        return ltcatMapper.toDto(savedEntity);
     }
 
     @Override
@@ -98,7 +99,6 @@ public class LtcatServiceImpl implements LtcatService {
         entity.setSituacao(dto.getSituacao());
         entity.setComentariosInternos(dto.getComentariosInternos());
         entity.setCondicoesPreliminares(dto.getCondicoesPreliminares());
-        entity.setImagemCapa(dto.getImagemCapa());
         entity.setLaudoResponsabilidadeTecnica(dto.getLaudoResponsabilidadeTecnica());
         entity.setLaudoIntroducao(dto.getLaudoIntroducao());
         entity.setLaudoObjetivos(dto.getLaudoObjetivos());

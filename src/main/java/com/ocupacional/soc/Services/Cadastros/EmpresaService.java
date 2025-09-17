@@ -68,8 +68,7 @@ public class EmpresaService {
     }
 
     public Map<String, String> uploadLogo(MultipartFile file) {
-        String fileName = logoStorageService.storeLogo(file);
-        String fileUrl = logoStorageService.getLogoUrl(fileName);
+        String fileUrl = logoStorageService.storeLogo(file);
         return Map.of("url", fileUrl);
     }
 

@@ -17,7 +17,7 @@ public class LtipRequestDTO {
     private LocalDate inicioValidade;
     private LocalDate proximaRevisao;
     private Integer alertaValidadeDias;
-    private String conteudoCapa;
+    private String imagemCapa;
     private String introducao;
     private String objetivo;
     private String definicoes;

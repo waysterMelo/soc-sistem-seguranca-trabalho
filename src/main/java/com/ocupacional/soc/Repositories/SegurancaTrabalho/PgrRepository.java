@@ -1,6 +1,6 @@
 package com.ocupacional.soc.Repositories.SegurancaTrabalho;
 
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrEntity;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

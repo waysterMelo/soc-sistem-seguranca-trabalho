@@ -5,7 +5,7 @@ import com.ocupacional.soc.Dto.Cadastros.UnidadeOperacionalResponseDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrMapaRiscoFuncaoResponseDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PlanoAcaoRiscoResponseDTO;
 import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrEntity;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.PgrMapaRiscoFuncaoMapper;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.PlanoAcaoRiscoMapper;

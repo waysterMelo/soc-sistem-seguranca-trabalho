@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Entities.SegurancaTrabalho;
+package com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr;
 
 import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
 import jakarta.persistence.*;

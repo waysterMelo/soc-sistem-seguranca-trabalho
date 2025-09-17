@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Mapper.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrMapaRiscoFuncaoResponseDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrMapaRiscoFuncaoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrMapaRiscoFuncaoEntity;
 import com.ocupacional.soc.Mapper.Cadastros.RiscoCatalogoMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

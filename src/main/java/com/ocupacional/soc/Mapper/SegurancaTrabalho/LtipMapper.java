@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Mapper.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtipEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipEntity;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Mapper.Mapper.AparelhoMapper;
 import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;

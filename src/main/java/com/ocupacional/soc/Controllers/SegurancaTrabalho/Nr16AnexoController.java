@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/nr16-anexos")
+@RequestMapping("/nr16")
 @RequiredArgsConstructor
 public class Nr16AnexoController {
 

@@ -1,13 +1,10 @@
-package com.ocupacional.soc.Services.SegurancaTrabalho.Ltcat;
+package com.ocupacional.soc.Services.SegurancaTrabalho.Ltip;
 
 import com.ocupacional.soc.Exceptions.BusinessException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,16 +15,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class LtcatFileStorageService {
+public class LtipFileStorageService {
 
     private final Path fileStorageLocation;
 
-    public LtcatFileStorageService(@Value("${file.upload-dir.ltcat-capas}") String uploadDir) {
+    public LtipFileStorageService(@Value("${file.upload-dir.ltip-capas}") String uploadDir) {
         this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
-            throw new BusinessException("Não foi possível criar o diretório para armazenar as capas da LTCAT.", ex);
+            throw new BusinessException("Não foi possível criar o diretório para armazenar as capas da LTIP.", ex);
         }
     }
 
@@ -48,7 +45,7 @@ public class LtcatFileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return STR."/uploads/capa-ltcat/\{newFileName}";
+            return STR."/uploads/capa-ltip/\{newFileName}";
 
         } catch (IOException ex) {
             throw new BusinessException(STR."Não foi possível armazenar o arquivo \{originalFileName}", ex);

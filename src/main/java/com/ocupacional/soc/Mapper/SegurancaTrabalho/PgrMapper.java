@@ -3,7 +3,7 @@ package com.ocupacional.soc.Mapper.SegurancaTrabalho;
 
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.PgrResponseDTO;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrEntity;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
 import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.Mapper;

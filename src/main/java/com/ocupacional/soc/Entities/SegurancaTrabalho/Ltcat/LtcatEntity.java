@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Entities.SegurancaTrabalho;
+package com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat;
 
 import com.ocupacional.soc.Entities.Aparelho.AparelhoEntity;
 import com.ocupacional.soc.Entities.BibliografiaEntity;

@@ -1,4 +1,4 @@
-package com.ocupacional.soc.Entities.SegurancaTrabalho;
+package com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat;
 
 import com.ocupacional.soc.Entities.Cadastros.AgenteNocivoCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;

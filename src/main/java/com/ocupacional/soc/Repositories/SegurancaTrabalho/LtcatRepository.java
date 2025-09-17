@@ -1,6 +1,6 @@
 package com.ocupacional.soc.Repositories.SegurancaTrabalho;
 
-import com.ocupacional.soc.Entities.SegurancaTrabalho.LtcatEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltcat.LtcatEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,14 +1,12 @@
-package com.ocupacional.soc.Entities.SegurancaTrabalho;
+package com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip;
 
 import com.ocupacional.soc.Entities.Aparelho.AparelhoEntity;
 import com.ocupacional.soc.Entities.BibliografiaEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Nr16AnexoEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ltip")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,7 +48,8 @@ public class LtipEntity {
     private LocalDate proximaRevisao;
     private Integer alertaValidadeDias;
 
-    @Lob private String conteudoCapa;
+    @Lob
+    private String imagemCapa;
     @Lob private String introducao;
     @Lob private String objetivo;
     @Lob private String definicoes;

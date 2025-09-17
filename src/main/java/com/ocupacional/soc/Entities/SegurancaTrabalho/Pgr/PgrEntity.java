@@ -1,10 +1,9 @@
-package com.ocupacional.soc.Entities.SegurancaTrabalho;
+package com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr;
 
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.MetodologiaPlanoAcao;
-import com.ocupacional.soc.Enuns.SegurancaTrabalho.TipoPgr;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

@@ -8,9 +8,9 @@ import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PgrMapaRiscoFuncaoEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.PlanoAcaoRiscoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PgrMapaRiscoFuncaoEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Pgr.PlanoAcaoRiscoEntity;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.UnidadeOperacionalMapper;
@@ -67,11 +67,8 @@ public class PgrServiceImpl implements PgrService {
     public void init() {
         try {
             root = Paths.get(uploadDir).toAbsolutePath().normalize();
-            System.out.println("Inicializando diretório de upload: " + root);
             Files.createDirectories(root);
-            System.out.println("Diretório de upload criado com sucesso!");
         } catch (IOException e) {
-            System.err.println("Erro ao inicializar o diretório de upload: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Não foi possível inicializar o diretório de upload!");
         }
