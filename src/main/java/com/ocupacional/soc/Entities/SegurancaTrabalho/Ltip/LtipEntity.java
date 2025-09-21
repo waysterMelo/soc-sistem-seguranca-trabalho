@@ -7,7 +7,6 @@ import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.Nr16AnexoEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -50,29 +49,29 @@ public class LtipEntity {
 
     @Lob
     private String imagemCapa;
-    @Lob private String introducao;
-    @Lob private String objetivo;
-    @Lob private String definicoes;
-    @Lob private String metodologia;
-    @Lob private String descritivoAtividades;
-    @Lob private String identificacaoLocal;
-    @Lob private String conclusao;
-    @Lob private String planejamentoAnual;
-    @Lob private String avaliacaoAtividadesPericulosas;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String introducao;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String objetivo;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String definicoes;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String descritivoAtividades;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String identificacaoLocal;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String conclusao;
 
     private boolean atividadesNaoInsalubres;
 
-    @ManyToMany
-    @JoinTable(name = "ltip_nr16_anexos",
-            joinColumns = @JoinColumn(name = "ltip_id"),
-            inverseJoinColumns = @JoinColumn(name = "anexo_id"))
-    private Set<Nr16AnexoEntity> atividadesPericulosasAnexos;
-
-    @ManyToMany
-    @JoinTable(name = "ltip_bibliografias",
-            joinColumns = @JoinColumn(name = "ltip_id"),
-            inverseJoinColumns = @JoinColumn(name = "bibliografia_id"))
-    private Set<BibliografiaEntity> bibliografias;
+    @OneToMany(mappedBy = "ltip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LtipNr16AnexoEntity> atividadesPericulosasAnexos;
 
     @ManyToMany
     @JoinTable(name = "ltip_aparelhos",

@@ -1,0 +1,34 @@
+{
+  "funcaoId": 14,
+  "dataLevantamento": "2025-06-09",
+  "horaInicial": "10:00:00",
+  "horaFinal": "12:00:00",
+  "responsavelTecnicoId": 6,
+  "demaisElaboradoresIds": [],
+  "responsavelEmpresa": "Gerente Geral da Unidade",
+  "inicioValidade": "2025-06-09",
+  "proximaRevisao": "2026-06-09",
+  "alertaValidadeDias": 60,
+  "introducao": "<p>Este laudo visa atender às exigências da legislação trabalhista e previdenciária.</p>",
+  "objetivo": "<p>Avaliar a exposição dos trabalhadores a agentes insalubres e periculosos na função especificada.</p>",
+  "definicoes": "<p>Nível de Ação: Metade do limite de tolerância.</p>",
+  "metodologia": "<p>Foram realizadas medições quantitativas e qualitativas conforme as NHOs da Fundacentro.</p>",
+  "descritivoAtividades": "<p>O profissional opera máquinas de corte e solda durante a jornada de trabalho.</p>",
+  "identificacaoLocal": "<p>A avaliação foi conduzida no galpão de produção principal.</p>",
+  "conclusao": "<h2>Conclusão</h2><p>As atividades exercidas não caracterizam trabalho em condições de insalubridade ou periculosidade.</p>",
+  "planejamentoAnual": "<p>Revisão anual deste laudo ou sempre que houver alteração de layout ou processo.</p>",
+  "avaliacaoAtividadesPericulosas": "<p>Não foram identificadas atividades enquadradas nos anexos de periculosidade.</p>",
+  "atividadesNaoInsalubres": true,
+  "atividadesPericulosasAnexos": [
+    {
+      "anexoId": 1,
+      "avaliacao": "Análise detalhada do anexo 1 - Atividade não enquadrada como periculosa conforme avaliação técnica."
+    },
+    {
+      "anexoId": 2,
+      "avaliacao": "Verificação do anexo 2 - Exposição dentro dos limites aceitáveis estabelecidos pela NR-16."
+    }
+  ],
+  "bibliografiasIds": [ 1 ],
+  "aparelhosIds": [ 1 ]
+}

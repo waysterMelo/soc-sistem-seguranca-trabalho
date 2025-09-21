@@ -21,14 +21,11 @@ public class LtipRequestDTO {
     private String introducao;
     private String objetivo;
     private String definicoes;
-    private String metodologia;
     private String descritivoAtividades;
     private String identificacaoLocal;
     private String conclusao;
-    private String planejamentoAnual;
     private String avaliacaoAtividadesPericulosas;
     private boolean atividadesNaoInsalubres;
-    private List<Long> atividadesPericulosasAnexosIds;
-    private List<Long> bibliografiasIds;
+    private List<LtipNr16AnexoRequestDTO> atividadesPericulosasAnexos;
     private List<Long> aparelhosIds;
 }

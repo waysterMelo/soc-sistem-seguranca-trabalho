@@ -2,14 +2,14 @@ package com.ocupacional.soc.Entities.Aparelho;
 
 import com.ocupacional.soc.Enuns.Aparelho.StatusAparelho;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "aparelhos")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AparelhoEntity {

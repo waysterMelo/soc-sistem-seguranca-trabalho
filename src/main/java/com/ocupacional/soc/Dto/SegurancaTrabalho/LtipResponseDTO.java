@@ -26,14 +26,11 @@ public class LtipResponseDTO {
     private String introducao;
     private String objetivo;
     private String definicoes;
-    private String metodologia;
     private String descritivoAtividades;
     private String identificacaoLocal;
     private String conclusao;
-    private String planejamentoAnual;
     private String avaliacaoAtividadesPericulosas;
     private boolean atividadesNaoInsalubres;
-    private Set<Nr16AnexoDTO> atividadesPericulosasAnexos;
-    private Set<BibliografiaResponseDTO> bibliografias;
+    private Set<LtipNr16AnexoDTO> atividadesPericulosasAnexos;
     private Set<AparelhoResponseDTO> aparelhos;
 }

@@ -3,6 +3,7 @@ package com.ocupacional.soc.Services.impl;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipRequestDTO;
 import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipEntity;
+import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipNr16AnexoEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.LtipMapper;
 import com.ocupacional.soc.Repositories.Aparelhos.AparelhoRepository;
@@ -102,8 +103,20 @@ public class LtipServiceImpl implements LtipService {
         }
 
         if (dto.getDemaisElaboradoresIds() != null) entity.setDemaisElaboradores(new HashSet<>(prestadorServicoRepository.findAllById(dto.getDemaisElaboradoresIds())));
-        if (dto.getAtividadesPericulosasAnexosIds() != null) entity.setAtividadesPericulosasAnexos(new HashSet<>(nr16AnexoRepository.findAllById(dto.getAtividadesPericulosasAnexosIds())));
-        if (dto.getBibliografiasIds() != null) entity.setBibliografias(new HashSet<>(bibliografiaRepository.findAllById(dto.getBibliografiasIds())));
+        if (dto.getAtividadesPericulosasAnexos() != null) {
+            entity.setAtividadesPericulosasAnexos(
+                dto.getAtividadesPericulosasAnexos().stream()
+                    .map(anexoRequest -> {
+                        LtipNr16AnexoEntity ltipAnexo = new LtipNr16AnexoEntity();
+                        ltipAnexo.setLtip(entity);
+                        ltipAnexo.setAnexo(nr16AnexoRepository.findById(anexoRequest.getAnexoId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Anexo não encontrado com ID: " + anexoRequest.getAnexoId())));
+                        ltipAnexo.setAvaliacao(anexoRequest.getAvaliacao());
+                        return ltipAnexo;
+                    })
+                    .collect(java.util.stream.Collectors.toSet())
+            );
+        }
         if (dto.getAparelhosIds() != null) entity.setAparelhos(new HashSet<>(aparelhoRepository.findAllById(dto.getAparelhosIds())));
 
         // Mapeamento de campos diretos
@@ -117,12 +130,9 @@ public class LtipServiceImpl implements LtipService {
         entity.setIntroducao(dto.getIntroducao());
         entity.setObjetivo(dto.getObjetivo());
         entity.setDefinicoes(dto.getDefinicoes());
-        entity.setMetodologia(dto.getMetodologia());
         entity.setDescritivoAtividades(dto.getDescritivoAtividades());
         entity.setIdentificacaoLocal(dto.getIdentificacaoLocal());
         entity.setConclusao(dto.getConclusao());
-        entity.setPlanejamentoAnual(dto.getPlanejamentoAnual());
-        entity.setAvaliacaoAtividadesPericulosas(dto.getAvaliacaoAtividadesPericulosas());
         entity.setAtividadesNaoInsalubres(dto.isAtividadesNaoInsalubres());
     }
 }

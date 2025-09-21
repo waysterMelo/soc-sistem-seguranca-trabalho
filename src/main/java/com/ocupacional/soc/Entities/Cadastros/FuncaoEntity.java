@@ -3,10 +3,7 @@ package com.ocupacional.soc.Entities.Cadastros;
 import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoGfip;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +11,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "funcoes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FuncaoEntity {

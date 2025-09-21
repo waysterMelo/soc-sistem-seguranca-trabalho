@@ -13,7 +13,8 @@ import org.mapstruct.Mapping;
         PrestadorServicoMapper.class,
         AparelhoMapper.class,
         BibliografiaMapper.class,
-        Nr16AnexoMapper.class
+        Nr16AnexoMapper.class,
+        LtipNr16AnexoMapper.class
 })
 public interface LtipMapper {
 
@@ -21,7 +22,6 @@ public interface LtipMapper {
     @Mapping(source = "responsavelTecnico", target = "responsavelTecnico")
     @Mapping(source = "demaisElaboradores", target = "demaisElaboradores")
     @Mapping(source = "atividadesPericulosasAnexos", target = "atividadesPericulosasAnexos")
-    @Mapping(source = "bibliografias", target = "bibliografias")
     @Mapping(source = "aparelhos", target = "aparelhos")
     LtipResponseDTO toDto(LtipEntity entity);
 }
