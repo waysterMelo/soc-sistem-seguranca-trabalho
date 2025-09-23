@@ -1,7 +1,8 @@
 package com.ocupacional.soc.Services.impl;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipNr16AnexoRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipResponseDTO;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip.LtipNr16AnexoEntity;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +34,6 @@ public class LtipServiceImpl implements LtipService {
     private final FuncaoRepository funcaoRepository;
     private final PrestadorServicoRepository prestadorServicoRepository;
     private final Nr16AnexoRepository nr16AnexoRepository;
-    private final BibliografiaRepository bibliografiaRepository;
     private final AparelhoRepository aparelhoRepository;
     private final LtipFileStorageService ltipFileStorageService;
 
@@ -87,6 +88,7 @@ public class LtipServiceImpl implements LtipService {
         LtipEntity ltipEntity = ltipRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("LTIP não encontrado com ID: " + id));
 
+
         if (ltipEntity.getImagemCapa() != null && !ltipEntity.getImagemCapa().isEmpty()) {
             ltipFileStorageService.deleteFile(ltipEntity.getImagemCapa());
         }
@@ -102,22 +104,59 @@ public class LtipServiceImpl implements LtipService {
             entity.setResponsavelTecnico(null);
         }
 
-        if (dto.getDemaisElaboradoresIds() != null) entity.setDemaisElaboradores(new HashSet<>(prestadorServicoRepository.findAllById(dto.getDemaisElaboradoresIds())));
-        if (dto.getAtividadesPericulosasAnexos() != null) {
-            entity.setAtividadesPericulosasAnexos(
-                dto.getAtividadesPericulosasAnexos().stream()
-                    .map(anexoRequest -> {
-                        LtipNr16AnexoEntity ltipAnexo = new LtipNr16AnexoEntity();
-                        ltipAnexo.setLtip(entity);
-                        ltipAnexo.setAnexo(nr16AnexoRepository.findById(anexoRequest.getAnexoId())
-                            .orElseThrow(() -> new ResourceNotFoundException("Anexo não encontrado com ID: " + anexoRequest.getAnexoId())));
-                        ltipAnexo.setAvaliacao(anexoRequest.getAvaliacao());
-                        return ltipAnexo;
-                    })
-                    .collect(java.util.stream.Collectors.toSet())
-            );
+        if (dto.getDemaisElaboradoresIds() != null) {
+            entity.setDemaisElaboradores(new HashSet<>(prestadorServicoRepository.findAllById(dto.getDemaisElaboradoresIds())));
+        } else {
+            entity.setDemaisElaboradores(new HashSet<>());
         }
-        if (dto.getAparelhosIds() != null) entity.setAparelhos(new HashSet<>(aparelhoRepository.findAllById(dto.getAparelhosIds())));
+
+        // Atualização inteligente dos anexos
+        if (dto.getAtividadesPericulosasAnexos() != null) {
+            // Coletar IDs dos anexos enviados no DTO
+            var anexosEnviados = dto.getAtividadesPericulosasAnexos().stream()
+                    .map(LtipNr16AnexoRequestDTO::getId)
+                    .filter(Objects::nonNull)
+                    .collect(java.util.stream.Collectors.toSet());
+
+            // Remover anexos não enviados (que não estão no DTO)
+            entity.getAtividadesPericulosasAnexos().removeIf(anexoExistente ->
+                !anexosEnviados.contains(anexoExistente.getId()));
+
+            // Processar anexos do DTO
+            for (var anexoRequest : dto.getAtividadesPericulosasAnexos()) {
+                var anexoNr16Optional = nr16AnexoRepository.findById(anexoRequest.getAnexoId());
+                if (anexoNr16Optional.isEmpty()) {
+                    continue; // Pula anexos inválidos
+                }
+
+                if (anexoRequest.getId() != null) {
+                    // Atualizar anexo existente
+                    var anexoExistente = entity.getAtividadesPericulosasAnexos().stream()
+                            .filter(a -> a.getId().equals(anexoRequest.getId()))
+                            .findFirst();
+
+                    if (anexoExistente.isPresent()) {
+                        anexoExistente.get().setAnexo(anexoNr16Optional.get());
+                        anexoExistente.get().setAvaliacao(anexoRequest.getAvaliacao());
+                    }
+                } else {
+                    // Criar novo anexo
+                    LtipNr16AnexoEntity novoAnexo = new LtipNr16AnexoEntity();
+                    novoAnexo.setLtip(entity);
+                    novoAnexo.setAnexo(anexoNr16Optional.get());
+                    novoAnexo.setAvaliacao(anexoRequest.getAvaliacao());
+                    entity.getAtividadesPericulosasAnexos().add(novoAnexo);
+                }
+            }
+        } else {
+            // Se DTO não tem anexos, remove todos
+            entity.getAtividadesPericulosasAnexos().clear();
+        }
+        if (dto.getAparelhosIds() != null) {
+            entity.setAparelhos(new HashSet<>(aparelhoRepository.findAllById(dto.getAparelhosIds())));
+        } else {
+            entity.setAparelhos(new HashSet<>());
+        }
 
         // Mapeamento de campos diretos
         entity.setDataLevantamento(dto.getDataLevantamento());

@@ -1,0 +1,1 @@
+- sempre mostre seu plano de ação e o que irá fazer, tambem aguarde meu sim para continuar.

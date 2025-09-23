@@ -4,7 +4,6 @@ import com.ocupacional.soc.Dto.SegurancaTrabalho.Nr16AnexoDTO;
 import com.ocupacional.soc.Mapper.SegurancaTrabalho.Nr16AnexoMapper;
 import com.ocupacional.soc.Repositories.SegurancaTrabalho.*;
 import com.ocupacional.soc.Services.SegurancaTrabalho.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -23,6 +23,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload-dir.ltcat-capas}")
     private String uploadDirLtcatCapas;
 
+    @Value("${file.upload-dir.ltip-capas}")
+    private String uploadDirLtipCapas;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Mapeia a URL para o diretório físico de certificados
@@ -44,5 +47,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String ltcatCapasPath = Paths.get(uploadDirLtcatCapas).toAbsolutePath().normalize().toString();
         registry.addResourceHandler("/uploads/capa-ltcat/**", "/api/uploads/capa-ltcat/**")
                 .addResourceLocations("file:" + ltcatCapasPath + "/");
+
+        String ltipCapasPath = Paths.get(uploadDirLtipCapas).toAbsolutePath().normalize().toString();
+        registry.addResourceHandler("/uploads/capa-ltip/**", "/api/uploads/capa-ltip/**")
+                .addResourceLocations("file:" + ltipCapasPath + "/");
     }
 }

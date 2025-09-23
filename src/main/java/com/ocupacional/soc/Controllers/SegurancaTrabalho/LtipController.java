@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Controllers.SegurancaTrabalho;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipResponseDTO;
 import com.ocupacional.soc.Services.SegurancaTrabalho.LtipService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/ltip")
@@ -49,5 +50,13 @@ public class LtipController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ltipService.deleteLtip(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/report")
+    public ModelAndView getLtipReport(@PathVariable Long id) {
+        ModelAndView mav = new ModelAndView("ltip");
+        LtipResponseDTO ltipDto = ltipService.findLtipById(id);
+        mav.addObject("ltip", ltipDto);
+        return mav;
     }
 }

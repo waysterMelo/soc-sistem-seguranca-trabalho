@@ -1,14 +1,14 @@
 package com.ocupacional.soc.Entities.SegurancaTrabalho.Ltip;
 
 import com.ocupacional.soc.Entities.Aparelho.AparelhoEntity;
-import com.ocupacional.soc.Entities.BibliografiaEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
-import com.ocupacional.soc.Entities.SegurancaTrabalho.Nr16AnexoEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -71,11 +71,12 @@ public class LtipEntity {
     private boolean atividadesNaoInsalubres;
 
     @OneToMany(mappedBy = "ltip", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<LtipNr16AnexoEntity> atividadesPericulosasAnexos;
+    private Set<LtipNr16AnexoEntity> atividadesPericulosasAnexos = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "ltip_aparelhos",
             joinColumns = @JoinColumn(name = "ltip_id"),
             inverseJoinColumns = @JoinColumn(name = "aparelho_id"))
     private Set<AparelhoEntity> aparelhos;
+
 }

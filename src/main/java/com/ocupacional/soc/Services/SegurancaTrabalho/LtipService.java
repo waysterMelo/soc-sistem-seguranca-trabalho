@@ -1,7 +1,7 @@
 package com.ocupacional.soc.Services.SegurancaTrabalho;
 
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipRequestDTO;
-import com.ocupacional.soc.Dto.SegurancaTrabalho.LtipResponseDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipRequestDTO;
+import com.ocupacional.soc.Dto.SegurancaTrabalho.Ltip.LtipResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
