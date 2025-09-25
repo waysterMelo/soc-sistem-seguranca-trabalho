@@ -10,4 +10,5 @@ public class EmpresaSimpleResponseDTO {
     private Long id;
     private String razaoSocial;
     private String nomeFantasia;
+    private String cpfOuCnpj;
 }

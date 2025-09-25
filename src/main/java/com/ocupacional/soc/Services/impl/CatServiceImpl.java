@@ -56,6 +56,13 @@ public class CatServiceImpl implements CatService {
         return catRepository.findAll().stream().map(catMapper::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<CatResponseDTO> findByFuncionarioId(Long funcionarioId) {
+        return catRepository.findByAcidentadoId(funcionarioId).stream()
+                .map(catMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 
     private void buildCatEntity(CatEntity entity, CatRequestDTO dto) {
         // Acidentado

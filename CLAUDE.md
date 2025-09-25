@@ -1,1 +1,2 @@
 - sempre mostre seu plano de ação e o que irá fazer, tambem aguarde meu sim para continuar.
+- não precisa testar as funcionalidades , eu mesmo faço isso

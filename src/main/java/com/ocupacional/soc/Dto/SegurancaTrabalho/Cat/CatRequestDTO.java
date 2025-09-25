@@ -49,6 +49,6 @@ public class CatRequestDTO {
     private String diagnosticoProvavel;
     private TipoLocalAcidente tipoLocalAcidente;
     private Long cidId;
-    private Long atestadoMedicoId; // ID de um Medico ou Prestador
-    private String tipoProfissionalAtestado; // "MEDICO" ou "PRESTADOR"
+    private Long atestadoMedicoId;
+    private String tipoProfissionalAtestado;
 }

@@ -32,4 +32,9 @@ public class CatController {
     public ResponseEntity<List<CatResponseDTO>> findAll() {
         return ResponseEntity.ok(catService.findAll());
     }
+
+    @GetMapping("/funcionario/{funcionarioId}")
+    public ResponseEntity<List<CatResponseDTO>> findByFuncionarioId(@PathVariable Long funcionarioId) {
+        return ResponseEntity.ok(catService.findByFuncionarioId(funcionarioId));
+    }
 }

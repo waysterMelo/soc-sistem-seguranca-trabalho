@@ -8,4 +8,5 @@ public interface CatService {
     CatResponseDTO createCat(CatRequestDTO dto);
     CatResponseDTO findById(Long id);
     List<CatResponseDTO> findAll();
+    List<CatResponseDTO> findByFuncionarioId(Long funcionarioId);
 }
