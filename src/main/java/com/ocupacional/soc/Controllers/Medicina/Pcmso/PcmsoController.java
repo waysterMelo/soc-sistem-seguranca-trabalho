@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/pcmso")
+@RequestMapping("/pcmso")
 @RequiredArgsConstructor
 public class PcmsoController {
 
@@ -37,16 +37,16 @@ public class PcmsoController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PcmsoResponseDTO> create(
             @Valid @RequestPart("pcmso") PcmsoRequestDTO dto,
-            @RequestPart(value = "capaImagem", required = false) MultipartFile capaImagem) {
-        return new ResponseEntity<>(pcmsoService.create(dto, capaImagem), HttpStatus.CREATED);
+            @RequestPart(value = "imagemCapa", required = false) MultipartFile imagemCapa) {
+        return new ResponseEntity<>(pcmsoService.create(dto, imagemCapa), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PcmsoResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestPart("pcmso") PcmsoRequestDTO dto,
-            @RequestPart(value = "capaImagem", required = false) MultipartFile capaImagem) {
-        return ResponseEntity.ok(pcmsoService.update(id, dto, capaImagem));
+            @RequestPart(value = "imagemCapa", required = false) MultipartFile imagemCapa) {
+        return ResponseEntity.ok(pcmsoService.update(id, dto, imagemCapa));
     }
 
     @DeleteMapping("/{id}")

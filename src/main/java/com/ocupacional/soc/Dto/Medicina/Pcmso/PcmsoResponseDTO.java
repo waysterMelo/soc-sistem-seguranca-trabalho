@@ -20,7 +20,7 @@ public class PcmsoResponseDTO {
     private Set<PrestadorServicoResponseDTO> elaboradores;
     private LocalDate dataDocumento;
     private LocalDate dataVencimento;
-    private String capaImagemUrl;
+    private String imagemCapa;
     private String capa;
     private String introducao;
     private String sobrePcmso;

@@ -46,6 +46,34 @@ public class CatServiceImpl implements CatService {
     }
 
     @Override
+    @Transactional
+    public CatResponseDTO updateCat(Long id, CatRequestDTO dto) {
+        CatEntity entity = catRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("CAT não encontrada com ID: " + id));
+        buildCatEntity(entity, dto);
+        CatEntity savedEntity = catRepository.save(entity);
+        return catMapper.toDto(savedEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCat(Long id) {
+        CatEntity entity = catRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("CAT não encontrada com ID: " + id));
+
+        // Limpar relacionamento ManyToMany antes da exclusão
+        if (entity.getPartesCorpoAtingidas() != null) {
+            entity.getPartesCorpoAtingidas().clear();
+        }
+
+        // Salvar para limpar a tabela intermediária
+        catRepository.save(entity);
+
+        // Agora pode deletar a CAT (o endereço será deletado automaticamente por cascade)
+        catRepository.delete(entity);
+    }
+
+    @Override
     public CatResponseDTO findById(Long id) {
         return catRepository.findById(id).map(catMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("CAT não encontrada com ID: " + id));

@@ -12,9 +12,9 @@ public interface PcmsoService {
 
     PcmsoResponseDTO findById(Long id);
 
-    PcmsoResponseDTO create(PcmsoRequestDTO dto, MultipartFile capaImagem);
+    PcmsoResponseDTO create(PcmsoRequestDTO dto, MultipartFile imagemCapa);
 
-    PcmsoResponseDTO update(Long id, PcmsoRequestDTO dto, MultipartFile capaImagem);
+    PcmsoResponseDTO update(Long id, PcmsoRequestDTO dto, MultipartFile imagemCapa);
 
     void delete(Long id);
 }

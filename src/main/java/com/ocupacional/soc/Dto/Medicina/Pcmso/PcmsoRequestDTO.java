@@ -27,6 +27,8 @@ public class PcmsoRequestDTO {
     private String sobrePcmso;
     private String conclusao;
 
+    private String imagemCapa;
+
     @Valid
     private List<PcmsoExameRequestDTO> exames;
 }

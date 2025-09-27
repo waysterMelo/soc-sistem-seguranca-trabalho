@@ -1,0 +1,37 @@
+{
+  "unidadeOperacionalId": 1,
+  "medicoResponsavelId": 1, 
+  "elaboradoresIds": [],
+  "status": "ATIVO",
+  "dataDocumento": "2025-06-13",
+  "dataVencimento": "2026-06-13",
+  "introducao": "Este documento estabelece as diretrizes para o Programa de Controle Médico de Saúde Ocupacional da Unidade.",
+  "sobrePcmso": "O objetivo principal é a promoção e preservação da saúde dos trabalhadores.",
+  "conclusao": "A empresa se compromete a seguir as diretrizes deste documento.",
+  "exames": [
+    {
+      "funcaoId": 1,
+      "exameId": [1],
+      "tipoExame": "ADMISSIONAL",
+      "periodicidadeMeses": 12
+    },
+    {
+      "funcaoId": 1,
+      "exameId": [2],
+      "tipoExame": "PERIODICO",
+      "periodicidadeMeses": 12
+    },
+    {
+      "funcaoId": 2,
+      "exameId": [1],
+      "tipoExame": "ADMISSIONAL",
+      "periodicidadeMeses": 12
+    },
+    {
+      "funcaoId": 2,
+      "exameId": [3],
+      "tipoExame": "DEMISSIONAL",
+      "periodicidadeMeses": 12
+    }
+  ]
+}

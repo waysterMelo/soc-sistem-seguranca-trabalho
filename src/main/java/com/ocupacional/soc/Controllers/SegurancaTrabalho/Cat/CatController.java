@@ -23,6 +23,17 @@ public class CatController {
         return new ResponseEntity<>(catService.createCat(dto), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CatResponseDTO> update(@PathVariable Long id, @Valid @RequestBody CatRequestDTO dto) {
+        return ResponseEntity.ok(catService.updateCat(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        catService.deleteCat(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CatResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(catService.findById(id));

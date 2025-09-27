@@ -1,6 +1,8 @@
 package com.ocupacional.soc.Mapper.SegurancaTrabalho.Cat;
 
-// Este é um helper, não um @Mapper de MapStruct
+import org.springframework.stereotype.Component;
+
+@Component
 public class CatalogoCatMapper {
     public static <E> com.ocupacional.soc.Dto.SegurancaTrabalho.Cat.CatalogoSimplesDTO toDto(E entity) {
         if (entity == null) return null;

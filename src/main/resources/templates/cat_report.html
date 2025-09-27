@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CAT - Comunicação de Acidente de Trabalho</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        /* Basic styles for printing and A4 page layout */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            .page {
+                page-break-after: always;
+            }
+            .page:last-of-type {
+                page-break-after: auto;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        body {
+            background-color: #e9ecef;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .report-container {
+            max-width: 21cm;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .page {
+            padding: 2cm;
+            min-height: 29.7cm;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            background-color: #0d47a1;
+            color: white;
+            padding: 15px 20px;
+            margin: 20px 0 15px 0;
+            font-weight: bold;
+            font-size: 1.1em;
+            border-radius: 5px;
+        }
+
+        .header-info {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #495057;
+            min-width: 200px;
+            display: inline-block;
+        }
+
+        .info-value {
+            color: #212529;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .data-table td {
+            background-color: #fff;
+        }
+
+        .address-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .boolean-yes {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .boolean-no {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .observations {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d47a1;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Print Button -->
+    <button class="btn btn-primary no-print print-button" onclick="window.print()">
+        <i class="fas fa-print"></i> Imprimir
+    </button>
+
+    <div class="report-container">
+        <div class="page">
+            <!-- Cabeçalho Principal -->
+            <div class="text-center mb-4">
+                <h1 class="h2 text-primary">
+                    <i class="fas fa-file-medical"></i>
+                    COMUNICAÇÃO DE ACIDENTE DE TRABALHO - CAT
+                </h1>
+                <hr class="border-primary border-2">
+            </div>
+
+            <!-- Informações da CAT -->
+            <div class="header-info">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-row">
+                            <span class="info-label">Número do Recibo CAT:</span>
+                            <span class="info-value" th:text="${cat.numeroReciboCat ?: 'Não informado'}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Tipo da CAT:</span>
+                            <span class="info-value" th:text="${cat.tipoCat}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-row">
+                            <span class="info-label">Iniciativa:</span>
+                            <span class="info-value" th:text="${cat.iniciativaCat}"></span>
+                        </div>
+                        <div class="info-row" th:if="${cat.numeroCatOrigem}">
+                            <span class="info-label">Número CAT Origem:</span>
+                            <span class="info-value" th:text="${cat.numeroCatOrigem}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dados do Acidentado -->
+            <div class="section-title">
+                <i class="fas fa-user-injured"></i> DADOS DO ACIDENTADO
+            </div>
+
+            <table class="data-table">
+                <tr>
+                    <th>Nome Completo</th>
+                    <td th:text="${cat.acidentado.nome + ' ' + cat.acidentado.sobrenome}"></td>
+                    <th>CPF</th>
+                    <td th:text="${cat.acidentado.cpf}"></td>
+                </tr>
+                <tr>
+                    <th>RG</th>
+                    <td th:text="${cat.acidentado.rg + ' - ' + cat.acidentado.orgaoEmissorRg + '/' + cat.acidentado.estadoEmissorRg}"></td>
+                    <th>Data de Nascimento</th>
+                    <td th:text="${cat.acidentado.dataNascimento}"></td>
+                </tr>
+                <tr>
+                    <th>Sexo</th>
+                    <td th:text="${cat.acidentado.sexo}"></td>
+                    <th>Estado Civil</th>
+                    <td th:text="${cat.acidentado.estadoCivil}"></td>
+                </tr>
+                <tr>
+                    <th>Função</th>
+                    <td th:text="${cat.acidentado.funcao?.nome}"></td>
+                    <th>Setor</th>
+                    <td th:text="${cat.acidentado.setor?.nome}"></td>
+                </tr>
+                <tr>
+                    <th>Data de Admissão</th>
+                    <td th:text="${cat.acidentado.dataAdmissao}"></td>
+                    <th>Matrícula</th>
+                    <td th:text="${cat.acidentado.matricula}"></td>
+                </tr>
+            </table>
+
+            <!-- Empresa -->
+            <div class="header-info" th:if="${cat.acidentado.empresa}">
+                <h5 class="mb-3"><i class="fas fa-building"></i> Empresa</h5>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="info-row">
+                            <span class="info-label">Razão Social:</span>
+                            <span class="info-value" th:text="${cat.acidentado.empresa.razaoSocial}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Nome Fantasia:</span>
+                            <span class="info-value" th:text="${cat.acidentado.empresa.nomeFantasia}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-row">
+                            <span class="info-label">CNPJ:</span>
+                            <span class="info-value" th:text="${cat.acidentado.empresa.cpfOuCnpj}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endereço do Acidentado -->
+            <div class="address-info" th:if="${cat.acidentado.endereco}">
+                <h6 class="mb-2"><i class="fas fa-map-marker-alt"></i> Endereço do Acidentado</h6>
+                <p class="mb-0">
+                    <span th:text="${cat.acidentado.endereco.logradouro + ', ' + cat.acidentado.endereco.numero}"></span>
+                    <span th:if="${cat.acidentado.endereco.complemento}" th:text="', ' + ${cat.acidentado.endereco.complemento}"></span>
+                    <br>
+                    <span th:text="${cat.acidentado.endereco.bairro + ' - ' + cat.acidentado.endereco.cidade + '/' + cat.acidentado.endereco.estado}"></span>
+                    <br>
+                    <strong>CEP:</strong> <span th:text="${cat.acidentado.endereco.cep}"></span>
+                </p>
+            </div>
+
+            <!-- Dados do Acidente -->
+            <div class="section-title">
+                <i class="fas fa-exclamation-triangle"></i> DADOS DO ACIDENTE
+            </div>
+
+            <table class="data-table">
+                <tr>
+                    <th>Data do Acidente</th>
+                    <td th:text="${cat.dataAcidenteFormatada}"></td>
+                    <th>Hora do Acidente</th>
+                    <td th:text="${cat.horaAcidenteFormatada}"></td>
+                </tr>
+                <tr>
+                    <th>Horas Trabalhadas no Dia</th>
+                    <td th:text="${cat.horasTrabalhadas + 'h'}"></td>
+                    <th>Tipo do Acidente</th>
+                    <td th:text="${cat.tipoAcidente}"></td>
+                </tr>
+                <tr>
+                    <th>Houve Afastamento?</th>
+                    <td>
+                        <span th:class="${cat.houveAfastamento ? 'boolean-yes' : 'boolean-no'}"
+                              th:text="${cat.houveAfastamento ? 'Sim' : 'Não'}"></span>
+                    </td>
+                    <th>Último Dia Trabalhado</th>
+                    <td th:text="${cat.ultimoDiaTrabalhado ?: 'Não informado'}"></td>
+                </tr>
+                <tr>
+                    <th>Tipo Local Acidente</th>
+                    <td th:text="${cat.tipoLocalAcidente}"></td>
+                    <th>Especificação do Local</th>
+                    <td th:text="${cat.localAcidenteEspecificacao}"></td>
+                </tr>
+                <tr th:if="${cat.tipoInscricaoLocalAcidente}">
+                    <th>Tipo Inscrição Local</th>
+                    <td th:text="${cat.tipoInscricaoLocalAcidente}"></td>
+                    <th>Inscrição Local</th>
+                    <td th:text="${cat.inscricaoLocalAcidente}"></td>
+                </tr>
+            </table>
+
+            <!-- Endereço do Local do Acidente -->
+            <div class="address-info" th:if="${cat.localAcidenteEndereco}">
+                <h6 class="mb-2"><i class="fas fa-location-arrow"></i> Endereço do Local do Acidente</h6>
+                <p class="mb-0">
+                    <span th:text="${cat.localAcidenteEndereco.logradouro + ', ' + cat.localAcidenteEndereco.numero}"></span>
+                    <span th:if="${cat.localAcidenteEndereco.complemento}" th:text="', ' + ${cat.localAcidenteEndereco.complemento}"></span>
+                    <br>
+                    <span th:text="${cat.localAcidenteEndereco.bairro + ' - ' + cat.localAcidenteEndereco.cidade + '/' + cat.localAcidenteEndereco.estado}"></span>
+                    <br>
+                    <strong>CEP:</strong> <span th:text="${cat.localAcidenteEndereco.cep}"></span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Página 2 -->
+        <div class="page">
+            <!-- Partes do Corpo e Causas -->
+            <div class="section-title">
+                <i class="fas fa-body"></i> PARTES DO CORPO ATINGIDAS E CAUSAS
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h6><i class="fas fa-crosshairs"></i> Partes do Corpo Atingidas</h6>
+                    <ul th:if="${cat.partesCorpoAtingidas}" class="list-unstyled">
+                        <li th:each="parte : ${cat.partesCorpoAtingidas}" class="mb-2">
+                            <i class="fas fa-dot-circle text-danger"></i>
+                            <span th:text="${parte.descricao}"></span>
+                        </li>
+                    </ul>
+                    <p th:unless="${cat.partesCorpoAtingidas}">Não informado</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h6><i class="fas fa-hammer"></i> Agente Causador</h6>
+                        <p th:text="${cat.agenteCausador?.descricao ?: 'Não informado'}"></p>
+                    </div>
+                    <div class="mb-4">
+                        <h6><i class="fas fa-bandage"></i> Natureza da Lesão</h6>
+                        <p th:text="${cat.naturezaLesao?.descricao ?: 'Não informado'}"></p>
+                    </div>
+                    <div class="mb-4">
+                        <h6><i class="fas fa-cog"></i> Situação Geradora</h6>
+                        <p th:text="${cat.situacaoGeradora?.descricao ?: 'Não informado'}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outras Informações -->
+            <div class="section-title">
+                <i class="fas fa-info-circle"></i> INFORMAÇÕES COMPLEMENTARES
+            </div>
+
+            <table class="data-table">
+                <tr>
+                    <th>Houve Registro Policial?</th>
+                    <td>
+                        <span th:class="${cat.houveRegistroPolicial ? 'boolean-yes' : 'boolean-no'}"
+                              th:text="${cat.houveRegistroPolicial ? 'Sim' : 'Não'}"></span>
+                    </td>
+                    <th>Houve Óbito?</th>
+                    <td>
+                        <span th:class="${cat.houveObito ? 'boolean-yes' : 'boolean-no'}"
+                              th:text="${cat.houveObito ? 'Sim' : 'Não'}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${cat.houveObito && cat.dataObitoFormatada}">
+                    <th>Data do Óbito</th>
+                    <td th:text="${cat.dataObitoFormatada}"></td>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </table>
+
+            <!-- Observações -->
+            <div th:if="${cat.observacoes}" class="observations">
+                <h6><i class="fas fa-sticky-note"></i> Observações sobre o Acidente</h6>
+                <p th:text="${cat.observacoes}"></p>
+            </div>
+
+            <!-- Dados do Atendimento -->
+            <div class="section-title">
+                <i class="fas fa-user-md"></i> DADOS DO ATENDIMENTO MÉDICO
+            </div>
+
+            <table class="data-table">
+                <tr>
+                    <th>Data do Atendimento</th>
+                    <td th:text="${cat.dataAtendimentoFormatada ?: 'Não informado'}"></td>
+                    <th>Hora do Atendimento</th>
+                    <td th:text="${cat.horaAtendimentoFormatada ?: 'Não informado'}"></td>
+                </tr>
+                <tr>
+                    <th>Houve Internação?</th>
+                    <td>
+                        <span th:class="${cat.houveInternacao ? 'boolean-yes' : 'boolean-no'}"
+                              th:text="${cat.houveInternacao ? 'Sim' : 'Não'}"></span>
+                    </td>
+                    <th>Duração do Tratamento (dias)</th>
+                    <td th:text="${cat.duracaoTratamentoDias ?: 'Não informado'}"></td>
+                </tr>
+                <tr>
+                    <th>Provável Afastamento?</th>
+                    <td>
+                        <span th:class="${cat.provavelAfastamento ? 'boolean-yes' : 'boolean-no'}"
+                              th:text="${cat.provavelAfastamento ? 'Sim' : 'Não'}"></span>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </table>
+
+            <!-- Diagnóstico -->
+            <div th:if="${cat.diagnosticoProvavel}" class="header-info">
+                <h6><i class="fas fa-stethoscope"></i> Diagnóstico Provável</h6>
+                <p th:text="${cat.diagnosticoProvavel}"></p>
+            </div>
+
+            <!-- CID -->
+            <div th:if="${cat.cid}" class="header-info">
+                <h6><i class="fas fa-code"></i> Classificação Internacional de Doenças (CID)</h6>
+                <div class="info-row">
+                    <span class="info-label">Código:</span>
+                    <span class="info-value" th:text="${cat.cid.codigo}"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Descrição:</span>
+                    <span class="info-value" th:text="${cat.cid.descricao}"></span>
+                </div>
+            </div>
+
+            <!-- Médico Atestante -->
+            <div th:if="${cat.atestadoMedico}" class="header-info">
+                <h6><i class="fas fa-user-md"></i> Médico Responsável pelo Atestado</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-row">
+                            <span class="info-label">Nome:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.nome + ' ' + cat.atestadoMedico.sobrenome}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">CPF:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.cpf}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.email}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-row">
+                            <span class="info-label">Conselho:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.conselho}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Número de Inscrição:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.numeroInscricaoConselho}"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value" th:text="${cat.atestadoMedico.estadoConselho}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rodapé -->
+            <div class="mt-5 pt-4 border-top">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="text-muted small">
+                            <i class="fas fa-calendar"></i>
+                            Gerado em: <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}"></span>
+                        </p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <p class="text-muted small">
+                            <i class="fas fa-id-badge"></i>
+                            CAT ID: <span th:text="${cat.id}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CatService {
     CatResponseDTO createCat(CatRequestDTO dto);
+    CatResponseDTO updateCat(Long id, CatRequestDTO dto);
+    void deleteCat(Long id);
     CatResponseDTO findById(Long id);
     List<CatResponseDTO> findAll();
     List<CatResponseDTO> findByFuncionarioId(Long funcionarioId);

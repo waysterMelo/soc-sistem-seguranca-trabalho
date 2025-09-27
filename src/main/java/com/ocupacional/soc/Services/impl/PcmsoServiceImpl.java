@@ -22,7 +22,7 @@ import com.ocupacional.soc.Repositories.Cadastros.UnidadeOperacionalRepository;
 import com.ocupacional.soc.Repositories.Medicina.Pcmso.PcmsoExameRepository;
 import com.ocupacional.soc.Repositories.Medicina.Pcmso.PcmsoRepository;
 import com.ocupacional.soc.Repositories.PrestadorServico.PrestadorServicoRepository;
-import com.ocupacional.soc.Services.Aparelhos.FileStorageService;
+import com.ocupacional.soc.Services.Medicina.Pcmso.PcmsoFileStorageService;
 import com.ocupacional.soc.Services.Medicina.Pcmso.PcmsoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,7 +49,7 @@ public class PcmsoServiceImpl implements PcmsoService {
     private final PrestadorServicoRepository prestadorRepository;
     private final PcmsoMapper pcmsoMapper;
     private final RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper;
-    private final FileStorageService fileStorageService;
+    private final PcmsoFileStorageService fileStorageService;
     private final PcmsoExameRepository pcmsoExameRepository;
 
     @Override
@@ -95,7 +95,7 @@ public class PcmsoServiceImpl implements PcmsoService {
         mapToEntity(entity, dto); // Lógica de mapeamento centralizada
 
         if (capaImagem != null && !capaImagem.isEmpty()) {
-            entity.setCapaImagemUrl(fileStorageService.storeFile(capaImagem));
+            entity.setImagemCapa(fileStorageService.storeFile(capaImagem));
         }
 
         PcmsoEntity savedPcmso = pcmsoRepository.save(entity);
@@ -122,8 +122,8 @@ public class PcmsoServiceImpl implements PcmsoService {
         mapToEntity(entity, dto); // Lógica de mapeamento centralizada
 
         if (capaImagem != null && !capaImagem.isEmpty()) {
-            fileStorageService.deleteFile(entity.getCapaImagemUrl());
-            entity.setCapaImagemUrl(fileStorageService.storeFile(capaImagem));
+            fileStorageService.deleteFile(entity.getImagemCapa());
+            entity.setImagemCapa(fileStorageService.storeFile(capaImagem));
         }
 
         PcmsoEntity updatedPcmso = pcmsoRepository.save(entity);
@@ -142,7 +142,20 @@ public class PcmsoServiceImpl implements PcmsoService {
         PcmsoEntity entity = pcmsoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PCMSO não encontrado com ID: " + id));
 
-        fileStorageService.deleteFile(entity.getCapaImagemUrl());
+        // Deleta os exames associados ao PCMSO
+        if (entity.getExames() != null && !entity.getExames().isEmpty()) {
+            pcmsoExameRepository.deleteAll(entity.getExames());
+        }
+
+        // Limpa a coleção de elaboradores para remover as associações na tabela de junção
+        entity.getElaboradores().clear();
+
+        // Deleta o arquivo de imagem da capa, se existir
+        if (entity.getImagemCapa() != null && !entity.getImagemCapa().isEmpty()) {
+            fileStorageService.deleteFile(entity.getImagemCapa());
+        }
+
+        // Finalmente, deleta a entidade PCMSO
         pcmsoRepository.delete(entity);
     }
 

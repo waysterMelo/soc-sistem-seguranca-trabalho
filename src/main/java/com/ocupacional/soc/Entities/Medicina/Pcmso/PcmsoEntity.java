@@ -22,8 +22,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SQLDelete(sql = "UPDATE pcmso SET excluido = true WHERE id = ?")
-@Where(clause = "excluido = false")
 public class PcmsoEntity extends AuditableEntity {
 
     @Id
@@ -53,7 +51,9 @@ public class PcmsoEntity extends AuditableEntity {
 
     private LocalDate dataDocumento;
     private LocalDate dataVencimento;
-    private String capaImagemUrl;
+
+    @Lob
+    private String imagemCapa;
 
     @Lob
     @Column(columnDefinition = "TEXT")

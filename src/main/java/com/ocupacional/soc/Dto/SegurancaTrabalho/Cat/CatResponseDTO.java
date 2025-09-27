@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Dto.SegurancaTrabalho.Cat;
 
 import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.EnderecoDto;
 import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import com.ocupacional.soc.Enuns.SegurancaTrabalho.Cat.*;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class CatResponseDTO {
     private Boolean houveAfastamento;
     private LocalDate ultimoDiaTrabalhado;
     private String localAcidenteEspecificacao;
+    private EnderecoDto localAcidenteEndereco;
     private TipoInscricaoLocalAcidente tipoInscricaoLocalAcidente;
     private String inscricaoLocalAcidente;
     private Set<CatalogoSimplesDTO> partesCorpoAtingidas;
