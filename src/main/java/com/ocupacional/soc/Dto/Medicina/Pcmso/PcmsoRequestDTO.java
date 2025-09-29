@@ -18,11 +18,8 @@ public class PcmsoRequestDTO {
     private Set<Long> elaboradoresIds;
     @NotNull(message = "O status é obrigatório.")
     private PcmsoStatus status;
-
     private LocalDate dataDocumento;
     private LocalDate dataVencimento;
-
-    private String capa;
     private String introducao;
     private String sobrePcmso;
     private String conclusao;

@@ -164,7 +164,6 @@ public class PcmsoServiceImpl implements PcmsoService {
         entity.setStatus(dto.getStatus());
         entity.setDataDocumento(dto.getDataDocumento());
         entity.setDataVencimento(dto.getDataVencimento());
-        entity.setCapa(dto.getCapa());
         entity.setIntroducao(dto.getIntroducao());
         entity.setSobrePcmso(dto.getSobrePcmso());
         entity.setConclusao(dto.getConclusao());
@@ -182,7 +181,6 @@ public class PcmsoServiceImpl implements PcmsoService {
         entity.setStatus(dto.getStatus());
         entity.setDataDocumento(dto.getDataDocumento());
         entity.setDataVencimento(dto.getDataVencimento());
-        entity.setCapa(dto.getCapa());
         entity.setIntroducao(dto.getIntroducao());
         entity.setSobrePcmso(dto.getSobrePcmso());
         entity.setConclusao(dto.getConclusao());

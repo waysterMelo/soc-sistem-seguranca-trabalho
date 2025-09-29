@@ -57,10 +57,6 @@ public class PcmsoEntity extends AuditableEntity {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String capa;
-
-    @Lob
-    @Column(columnDefinition = "TEXT")
     private String introducao;
 
     @Lob
