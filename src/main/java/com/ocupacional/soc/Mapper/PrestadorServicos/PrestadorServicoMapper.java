@@ -18,6 +18,8 @@ public interface PrestadorServicoMapper {
     @Mapping(target = "cboId", source = "cbo.id")
     @Mapping(target = "cboNomeOcupacao", source = "cbo.nomeOcupacao")
     @Mapping(target = "status", source = "status")
+    @Mapping(target = "telefone1", source = "telefone1")
+    @Mapping(target = "telefone2", source = "telefone2")
     PrestadorServicoResponseDTO toDto(PrestadorServicoEntity entity);
 
 

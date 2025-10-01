@@ -19,10 +19,7 @@ public class PrestadorServicoResponseDTO extends PrestadorServicoRequestDTO {
     private String rg;
     private String orgaoEmissorRg;
     private Sexo sexo;
-
     private EnderecoDto endereco;
-    private String telefone1;
-    private String telefone2;
     private String email;
     private Long cboId;
     private String cboNomeOcupacao;

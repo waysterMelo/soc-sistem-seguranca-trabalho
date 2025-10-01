@@ -1,37 +1,260 @@
 {
-  "unidadeOperacionalId": 1,
-  "medicoResponsavelId": 1, 
-  "elaboradoresIds": [],
+  "id": 20,
+  "unidadeOperacional": {
+    "id": 1,
+    "nome": "Unidade Alpha",
+    "descricao": "Unidade principal de operações",
+    "situacao": "ATIVO",
+    "empresa": {
+      "id": 4,
+      "tipoEmpresa": "JURIDICA",
+      "cpfOuCnpj": "12345678000199",
+      "inscricaoEstadual": "341434324234324324",
+      "status": "ATIVO",
+      "razaoSocial": "Minha Empresa de Teste LTDA modificada",
+      "nomeFantasia": "Empresa Teste modificada",
+      "logomarcaUrl": "/logos/184e1825-4edf-46c3-b871-bfdf7f1c94ea.png",
+      "endereco": {
+        "id": 95,
+        "cep": "35720000",
+        "cidade": "Matozinhos modificada",
+        "estado": "MG",
+        "logradouro": "Rua Teste modificada",
+        "numero": "123",
+        "bairro": "Centro modificada",
+        "complemento": "Sala 1 modificada",
+        "regiao": "Metropolitana modificada"
+      },
+      "telefonePrincipal": "5435435454354",
+      "telefoneSecundario": "435435435435435",
+      "email": "contato@empresateste.com",
+      "grauRisco": "RISCO_2",
+      "cnaePrincipal": {
+        "id": 1,
+        "codigo": "0111-3/01",
+        "descricao": "Cultivo de arroz"
+      },
+      "tipoMatrizFilial": "MATRIZ",
+      "medicoResponsavel": {
+        "nome": "Wayster",
+        "sobrenome": "Melo",
+        "cpf": "123.456.789-09",
+        "rg": "MG-123456",
+        "orgaoEmissorRg": "SSP/MG",
+        "sexo": "MASCULINO",
+        "endereco": {
+          "id": 6,
+          "cep": "35700-000",
+          "cidade": "Matozinhos",
+          "estado": "MG",
+          "logradouro": "Rua Brasília",
+          "numero": "1042",
+          "bairro": "Cruzeiro",
+          "complemento": "Casa",
+          "regiao": "Zona Norte"
+        },
+        "telefone1": "3198987987",
+        "telefone2": "3198987987",
+        "email": "wayster@ignix.com.br",
+        "cboId": 7064,
+        "nis": "12345678900",
+        "conselho": "CRM",
+        "numeroInscricaoConselho": "123456",
+        "estadoConselho": "MG",
+        "id": 1,
+        "cboNomeOcupacao": "Abacaxicultor",
+        "status": "ATIVO"
+      },
+      "observacoes": "Empresa em fase de testes."
+    },
+    "cep": "35720000",
+    "cidade": "matozinhos",
+    "estado": "MG",
+    "logradouro": "Rua Brasilia",
+    "numero": 1042,
+    "bairro": "cruzeiro",
+    "complemento": "casa",
+    "regiao": "sul",
+    "emailContato": "contato@unidadealpha.com",
+    "dddTelefone1": "31",
+    "numeroTelefone1": "999998888",
+    "dddTelefone2": "31",
+    "numeroTelefone2": "33334444",
+    "grauRisco": "RISCO_2",
+    "cnaePrincipal": {
+      "id": 10,
+      "codigo": "0115-6/00",
+      "descricao": "Cultivo de soja"
+    },
+    "setores": [
+      {
+        "id": 14,
+        "nome": "RECURSOS HUMANOS",
+        "descricao": "DP",
+        "empresa": {
+          "id": 4,
+          "razaoSocial": "Minha Empresa de Teste LTDA modificada",
+          "nomeFantasia": "Empresa Teste modificada",
+          "cpfOuCnpj": "12345678000199"
+        },
+        "unidadeOperacional": {
+          "id": 1,
+          "nome": "Unidade Alpha",
+          "descricao": "Unidade principal de operações"
+        },
+        "status": "ATIVO",
+        "tipoEmpresa": "JURIDICA",
+        "tipoDocumento": "CNPJ",
+        "numeroDocumento": 3213546874687
+      },
+      {
+        "id": 16,
+        "nome": "PRODUÇÃO",
+        "descricao": "GERENCIA",
+        "empresa": {
+          "id": 4,
+          "razaoSocial": "Minha Empresa de Teste LTDA modificada",
+          "nomeFantasia": "Empresa Teste modificada",
+          "cpfOuCnpj": "12345678000199"
+        },
+        "unidadeOperacional": {
+          "id": 1,
+          "nome": "Unidade Alpha",
+          "descricao": "Unidade principal de operações"
+        },
+        "status": "ATIVO",
+        "tipoEmpresa": "FISICA",
+        "tipoDocumento": "CNPJ",
+        "numeroDocumento": 313321231321
+      }
+    ]
+  },
   "status": "ATIVO",
-  "dataDocumento": "2025-06-13",
-  "dataVencimento": "2026-06-13",
-  "introducao": "Este documento estabelece as diretrizes para o Programa de Controle Médico de Saúde Ocupacional da Unidade.",
-  "sobrePcmso": "O objetivo principal é a promoção e preservação da saúde dos trabalhadores.",
-  "conclusao": "A empresa se compromete a seguir as diretrizes deste documento.",
-  "exames": [
+  "medicoResponsavel": {
+    "id": 1,
+    "nome": "Wayster",
+    "sobrenome": "Melo",
+    "nis": "12345678900",
+    "conselho": "CRM",
+    "numeroInscricaoConselho": "123456",
+    "estadoConselho": "MG"
+  },
+  "elaboradores": [
     {
-      "funcaoId": 1,
-      "exameId": [1],
-      "tipoExame": "ADMISSIONAL",
-      "periodicidadeMeses": 12
-    },
-    {
-      "funcaoId": 1,
-      "exameId": [2],
-      "tipoExame": "PERIODICO",
-      "periodicidadeMeses": 12
-    },
-    {
-      "funcaoId": 2,
-      "exameId": [1],
-      "tipoExame": "ADMISSIONAL",
-      "periodicidadeMeses": 12
-    },
-    {
-      "funcaoId": 2,
-      "exameId": [3],
-      "tipoExame": "DEMISSIONAL",
-      "periodicidadeMeses": 12
+      "id": 3,
+      "nome": "Mariana",
+      "sobrenome": "Souza",
+      "nis": "99887766554",
+      "conselho": "COREN",
+      "numeroInscricaoConselho": "654321",
+      "estadoConselho": "MG"
     }
-  ]
+  ],
+  "dataDocumento": "2025-10-01",
+  "dataVencimento": "2026-10-01",
+  "imagemCapa": "/uploads/capa-pcmso/340da415-450f-4286-982d-8d49ed0ddd4e.png",
+  "introducao": "Introdução do PCMSO",
+  "sobrePcmso": "Sobre o PCMSO",
+  "conclusao": "Conclusão do PCMSO",
+  "setores": [
+    {
+      "id": 14,
+      "nome": "RECURSOS HUMANOS",
+      "funcoes": [
+        {
+          "id": 14,
+          "nome": "Auxiliar de pessoal",
+          "exames": [],
+          "riscos": [
+            {
+              "id": 36,
+              "riscoCatalogo": {
+                "id": 4,
+                "grupo": "GRUPO_1_FISICOS",
+                "descricao": "Radiações não ionizantes"
+              }
+            }
+          ],
+          "agentesNocivos": [
+            {
+              "id": 1,
+              "nome": "Arsênio e seus compostos"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "nome": "Administrador de pessoal",
+          "exames": [
+            {
+              "id": 59,
+              "funcaoId": 15,
+              "nomeFuncao": "Administrador de pessoal",
+              "exameId": 4,
+              "nomeExame": "1,25-dihidroxi vitamina D",
+              "codigoExame": "0004",
+              "tipoExame": "ADMISSIONAL",
+              "periodicidadeMeses": 12
+            }
+          ],
+          "riscos": [
+            {
+              "id": 37,
+              "riscoCatalogo": {
+                "id": 3,
+                "grupo": "GRUPO_1_FISICOS",
+                "descricao": "Radiações ionizantes"
+              }
+            }
+          ],
+          "agentesNocivos": [
+            {
+              "id": 1,
+              "nome": "Arsênio e seus compostos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "nome": "PRODUÇÃO",
+      "funcoes": [
+        {
+          "id": 16,
+          "nome": "Abastecedor de linha de produção",
+          "exames": [
+            {
+              "id": 60,
+              "funcaoId": 16,
+              "nomeFuncao": "Abastecedor de linha de produção",
+              "exameId": 4,
+              "nomeExame": "1,25-dihidroxi vitamina D",
+              "codigoExame": "0004",
+              "tipoExame": "ADMISSIONAL",
+              "periodicidadeMeses": 12
+            }
+          ],
+          "riscos": [
+            {
+              "id": 40,
+              "riscoCatalogo": {
+                "id": 4,
+                "grupo": "GRUPO_1_FISICOS",
+                "descricao": "Radiações não ionizantes"
+              }
+            }
+          ],
+          "agentesNocivos": [
+            {
+              "id": 4,
+              "nome": "Estireno (vinilbenzeno)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "criadoEm": "2025-09-30T19:06:58.18025",
+  "atualizadoEm": "2025-09-30T19:06:58.18025"
 }

@@ -12,8 +12,7 @@ public interface PcmsoMapper {
     @Mapping(source = "unidadeOperacional", target = "unidadeOperacional")
     @Mapping(source = "medicoResponsavel", target = "medicoResponsavel")
     @Mapping(source = "elaboradores", target = "elaboradores")
-    @Mapping(source = "exames", target = "exames")
-    @Mapping(target = "riscos", ignore = true)
+    @Mapping(target = "setores", ignore = true)
     PcmsoResponseDTO toResponseDto(PcmsoEntity entity);
 
     @Mapping(source = "unidadeOperacional.empresa.nomeFantasia", target = "nomeEmpresa")

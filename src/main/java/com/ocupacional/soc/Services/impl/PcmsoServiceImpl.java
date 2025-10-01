@@ -1,10 +1,7 @@
 package com.ocupacional.soc.Services.impl;
 
 import com.ocupacional.soc.Dto.Cadastros.RiscoTrabalhistaPgrResponseDTO;
-import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoExameRequestDTO;
-import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoListDTO;
-import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoRequestDTO;
-import com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoResponseDTO;
+import com.ocupacional.soc.Dto.Medicina.Pcmso.*;
 import com.ocupacional.soc.Entities.Cadastros.ExameCatalogoEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
@@ -15,6 +12,7 @@ import com.ocupacional.soc.Enuns.Medicina.Pcmso.PcmsoStatus;
 import com.ocupacional.soc.Exceptions.BusinessException;
 import com.ocupacional.soc.Exceptions.ResourceNotFoundException;
 import com.ocupacional.soc.Mapper.Cadastros.RiscoTrabalhistaPgrMapper;
+import com.ocupacional.soc.Mapper.Medicina.Pcmso.PcmsoExameMapper;
 import com.ocupacional.soc.Mapper.Medicina.Pcmso.PcmsoMapper;
 import com.ocupacional.soc.Repositories.Cadastros.ExameCatalogoRepository;
 import com.ocupacional.soc.Repositories.Cadastros.FuncaoRepository;
@@ -48,6 +46,7 @@ public class PcmsoServiceImpl implements PcmsoService {
     private final ExameCatalogoRepository exameCatalogoRepository;
     private final PrestadorServicoRepository prestadorRepository;
     private final PcmsoMapper pcmsoMapper;
+    private final PcmsoExameMapper pcmsoExameMapper;
     private final RiscoTrabalhistaPgrMapper riscoTrabalhistaPgrMapper;
     private final PcmsoFileStorageService fileStorageService;
     private final PcmsoExameRepository pcmsoExameRepository;
@@ -62,25 +61,49 @@ public class PcmsoServiceImpl implements PcmsoService {
     @Override
     @Transactional(readOnly = true)
     public PcmsoResponseDTO findById(Long id) {
-        PcmsoEntity pcmsoEntity = pcmsoRepository.findById(id)
+        PcmsoEntity pcmsoEntity = pcmsoRepository.findCompletoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PCMSO não encontrado com ID: " + id));
 
         PcmsoResponseDTO responseDTO = pcmsoMapper.toResponseDto(pcmsoEntity);
 
-        if (responseDTO != null && !CollectionUtils.isEmpty(pcmsoEntity.getExames())) {
-            List<Long> funcaoIds = pcmsoEntity.getExames().stream()
-                    .map(pcmsoExame -> pcmsoExame.getFuncao().getId())
-                    .distinct()
+        if (responseDTO != null) {
+            UnidadeOperacionalEntity unidade = pcmsoEntity.getUnidadeOperacional();
+            List<PcmsoSetorResponseDTO> setoresDTO = unidade.getSetores().stream()
+                    .map(setor -> {
+                        List<PcmsoFuncaoResponseDTO> funcoesDTO = setor.getFuncoes().stream()
+                                .map(funcao -> {
+                                    List<PcmsoExameResponseDTO> examesDTO = pcmsoEntity.getExames().stream()
+                                            .filter(exame -> exame.getFuncao().getId().equals(funcao.getId()))
+                                            .map(pcmsoExameMapper::toResponseDto)
+                                            .collect(Collectors.toList());
+
+                                    List<RiscoTrabalhistaPgrResponseDTO> riscosDTO = funcao.getRiscosPGR().stream()
+                                            .map(riscoTrabalhistaPgrMapper::toResponseDTO)
+                                            .collect(Collectors.toList());
+
+                                    List<PcmsoAgenteNocivoResponseDTO> agentesNocivosDTO = funcao.getAgentesNocivosEsocial().stream()
+                                            .map(agente -> new PcmsoAgenteNocivoResponseDTO(agente.getAgenteNocivoCatalogo().getId(),
+                                                    agente.getAgenteNocivoCatalogo().getDescricao()))
+                                            .collect(Collectors.toList());
+
+                                    return PcmsoFuncaoResponseDTO.builder()
+                                            .id(funcao.getId())
+                                            .nome(funcao.getNome())
+                                            .exames(examesDTO)
+                                            .riscos(riscosDTO)
+                                            .agentesNocivos(agentesNocivosDTO)
+                                            .build();
+                                })
+                                .collect(Collectors.toList());
+
+                        return PcmsoSetorResponseDTO.builder()
+                                .id(setor.getId())
+                                .nome(setor.getNome())
+                                .funcoes(funcoesDTO)
+                                .build();
+                    })
                     .collect(Collectors.toList());
-
-            List<FuncaoEntity> funcoes = funcaoRepository.findAllById(funcaoIds);
-
-            List<RiscoTrabalhistaPgrResponseDTO> riscos = funcoes.stream()
-                    .flatMap(funcao -> funcao.getRiscosPGR().stream())
-                    .map(riscoTrabalhistaPgrMapper::toResponseDTO)
-                    .collect(Collectors.toList());
-
-            responseDTO.setRiscos(riscos);
+            responseDTO.setSetores(setoresDTO);
         }
 
         return responseDTO;

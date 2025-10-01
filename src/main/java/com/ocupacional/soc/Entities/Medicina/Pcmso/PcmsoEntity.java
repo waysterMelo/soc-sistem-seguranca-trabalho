@@ -15,6 +15,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@NamedEntityGraph(
+    name = "Pcmso.withPrestadoresAndCbo",
+    attributeNodes = {
+        @NamedAttributeNode(value = "medicoResponsavel", subgraph = "prestador-cbo"),
+        @NamedAttributeNode(value = "elaboradores", subgraph = "prestador-cbo")
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "prestador-cbo",
+            attributeNodes = {
+                @NamedAttributeNode("cbo")
+            }
+        )
+    }
+)
 @Entity
 @Table(name = "pcmso")
 @Getter
@@ -29,10 +44,9 @@ public class PcmsoEntity extends AuditableEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_operacional_id", nullable = false, unique = true) // Alterado para OneToOne implícito
+    @JoinColumn(name = "unidade_operacional_id", nullable = false, unique = true)
     private UnidadeOperacionalEntity unidadeOperacional;
 
-    // Relação com o Médico Responsável (já existia no projeto implicitamente, agora formalizamos)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_responsavel_id", nullable = false)
     private PrestadorServicoEntity medicoResponsavel;

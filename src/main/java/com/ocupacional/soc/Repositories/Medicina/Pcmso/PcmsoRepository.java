@@ -4,13 +4,20 @@ import com.ocupacional.soc.Entities.Medicina.Pcmso.PcmsoEntity;
 import com.ocupacional.soc.Enuns.Medicina.Pcmso.PcmsoStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PcmsoRepository extends JpaRepository<PcmsoEntity, Long> {
+
+    @EntityGraph(value = "Pcmso.withPrestadoresAndCbo")
+    Optional<PcmsoEntity> findCompletoById(Long id);
+
 
     @Query("SELECT p FROM PcmsoEntity p JOIN p.unidadeOperacional u JOIN u.empresa e " +
             "WHERE LOWER(e.nomeFantasia) LIKE LOWER(CONCAT('%', :search, '%')) " +
