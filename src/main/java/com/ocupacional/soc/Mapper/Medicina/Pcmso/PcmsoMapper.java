@@ -17,5 +17,6 @@ public interface PcmsoMapper {
 
     @Mapping(source = "unidadeOperacional.empresa.nomeFantasia", target = "nomeEmpresa")
     @Mapping(source = "unidadeOperacional.nome", target = "nomeUnidadeOperacional")
+    @Mapping(source = "status", target = "status")
     PcmsoListDTO toListDto(PcmsoEntity entity);
 }

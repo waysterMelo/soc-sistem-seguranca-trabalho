@@ -7,6 +7,7 @@ import com.ocupacional.soc.Entities.Cadastros.EmpresaEntity;
 import com.ocupacional.soc.Entities.Cadastros.FuncaoEntity;
 import com.ocupacional.soc.Entities.Cadastros.SetorEntity;
 import com.ocupacional.soc.Entities.Cadastros.UnidadeOperacionalEntity;
+import com.ocupacional.soc.Enuns.CadastroEmpresas.StatusEmpresa;
 import com.ocupacional.soc.Mapper.Cadastros.FuncaoMapper;
 import com.ocupacional.soc.Mapper.Cadastros.SetorMapper;
 import com.ocupacional.soc.Repositories.Cadastros.EmpresaRepository;
@@ -66,10 +67,12 @@ public class SetorServiceImpl implements SetorService {
 
 
         setorRepository.findByNomeAndEmpresaId(dto.getNome(), dto.getEmpresaId()).ifPresent(existingSetor -> {
-            throw new IllegalArgumentException("Setor com o nome '" + dto.getNome() + "' já existe na empresa " + (empresa != null ? empresa.getNomeFantasia() : "ID: "+dto.getEmpresaId()) + ".");
+            throw new IllegalArgumentException(STR."Setor com o nome '\{dto.getNome()}' já existe na empresa \{empresa != null
+                    ? empresa.getNomeFantasia() : STR."ID: \{dto.getEmpresaId()}"}.");
         });
 
         SetorEntity setorEntity = setorMapper.toEntity(dto);
+        setorEntity.setStatus(StatusEmpresa.ATIVO);
         setorEntity.setEmpresa(empresa);
         setorEntity.setUnidadeOperacional(unidadeOperacional);
 
@@ -77,8 +80,8 @@ public class SetorServiceImpl implements SetorService {
         try {
             setorEntity = setorRepository.save(setorEntity);
         } catch (Exception e) {
-            e.printStackTrace(); // Imprime o stack trace completo do erro no console do servidor
-            throw e; // Relança a exceção para ser tratada pelo GlobalExceptionHandler
+            e.printStackTrace();
+            throw e;
         }
 
         return setorMapper.toResponseDto(setorEntity);

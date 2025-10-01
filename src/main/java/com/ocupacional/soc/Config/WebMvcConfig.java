@@ -26,6 +26,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload-dir.ltip-capas}")
     private String uploadDirLtipCapas;
 
+    @Value("${file.upload-dir.pcmso-capas}")
+    private String uploadDirPcmsoCapas;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Mapeia a URL para o diretório físico de certificados
@@ -51,5 +54,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String ltipCapasPath = Paths.get(uploadDirLtipCapas).toAbsolutePath().normalize().toString();
         registry.addResourceHandler("/uploads/capa-ltip/**", "/api/uploads/capa-ltip/**")
                 .addResourceLocations("file:" + ltipCapasPath + "/");
+
+        String pcmsoCapasPath = Paths.get(uploadDirPcmsoCapas).toAbsolutePath().normalize().toString();
+        registry.addResourceHandler("/uploads/capa-pcmso/**", "/api/uploads/capa-pcmso/**")
+                .addResourceLocations("file:" + pcmsoCapasPath + "/");
     }
 }

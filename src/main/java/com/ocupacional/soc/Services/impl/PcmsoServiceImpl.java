@@ -165,6 +165,11 @@ public class PcmsoServiceImpl implements PcmsoService {
         PcmsoEntity entity = pcmsoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PCMSO não encontrado com ID: " + id));
 
+        // Verifica se a unidade operacional associada tem setores
+        if (entity.getUnidadeOperacional() != null && !entity.getUnidadeOperacional().getSetores().isEmpty()) {
+            throw new BusinessException("Não é possível excluir o PCMSO pois existem setores vinculados à sua Unidade Operacional. Desative");
+        }
+
         // Deleta os exames associados ao PCMSO
         if (entity.getExames() != null && !entity.getExames().isEmpty()) {
             pcmsoExameRepository.deleteAll(entity.getExames());

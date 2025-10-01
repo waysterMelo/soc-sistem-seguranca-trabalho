@@ -45,14 +45,13 @@ public class FuncaoServiceImpl implements FuncaoService {
     @Override
     @Transactional
     public FuncaoResponseDTO criarFuncao(FuncaoRequestDTO requestDTO) {
-        log.info("Iniciando criação de nova função: {}", requestDTO.getNome());
+
         try {
-            FuncaoEntity funcaoEntity = buildFuncaoEntity(null, requestDTO); // Passar null para id na criação
+            FuncaoEntity funcaoEntity = buildFuncaoEntity(null, requestDTO);
+            funcaoEntity.setStatus(StatusEmpresa.ATIVO);
             FuncaoEntity savedEntity = funcaoRepository.save(funcaoEntity);
-            log.info("Função criada com sucesso. ID: {}", savedEntity.getId());
             return funcaoMapper.entityToResponseDTO(savedEntity);
         } catch (Exception e) {
-            log.error("Erro ao criar função: {}", e.getMessage(), e);
             throw e;
         }
     }
@@ -77,13 +76,11 @@ public class FuncaoServiceImpl implements FuncaoService {
     @Override
     @Transactional
     public FuncaoResponseDTO atualizarFuncao(Long id, FuncaoRequestDTO requestDTO) {
-        log.info("Iniciando atualização da função ID: {}", id);
+
         try {
             FuncaoEntity funcaoExistente = findFuncaoById(id);
-            // O buildFuncaoEntity pode ser adaptado para atualizar uma entidade existente
             buildFuncaoEntity(funcaoExistente, requestDTO);
             FuncaoEntity updatedEntity = funcaoRepository.save(funcaoExistente);
-            log.info("Função atualizada com sucesso. ID: {}", id);
             return funcaoMapper.entityToResponseDTO(updatedEntity);
         } catch (Exception e) {
             log.error("Erro ao atualizar função ID {}: {}", id, e.getMessage(), e);
@@ -108,6 +105,7 @@ public class FuncaoServiceImpl implements FuncaoService {
             funcaoEntity.setQuantidadeFuncionarios(requestDTO.getQuantidadeFuncionarios());
             funcaoEntity.setDescricao(requestDTO.getDescricaoFuncao()); // Mapeado de descricaoFuncao
             funcaoEntity.setTipoGfip(requestDTO.getTipoGfip());
+            funcaoEntity.setStatus(requestDTO.getStatus());
             funcaoEntity.setAtividadesInsalubres(requestDTO.getAtividadesInsalubres());
             funcaoEntity.setInformacoesComplementaresRegistrosAmbientais(requestDTO.getInformacoesComplementaresRegistrosAmbientais());
         }
