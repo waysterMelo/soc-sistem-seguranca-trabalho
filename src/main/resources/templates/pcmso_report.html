@@ -4,161 +4,258 @@
     <title>PCMSO - Programa de Controle Médico de Saúde Ocupacional</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
     <style>
+        /* Basic styles for printing and A4 page layout */
         @media print {
-            body { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
-            .page { page-break-after: always; }
-            .page:last-of-type { page-break-after: auto; }
-            .no-print { display: none !important; }
-            .page-break-before { page-break-before: always; }
+            body {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            .page {
+                page-break-after: always;
+            }
+            .page:last-of-type {
+                page-break-after: auto;
+            }
+            .no-print {
+                display: none !important;
+            }
         }
-        body { background-color: #e9ecef; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10pt; }
-        .report-container { max-width: 21cm; margin: 2rem auto; background: white; box-shadow: 0 0 15px rgba(0,0,0,0.1); border: 1px solid #dee2e6; }
-        .page { padding: 2cm; min-height: 29.7cm; box-sizing: border-box; position: relative; }
-        .section-title { border-bottom: 2px solid #198754; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1.5rem; font-weight: 600; color: #198754; font-size: 14pt; }
-        .sub-section-title { font-weight: bold; color: #343a40; margin-top: 1.5rem; margin-bottom: 1rem; border-left: 4px solid #198754; padding-left: 0.75rem; font-size: 12pt;}
-        .signature-area { margin-top: 50px; text-align: center; }
-        .signature-line { display: inline-block; width: 300px; border-bottom: 1px solid #495057; margin-top: 40px; }
-        .footer { position: absolute; bottom: 1cm; left: 2cm; right: 2cm; text-align: center; font-size: 0.8em; color: #6c757d; }
-        .table th { background-color: #f0f2f5; font-size: 9pt; }
-        .list-group-item { font-size: 9pt; }
-        b { color: #343a40; }
+
+        body {
+            background-color: #e9ecef;
+        }
+
+        .report-container {
+            max-width: 21cm;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .page {
+            padding: 2cm;
+            min-height: 29.7cm;
+            box-sizing: border-box;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid #198754;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: #198754;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+
+        .signature-area {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .signature-line {
+            display: inline-block;
+            width: 350px;
+            border-bottom: 1px solid #495057;
+            margin-top: 40px;
+        }
+
+        .word-wrap {
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal !important;
+        }
     </style>
 </head>
 <body>
 
+<div id="download-button-container" class="position-fixed bottom-0 end-0 p-3 no-print" style="z-index: 1030;">
+    <button id="download-pdf" class="btn btn-success btn-lg shadow-lg">
+        <i class="fas fa-file-pdf me-2"></i> Download PDF
+    </button>
+</div>
+
 <div class="report-container" id="report-to-print" th:if="${pcmso != null}">
 
-    <!-- Capa -->
-    <div class="page d-flex flex-column justify-content-center align-items-center text-center">
-        <img th:if="${pcmso.imagemCapa != null and !pcmso.imagemCapa.isEmpty()}" th:src="|/api${pcmso.imagemCapa}|" alt="Imagem de Capa do PCMSO" style="max-height: 200px; max-width: 100%; margin-bottom: 2rem;"/>
-        <img th:if="${(pcmso.imagemCapa == null or pcmso.imagemCapa.isEmpty()) and pcmso.unidadeOperacional?.empresa?.logomarcaUrl != null}" th:src="|/api${pcmso.unidadeOperacional.empresa.logomarcaUrl}|" alt="Logo Empresa" style="max-height: 150px; margin-bottom: 2rem;"/>
-        <h1 class="display-5 fw-bold text-success mt-4">PCMSO</h1>
-        <p class="lead fs-5">Programa de Controle Médico de Saúde Ocupacional</p>
-        <hr style="width: 50%;"/>
-        <h2 class="h3 mt-4" th:text="${pcmso.unidadeOperacional?.empresa?.nomeFantasia}"></h2>
-        <p class="fs-5" th:text="${pcmso.unidadeOperacional?.nome}"></p>
-        <div class="mt-auto">
-            <p class="mb-0">Data do Documento</p>
-            <p class="fw-bold" th:text="${#temporals.format(pcmso.dataDocumento, 'dd/MM/yyyy')}"></p>
-        </div>
-    </div>
-
-    <!-- Identificação da Organização -->
+    <!-- Página 1: Identificação e Introdução -->
     <div class="page">
+        <header class="pb-4 mb-4 border-bottom">
+            <div class="d-flex align-items-center">
+                <img th:if="${pcmso.imagemCapa}" th:src="|/api${pcmso.imagemCapa}|" alt="Logo" style="height: 80px; width: 80px; object-fit: cover;" class="me-4 rounded-circle border p-1"/>
+                <img th:unless="${pcmso.imagemCapa}" th:src="@{/imagens/logo.png}" alt="Logo" style="height: 80px;" class="me-4"/>
+                <div>
+                    <h1 class="h2 mb-1 fw-bold text-success word-wrap">Programa de Controle Médico de Saúde Ocupacional</h1>
+                    <p class="mb-0 fs-5 text-muted word-wrap" th:text="${pcmso.unidadeOperacional?.empresa?.nomeFantasia}">Nome da Empresa</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="text-muted mb-1"><i class="fas fa-calendar-alt me-2"></i>Data do Documento</div>
+                        <div class="fs-5 fw-bold" th:text="${#temporals.format(pcmso.dataDocumento, 'dd/MM/yyyy')}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                     <div class="card-body text-center">
+                        <div class="text-muted mb-1"><i class="fas fa-calendar-check me-2"></i>Data de Vencimento</div>
+                        <div class="fs-5 fw-bold" th:if="${pcmso.dataVencimento != null}" th:text="${#temporals.format(pcmso.dataVencimento, 'dd/MM/yyyy')}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2 class="section-title">1. Identificação da Organização</h2>
         <div class="card">
-            <div class="card-header"><b>Dados da Empresa</b></div>
             <div class="card-body p-0">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><b>Razão Social:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.empresa?.razaoSocial}"></span></li>
-                    <li class="list-group-item"><b>Nome Fantasia:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.empresa?.nomeFantasia}"></span></li>
-                    <li class="list-group-item"><b>CNPJ:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.empresa?.cpfOuCnpj}"></span></li>
-                    <li class="list-group-item"><b>Endereço:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.empresa?.endereco?.logradouro} + ', ' + ${pcmso.unidadeOperacional?.empresa?.endereco?.numero}"></span></li>
-                    <li class="list-group-item"><b>CNAE:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.empresa?.cnaePrincipal?.codigo} + ' - ' + ${pcmso.unidadeOperacional?.empresa?.cnaePrincipal?.descricao}"></span></li>
-                    <li class="list-group-item"><b>Grau de Risco:</b> <span class="float-end badge bg-warning text-dark" th:text="${pcmso.unidadeOperacional?.empresa?.grauRisco}"></span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-building fa-fw me-2 text-muted"></i>Razão Social</span>
+                        <strong class="word-wrap" th:text="${pcmso.unidadeOperacional?.empresa?.razaoSocial}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-store fa-fw me-2 text-muted"></i>Nome Fantasia</span>
+                        <strong class="word-wrap" th:text="${pcmso.unidadeOperacional?.empresa?.nomeFantasia}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-industry fa-fw me-2 text-muted"></i>Unidade Operacional</span>
+                        <strong class="word-wrap" th:text="${pcmso.unidadeOperacional?.nome}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-barcode fa-fw me-2 text-muted"></i>CNAE Principal</span>
+                        <strong class="word-wrap" th:text="${pcmso.unidadeOperacional?.cnaePrincipal?.codigo} + ' - ' + ${pcmso.unidadeOperacional?.cnaePrincipal?.descricao}"></strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-exclamation-triangle fa-fw me-2 text-muted"></i>Grau de Risco</span>
+                        <span class="badge bg-warning text-dark" th:text="${pcmso.unidadeOperacional?.grauRisco}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-map-marker-alt fa-fw me-2 text-muted"></i>Endereço Completo</span>
+                        </div>
+                        <div class="text-end mt-1">
+                            <strong class="d-block word-wrap" th:text="${pcmso.unidadeOperacional?.logradouro} + ', ' + ${pcmso.unidadeOperacional?.numero} + ' - ' + ${pcmso.unidadeOperacional?.bairro}"></strong>
+                            <strong class="d-block word-wrap" th:text="${pcmso.unidadeOperacional?.cidade} + '/' + ${pcmso.unidadeOperacional?.estado} + ' - CEP: ' + ${pcmso.unidadeOperacional?.cep}"></strong>
+                            <strong class="d-block word-wrap" th:if="${pcmso.unidadeOperacional?.complemento}" th:text="${pcmso.unidadeOperacional?.complemento}"></strong>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
 
-        <h3 class="sub-section-title mt-4">Unidade Operacional Avaliada</h3>
-        <div class="card">
-            <div class="card-body p-0">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><b>Nome da Unidade:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.nome}"></span></li>
-                    <li class="list-group-item"><b>Endereço da Unidade:</b> <span class="float-end" th:text="${pcmso.unidadeOperacional?.logradouro} + ', ' + ${pcmso.unidadeOperacional?.numero} + ' - ' + ${pcmso.unidadeOperacional?.bairro} + ', ' + ${pcmso.unidadeOperacional?.cidade} + '/' + ${pcmso.unidadeOperacional?.estado}"></span></li>
-                </ul>
-            </div>
-        </div>
-
-        <h3 class="sub-section-title mt-4">Vigência do Documento</h3>
-        <div class="row">
-            <div class="col-md-6"><b>Data do Documento:</b> <span th:text="${#temporals.format(pcmso.dataDocumento, 'dd/MM/yyyy')}"></span></div>
-            <div class="col-md-6"><b>Data de Vencimento:</b> <span th:text="${#temporals.format(pcmso.dataVencimento, 'dd/MM/yyyy')}"></span></div>
-        </div>
-
-        <div class="footer">
-            <p>ID do Documento: <span th:text="${pcmso.id}"></span></p>
-        </div>
-    </div>
-
-    <!-- Introdução e Conclusão -->
-    <div class="page">
         <h2 class="section-title">2. Introdução</h2>
-        <div th:utext="${pcmso.introducao}"></div>
-        <h2 class="section-title">3. Sobre o PCMSO</h2>
-        <div th:utext="${pcmso.sobrePcmso}"></div>
-        <h2 class="section-title">4. Conclusão</h2>
-        <div th:utext="${pcmso.conclusao}"></div>
-        <div class="footer">
-            <p>ID do Documento: <span th:text="${pcmso.id}"></span></p>
+        <div class="card">
+            <div class="card-body">
+                <div class="word-wrap" th:utext="${pcmso.introducao}"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Detalhamento por Setor e Função -->
-    <div th:each="setor : ${pcmso.setores}" class="page page-break-before">
+    <!-- Página 2: Sobre e Conclusão -->
+    <div class="page">
+        <h2 class="section-title">3. Sobre o PCMSO</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="word-wrap" th:utext="${pcmso.sobrePcmso}"></div>
+            </div>
+        </div>
+
+        <h2 class="section-title">4. Conclusão</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="word-wrap" th:utext="${pcmso.conclusao}"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Páginas de Setores e Funções -->
+    <div th:each="setor : ${pcmso.setores}" class="page">
         <h2 class="section-title" th:text="'Setor: ' + ${setor.nome}"></h2>
         <div th:each="funcao : ${setor.funcoes}" class="mb-4">
-            <h3 class="sub-section-title" th:text="'Função: ' + ${funcao.nome}"></h3>
-            
-            <h5>Exames Programados</h5>
-            <table class="table table-bordered table-sm">
-                <thead class="table-success">
-                    <tr>
-                        <th>Exame</th>
-                        <th>Tipo</th>
-                        <th>Periodicidade (meses)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="exame : ${funcao.exames}">
-                        <td th:text="${exame.nomeExame}"></td>
-                        <td th:text="${exame.tipoExame}"></td>
-                        <td th:text="${exame.periodicidadeMeses}"></td>
-                    </tr>
-                     <tr th:if="${#lists.isEmpty(funcao.exames)}">
-                        <td colspan="3" class="text-center text-muted">Nenhum exame programado.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-header"><h5 class="mb-0 word-wrap" th:text="'Função: ' + ${funcao.nome}"></h5></div>
+                <div class="card-body">
+                    <h6 class="text-success">Exames Programados</h6>
+                    <table class="table table-sm table-striped table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Exame</th>
+                                <th>Tipo</th>
+                                <th>Periodicidade (meses)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="exame : ${funcao.exames}">
+                                <td class="word-wrap" th:text="${exame.nomeExame}"></td>
+                                <td class="word-wrap" th:text="${exame.tipoExame}"></td>
+                                <td class="word-wrap" th:text="${exame.periodicidadeMeses}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(funcao.exames)}">
+                                <td colspan="3" class="text-center text-muted">Nenhum exame programado.</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <h5>Riscos Associados</h5>
-            <ul class="list-group">
-                <li th:each="risco : ${funcao.riscos}" class="list-group-item" th:text="${risco.riscoCatalogo.descricao}"></li>
-                <li th:if="${#lists.isEmpty(funcao.riscos)}" class="list-group-item text-muted">Nenhum risco associado.</li>
-            </ul>
+                    <h6 class="mt-4 text-danger">Riscos Associados</h6>
+                    <div th:if="${not #lists.isEmpty(funcao.riscos)}">
+                        <span th:each="risco : ${funcao.riscos}" class="badge bg-danger-subtle text-danger-emphasis rounded-pill me-1 word-wrap" th:text="${risco.riscoCatalogo.descricao}"></span>
+                    </div>
+                    <div th:if="${#lists.isEmpty(funcao.riscos)}" class="text-muted">
+                        Nenhum risco associado.
+                    </div>
 
-            <h5 class="mt-3">Agentes Nocivos</h5>
-            <ul class="list-group">
-                <li th:each="agente : ${funcao.agentesNocivos}" class="list-group-item" th:text="${agente.nome}"></li>
-                 <li th:if="${#lists.isEmpty(funcao.agentesNocivos)}" class="list-group-item text-muted">Nenhum agente nocivo associado.</li>
-            </ul>
-        </div>
-        <div class="footer">
-            <p>ID do Documento: <span th:text="${pcmso.id}"></span></p>
+                    <h6 class="mt-4 text-warning">Agentes Nocivos</h6>
+                     <div th:if="${not #lists.isEmpty(funcao.agentesNocivos)}">
+                        <span th:each="agente : ${funcao.agentesNocivos}" class="badge bg-warning-subtle text-warning-emphasis rounded-pill me-1 word-wrap" th:text="${agente.nome}"></span>
+                    </div>
+                    <div th:if="${#lists.isEmpty(funcao.agentesNocivos)}" class="text-muted">
+                        Nenhum agente nocivo associado.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Responsáveis e Assinaturas -->
-    <div class="page page-break-before">
+    <!-- Página 4: Responsáveis e Assinaturas -->
+    <div class="page">
         <h2 class="section-title">5. Responsabilidade Técnica e Assinaturas</h2>
-
+        
         <div class="card mb-4">
-            <div class="card-header"><b>Médico Responsável</b></div>
+             <div class="card-header"><i class="fas fa-user-md me-2"></i>Médico Responsável</div>
             <div class="card-body">
-                <p><b>Nome:</b> <span th:text="${pcmso.medicoResponsavel.nome} + ' ' + ${pcmso.medicoResponsavel.sobrenome}"></span></p>
-                <p><b>Conselho:</b> <span th:text="${pcmso.medicoResponsavel.conselho} + ': ' + ${pcmso.medicoResponsavel.numeroInscricaoConselho} + '/' + ${pcmso.medicoResponsavel.estadoConselho}"></span></p>
+                <p><b>Nome:</b> <span class="word-wrap" th:text="${pcmso.medicoResponsavel.nome} + ' ' + ${pcmso.medicoResponsavel.sobrenome}"></span></p>
+                <p><b>Conselho:</b> <span class="word-wrap" th:text="${pcmso.medicoResponsavel.conselho} + ': ' + ${pcmso.medicoResponsavel.numeroInscricaoConselho} + '/' + ${pcmso.medicoResponsavel.estadoConselho}"></span></p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><b>Elaboradores</b></div>
+            <div class="card-header"><i class="fas fa-users me-2"></i>Elaboradores</div>
             <ul class="list-group list-group-flush">
                 <li th:each="elaborador : ${pcmso.elaboradores}" class="list-group-item">
-                    <span th:text="${elaborador.nome} + ' ' + ${elaborador.sobrenome}"></span> - 
-                    <span th:text="${elaborador.conselho} + ': ' + ${elaborador.numeroInscricaoConselho} + '/' + ${elaborador.estadoConselho}"></span>
+                    <span class="word-wrap" th:text="${elaborador.nome} + ' ' + ${elaborador.sobrenome}"></span> - 
+                    <span class.text-muted class="word-wrap" th:text="${elaborador.conselho} + ': ' + ${elaborador.numeroInscricaoConselho} + '/' + ${elaborador.estadoConselho}"></span>
                 </li>
                  <li th:if="${#lists.isEmpty(pcmso.elaboradores)}" class="list-group-item text-muted">Nenhum elaborador adicional.</li>
             </ul>
@@ -166,26 +263,44 @@
 
         <div class="signature-area">
             <div class="signature-line"></div>
-            <div class="fw-bold" th:text="${pcmso.medicoResponsavel.nome} + ' ' + ${pcmso.medicoResponsavel.sobrenome}"></div>
-            <div class="text-muted" th:text="${pcmso.medicoResponsavel.conselho} + ': ' + ${pcmso.medicoResponsavel.numeroInscricaoConselho} + '/' + ${pcmso.medicoResponsavel.estadoConselho}"></div>
+            <div class="fw-bold word-wrap" th:text="${pcmso.medicoResponsavel.nome} + ' ' + ${pcmso.medicoResponsavel.sobrenome}"></div>
+            <div class="text-muted word-wrap" th:text="${pcmso.medicoResponsavel.conselho} + ': ' + ${pcmso.medicoResponsavel.numeroInscricaoConselho} + '/' + ${pcmso.medicoResponsavel.estadoConselho}"></div>
         </div>
-
+        
         <div th:each="elaborador : ${pcmso.elaboradores}" class="signature-area">
             <div class="signature-line"></div>
-            <div class="fw-bold" th:text="${elaborador.nome} + ' ' + ${elaborador.sobrenome}"></div>
-            <div class="text-muted" th:text="${elaborador.conselho} + ': ' + ${elaborador.numeroInscricaoConselho} + '/' + ${elaborador.estadoConselho}"></div>
+            <div class="fw-bold word-wrap" th:text="${elaborador.nome} + ' ' + ${elaborador.sobrenome}"></div>
+            <div class="text-muted word-wrap" th:text="${elaborador.conselho} + ': ' + ${elaborador.numeroInscricaoConselho} + '/' + ${elaborador.estadoConselho}"></div>
         </div>
-
-        <div class="footer">
-            <p>Este documento foi gerado eletronicamente. &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Todos os direitos reservados.</p>
-            <p>ID do Documento: <span th:text="${pcmso.id}"></span></p>
-        </div>
+        
+        <footer class="text-center text-muted pt-5 mt-5 border-top">
+            <p>Este documento foi gerado eletronicamente.</p>
+            <p>ID do Documento: <span th:text="${pcmso.id}"></span> &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Todos os direitos reservados.</p>
+        </footer>
     </div>
 </div>
 
+<!-- PDF Generation Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script th:inline="javascript">
-    // Opcional: Adicionar botão de download PDF
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        const element = document.getElementById('report-to-print');
+        const pcmsoId = /*[[${pcmso.id}]]*/ 'PCMSO'; // Get PCMSO ID for filename
+        const empresaNome = /*[[${pcmso.unidadeOperacional.empresa.nomeFantasia}]]*/ 'Empresa';
+        const filename = `PCMSO - ${empresaNome} - ID ${pcmsoId}.pdf`;
+
+        const opt = {
+            margin:       [0.5, 0.5, 0.5, 0.5], // margins in inches [top, left, bottom, right]
+            filename:     filename,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // New Promise-based usage:
+        html2pdf().set(opt).from(element).save();
+    });
 </script>
 
 </body>
