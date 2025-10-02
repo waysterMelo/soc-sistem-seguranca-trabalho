@@ -77,8 +77,14 @@ public class PcmsoServiceImpl implements PcmsoService {
                                             .map(pcmsoExameMapper::toResponseDto)
                                             .collect(Collectors.toList());
 
-                                    List<RiscoTrabalhistaPgrResponseDTO> riscosDTO = funcao.getRiscosPGR().stream()
+                                    List<PcmsoRiscoResponseDTO> riscosDTO = funcao.getRiscosPGR().stream()
                                             .map(riscoTrabalhistaPgrMapper::toResponseDTO)
+                                            .map(riscoTrabalhista -> {
+                                                PcmsoRiscoResponseDTO pcmsoRisco = new PcmsoRiscoResponseDTO();
+                                                pcmsoRisco.setId(riscoTrabalhista.getId());
+                                                pcmsoRisco.setRiscoCatalogo(riscoTrabalhista.getRiscoCatalogo());
+                                                return pcmsoRisco;
+                                            })
                                             .collect(Collectors.toList());
 
                                     List<PcmsoAgenteNocivoResponseDTO> agentesNocivosDTO = funcao.getAgentesNocivosEsocial().stream()
