@@ -1,7 +1,9 @@
 package com.ocupacional.soc.Controllers.Cadastros;
 
+import com.ocupacional.soc.Dto.Cadastros.FuncaoExamePcmsoResponseDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncionarioRequestDTO;
 import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.RiscoTrabalhistaPgrResponseDTO;
 import com.ocupacional.soc.Services.Cadastros.FuncionarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -69,6 +73,19 @@ public class FuncionarioController {
                         (setorId,pageable);
         return ResponseEntity.ok(pageResponse);
     }
+
+    @GetMapping("/{id}/exames")
+    public ResponseEntity<List<FuncaoExamePcmsoResponseDTO>> obterExamesFuncionario(@PathVariable Long id) {
+        List<FuncaoExamePcmsoResponseDTO> exames = funcionarioService.obterExamesPorFuncionario(id);
+        return ResponseEntity.ok(exames);
+    }
+
+    @GetMapping("/{id}/riscos")
+    public ResponseEntity<List<RiscoTrabalhistaPgrResponseDTO>> obterRiscosFuncionario(@PathVariable Long id) {
+        List<RiscoTrabalhistaPgrResponseDTO> riscos = funcionarioService.obterRiscosPorFuncionario(id);
+        return ResponseEntity.ok(riscos);
+    }
+
 
 
 }

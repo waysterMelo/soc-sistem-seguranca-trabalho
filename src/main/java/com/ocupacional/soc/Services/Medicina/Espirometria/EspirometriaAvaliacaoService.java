@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EspirometriaAvaliacaoService {
-    Page<EspirometriaAvaliacaoListDTO> findAll(Pageable pageable, Long empresaId, String search);
+    Page<EspirometriaAvaliacaoListDTO> findAll(Pageable pageable, Long empresaId, Long setorId, String search);
     EspirometriaAvaliacaoResponseDTO findById(Long id);
     ContextoProfissionalResponseDTO findContextoProfissional(Long funcionarioId);
     EspirometriaAvaliacaoResponseDTO create(EspirometriaAvaliacaoRequestDTO dto);

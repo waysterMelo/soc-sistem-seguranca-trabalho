@@ -8,5 +8,5 @@ import lombok.Data;
 public class AsoExameRequestDTO {
     @NotNull
     private Long exameCatalogoId;
-
+    private String nomeArquivoOriginal;
 }

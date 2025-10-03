@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/espirometria")
+@RequestMapping("/espirometria")
 @RequiredArgsConstructor
 public class EspirometriaController {
 
@@ -45,8 +45,9 @@ public class EspirometriaController {
     public ResponseEntity<Page<EspirometriaAvaliacaoListDTO>> findAll(
             @PageableDefault(size = 10, sort = "dataExame") Pageable pageable,
             @RequestParam(required = false) Long empresaId,
+            @RequestParam(required = false) Long setorId,
             @RequestParam(required = false) String search) {
-        return ResponseEntity.ok(espirometriaAvaliacaoService.findAll(pageable, empresaId, search));
+        return ResponseEntity.ok(espirometriaAvaliacaoService.findAll(pageable, empresaId, setorId, search));
     }
 
     @DeleteMapping("/{id}")

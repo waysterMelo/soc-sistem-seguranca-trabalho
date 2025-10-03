@@ -3,14 +3,12 @@ package com.ocupacional.soc.Mapper.Medicina.AcuidadeVisual;
 import com.ocupacional.soc.Dto.Medicina.AcuidadeVisual.AcuidadeVisualRequestDTO;
 import com.ocupacional.soc.Dto.Medicina.AcuidadeVisual.AcuidadeVisualResponseDTO;
 import com.ocupacional.soc.Entities.Medicina.AcuidadeVisual.AcuidadeVisualEntity;
-import com.ocupacional.soc.Mapper.Medicina.Aso.RegistroProfissionalMapper;
 import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {
-        RegistroProfissionalMapper.class,
         PrestadorServicoMapper.class
 })
 public interface AcuidadeVisualMapper {

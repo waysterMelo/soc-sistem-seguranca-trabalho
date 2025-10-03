@@ -1,11 +1,11 @@
 package com.ocupacional.soc.Controllers.Medicina.Aso;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ocupacional.soc.Dto.Medicina.Aso.AsoListDTO;
 import com.ocupacional.soc.Dto.Medicina.Aso.AsoRequestDTO;
 import com.ocupacional.soc.Dto.Medicina.Aso.AsoResponseDTO;
 import com.ocupacional.soc.Services.impl.AsoServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,17 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/aso")
+@RequestMapping("/aso")
 @RequiredArgsConstructor
 @Slf4j
 public class AsoController {
 
     private final AsoServiceImpl asoService;
-    private final ObjectMapper objectMapper;
 
 
     @GetMapping
@@ -43,41 +41,33 @@ public class AsoController {
         return ResponseEntity.ok(asoService.findById(id));
     }
 
+    @GetMapping("/funcionario/{funcionarioId}")
+    public ResponseEntity<List<AsoListDTO>> findByFuncionarioId(@PathVariable Long funcionarioId) {
+        return ResponseEntity.ok(asoService.findByFuncionarioId(funcionarioId));
+    }
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<AsoResponseDTO> create(
-            @RequestPart("aso") String asoRequestDtoStr,
-            @RequestPart(value = "exame_resultados", required = false) List<MultipartFile> exameResultados) {
 
-        AsoRequestDTO dto;
-        try {
-            // Converte a string JSON recebida para o objeto DTO
-            dto = objectMapper.readValue(asoRequestDtoStr, AsoRequestDTO.class);
-        } catch (IOException e) {
-            log.error("Erro ao deserializar o DTO do ASO a partir da string JSON.", e);
-            return ResponseEntity.badRequest().build();
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AsoResponseDTO> create(@RequestPart("aso") AsoRequestDTO dto,
+                                                 @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                                 HttpServletRequest request) {
+
+        log.info("================= INICIANDO DEBUG DE UPLOAD ==================");
+        log.info("Content-Type do Header: {}", request.getContentType());
+        log.info("Número de arquivos recebidos na parte 'files': {}", (files != null ? files.size() : "0 (lista nula)"));
+        if (files != null) {
+            files.forEach(file -> log.info("Nome do arquivo recebido: {}", file.getOriginalFilename()));
         }
+        log.info("================= FIM DO DEBUG DE UPLOAD ====================");
 
-        AsoResponseDTO createdAso = asoService.create(dto, exameResultados);
+        AsoResponseDTO createdAso = asoService.create(dto, files);
         return new ResponseEntity<>(createdAso, HttpStatus.CREATED);
     }
 
 
-    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<AsoResponseDTO> update(
-            @PathVariable Long id,
-            @RequestPart("aso") String asoRequestDtoStr,
-            @RequestPart(value = "exame_resultados", required = false) List<MultipartFile> exameResultados) {
-
-        AsoRequestDTO dto;
-        try {
-            dto = objectMapper.readValue(asoRequestDtoStr, AsoRequestDTO.class);
-        } catch (IOException e) {
-            log.error("Erro ao deserializar o DTO do ASO a partir da string JSON para atualização.", e);
-            return ResponseEntity.badRequest().build();
-        }
-
-        AsoResponseDTO updatedAso = asoService.update(id, dto, exameResultados);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<AsoResponseDTO> update(@PathVariable Long id, @RequestBody AsoRequestDTO dto) {
+        AsoResponseDTO updatedAso = asoService.update(id, dto);
         return ResponseEntity.ok(updatedAso);
     }
 
@@ -86,4 +76,5 @@ public class AsoController {
         asoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 }

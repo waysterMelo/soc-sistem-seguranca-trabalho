@@ -13,9 +13,11 @@ public interface EspirometriaAvaliacaoRepository extends JpaRepository<Espiromet
 
     @Query("SELECT e FROM EspirometriaAvaliacaoEntity e JOIN e.funcionario f JOIN f.empresa emp " +
             "WHERE (:empresaId IS NULL OR emp.id = :empresaId) " +
+            "AND (:setorId IS NULL OR f.setor.id = :setorId) " +
             "AND LOWER(f.nome) LIKE LOWER(CONCAT('%', :search, '%'))")
     Page<EspirometriaAvaliacaoEntity> findWithFilters(
             @Param("empresaId") Long empresaId,
+            @Param("setorId") Long setorId,
             @Param("search") String search,
             Pageable pageable);
 }

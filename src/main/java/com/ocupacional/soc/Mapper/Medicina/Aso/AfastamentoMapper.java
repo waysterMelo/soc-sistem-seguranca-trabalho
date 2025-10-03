@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {
-        RegistroProfissionalMapper.class,
         PrestadorServicoMapper.class,
         MotivoAfastamentoMapper.class,
         CidMapper.class

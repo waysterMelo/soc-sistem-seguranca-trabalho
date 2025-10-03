@@ -57,9 +57,9 @@ public class EspirometriaAvaliacaoServiceImpl implements EspirometriaAvaliacaoSe
 
     @Override
     @Transactional
-    public Page<EspirometriaAvaliacaoListDTO> findAll(Pageable pageable, Long empresaId, String search) {
+    public Page<EspirometriaAvaliacaoListDTO> findAll(Pageable pageable, Long empresaId, Long setorId, String search) {
         String searchTerm = (search == null || search.isBlank()) ? "" : search;
-        Page<EspirometriaAvaliacaoEntity> page = repository.findWithFilters(empresaId, searchTerm, pageable);
+        Page<EspirometriaAvaliacaoEntity> page = repository.findWithFilters(empresaId, setorId, searchTerm, pageable);
         return page.map(mapper::toListDto);
     }
 

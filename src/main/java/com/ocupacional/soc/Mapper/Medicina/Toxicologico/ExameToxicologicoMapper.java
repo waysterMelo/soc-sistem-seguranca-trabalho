@@ -4,7 +4,6 @@ import com.ocupacional.soc.Dto.Medicina.Toxicologico.ExameToxicologicoResponseDT
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
 import com.ocupacional.soc.Entities.Medicina.Toxicologico.ExameToxicologicoEntity;
 import com.ocupacional.soc.Mapper.Cadastros.LaboratorioMapper;
-import com.ocupacional.soc.Mapper.Medicina.Aso.RegistroProfissionalMapper;
 import com.ocupacional.soc.Mapper.PrestadorServicos.PrestadorServicoMapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -12,7 +11,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {
-        RegistroProfissionalMapper.class,
         LaboratorioMapper.class,
         PrestadorServicoMapper.class
 })

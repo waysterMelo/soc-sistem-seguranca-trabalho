@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class AsoRequestDTO {
     @NotNull
-    private Long registroProfissionalId;
+    private Long funcionarioId;
     @NotNull
     private TipoRetificacaoAso tipoRetificacao;
     private LocalDate dataAsoRetificado;
@@ -28,6 +28,12 @@ public class AsoRequestDTO {
     private ConclusaoAso conclusaoAso;
     private String observacoes;
     private String conclusaoColaborador;
+
+    private Integer diasInapto;
+
+    private String status;
+
+    private Boolean naoInformar;
 
     private List<Long> riscoIds;
     private List<AsoExameRequestDTO> exames;

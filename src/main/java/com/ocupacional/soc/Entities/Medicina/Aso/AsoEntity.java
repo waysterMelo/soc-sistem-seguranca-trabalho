@@ -2,7 +2,7 @@ package com.ocupacional.soc.Entities.Medicina.Aso;
 
 
 import com.ocupacional.soc.Entities.Cadastros.PrestadorServicoEntity;
-import com.ocupacional.soc.Entities.Cadastros.ProfissionalRegistrosEntity;
+import com.ocupacional.soc.Entities.Cadastros.FuncionarioEntity;
 import com.ocupacional.soc.Entities.Cadastros.RiscoCatalogoEntity;
 import com.ocupacional.soc.Entities.SegurancaTrabalho.OrdemServico.AuditableEntity;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoExameFuncao;
@@ -34,8 +34,8 @@ public class AsoEntity extends AuditableEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "registro_profissional_id", nullable = false)
-    private ProfissionalRegistrosEntity registroProfissional;
+    @JoinColumn(name = "funcionario_id", nullable = false)
+    private FuncionarioEntity funcionario;
 
     @Enumerated(EnumType.STRING)
     private TipoRetificacaoAso tipoRetificacao;
@@ -61,11 +61,17 @@ public class AsoEntity extends AuditableEntity {
     @Column(nullable = false)
     private ConclusaoAso conclusaoAso;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String observacoes;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String conclusaoColaborador;
+
+    private Integer diasInapto;
+
+    private String status;
+
+    private Boolean naoInformar;
 
     // Relações com Riscos e Exames
     @ManyToMany(fetch = FetchType.LAZY)

@@ -1,2 +1,0 @@
-C:\Users\wayst\OneDrive\Desktop\Projetos\soc-backend\src\main\java\com\ocupacional\soc\Services\impl\PcmsoServiceImpl.java:93:53
-java: incompatible types: java.util.List<com.ocupacional.soc.Dto.Cadastros.RiscoTrabalhistaPgrResponseDTO> cannot be converted to java.util.List<com.ocupacional.soc.Dto.Medicina.Pcmso.PcmsoRiscoResponseDTO>

@@ -1,6 +1,7 @@
 package com.ocupacional.soc.Dto.Medicina.Aso;
 
 import com.ocupacional.soc.Dto.CadastroPrestadorServicos.PrestadorServicoResponseDTO;
+import com.ocupacional.soc.Dto.Cadastros.FuncionarioResponseDTO;
 import com.ocupacional.soc.Dto.Cadastros.RiscoCatalogoResponseDTO;
 import com.ocupacional.soc.Enuns.CadastroFuncoes.TipoExameFuncao;
 import com.ocupacional.soc.Enuns.Medicina.Aso.ConclusaoAso;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Data
 public class AsoResponseDTO {
     private Long id;
-    private RegistroProfissionalSimpleDTO registroProfissional;
+    private FuncionarioResponseDTO funcionario;
     private TipoRetificacaoAso tipoRetificacao;
     private LocalDate dataAsoRetificado;
     private TipoExameFuncao tipoAso;
@@ -24,6 +25,9 @@ public class AsoResponseDTO {
     private ConclusaoAso conclusaoAso;
     private String observacoes;
     private String conclusaoColaborador;
+    private Integer diasInapto;
+    private String status;
+    private Boolean naoInformar;
     private Set<RiscoCatalogoResponseDTO> riscos;
     private List<AsoExameResponseDTO> exames;
 }
